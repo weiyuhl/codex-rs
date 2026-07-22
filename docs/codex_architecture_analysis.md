@@ -11,11 +11,12 @@
 > 5. 实施方案 B：彻底从源码层面剥离 Windows 及 macOS 平台依赖，重构沙箱路由为纯 Linux / Android 模式。  
 > 6. 彻底剥离官方账号登录授权（删除 OAuth 2.0 PKCE 本地 Web 服务器 `LoginServer`、Device Code 设备码服务及 HTML 回调网页）。  
 > 7. 彻底剥离 AWS Bedrock 凭据与 `aws-auth` 签名 Crate 及外部 AWS 依赖。  
-> 8. 彻底剥离云端服务模块（删除 `cloud-config`、`cloud-tasks`、`cloud-tasks-client`、`cloud-tasks-mock-client`）。  
+> 8. 彻底剥离云端服务模块（删除 `cloud-config``cloud-tasks`、`cloud-tasks-client`、`cloud-tasks-mock-client`）。  
 > 9. 彻底剥离外部 Agent 迁移模块（删除 `external-agent-migration`）。  
 > 10. 彻底剥离 4 大桌面端冗余模块（删除 `feedback` 桌面反馈、`install-context` 包管理器检测、`stdio-to-uds` 管道重定向、`utils/sleep-inhibitor` 防休眠锁）。  
 > 11. 彻底剥离 V8 引擎 POC 模块（删除 `v8-poc`）。  
-> 12. `codex-rs/` 全量代码统计数据完成归档。  
+> 12. 彻底剥离桌面 Linux Bubblewrap 隔离包装模块（删除 `bwrap`）。  
+> 13. `codex-rs/` 全量代码统计数据完成归档。  
 
 ---
 

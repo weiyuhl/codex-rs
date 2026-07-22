@@ -1,4 +1,4 @@
-[package]
+﻿[package]
 edition.workspace = true
 license.workspace = true
 name = "codex-skills-extension"
@@ -14,7 +14,6 @@ workspace = true
 
 [dependencies]
 codex-core-skills = { workspace = true }
-codex-exec-server = { workspace = true }
 codex-extension-api = { workspace = true }
 codex-mcp = { workspace = true }
 codex-otel = { workspace = true }

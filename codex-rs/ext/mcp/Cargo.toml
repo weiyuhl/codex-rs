@@ -1,4 +1,4 @@
-[package]
+﻿[package]
 edition.workspace = true
 license.workspace = true
 name = "codex-mcp-extension"
@@ -17,7 +17,6 @@ codex-core = { workspace = true }
 codex-core-plugins = { workspace = true }
 codex-config = { workspace = true }
 codex-connectors = { workspace = true }
-codex-exec-server = { workspace = true }
 codex-extension-api = { workspace = true }
 codex-features = { workspace = true }
 codex-mcp = { workspace = true }

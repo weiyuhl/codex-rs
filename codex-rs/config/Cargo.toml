@@ -1,4 +1,4 @@
-[package]
+﻿[package]
 name = "codex-config"
 version.workspace = true
 edition.workspace = true
@@ -19,7 +19,6 @@ codex-features = { workspace = true }
 codex-file-system = { workspace = true }
 codex-git-utils = { workspace = true }
 codex-model-provider-info = { workspace = true }
-codex-network-proxy = { workspace = true }
 codex-protocol = { workspace = true }
 codex-utils-absolute-path = { workspace = true }
 codex-utils-path = { workspace = true }

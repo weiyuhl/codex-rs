@@ -300,13 +300,7 @@ pub fn list_marketplaces(
 }
 
 pub(crate) fn home_dir() -> Option<PathBuf> {
-    ["HOME", "USERPROFILE"]
-        .into_iter()
-        .filter_map(std::env::var_os)
-        .filter(|value| !value.is_empty())
-        .map(PathBuf::from)
-        .find(|path| path.is_absolute())
-        .or_else(dirs::home_dir)
+    codex_home::find_codex_home().ok().map(|p| p.into_path_buf())
 }
 
 pub fn validate_marketplace_root(root: &Path) -> Result<String, MarketplaceError> {

@@ -29,7 +29,6 @@ use codex_utils_absolute_path::AbsolutePathBuf;
 use codex_utils_absolute_path::AbsolutePathBufGuard;
 use codex_utils_path_uri::PathUri;
 use codex_utils_plugins::PluginSkillRoot;
-use dirs::home_dir;
 use discovery::DirectorySymlinkPolicy;
 use discovery::DiscoveredSkill;
 use discovery::HiddenDirectoryPolicy;
@@ -255,8 +254,7 @@ pub(crate) async fn skill_roots(
     plugin_skill_roots: Vec<PluginSkillRoot>,
     extra_skill_roots: Vec<AbsolutePathBuf>,
 ) -> Vec<SkillRoot> {
-    let home_dir =
-        home_dir().and_then(|path| AbsolutePathBuf::from_absolute_path_checked(path).ok());
+    let home_dir = codex_home::find_codex_home().ok();
     skill_roots_with_home_dir(
         fs,
         config_layer_stack,

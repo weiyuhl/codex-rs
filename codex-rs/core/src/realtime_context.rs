@@ -12,7 +12,6 @@ use codex_thread_store::ThreadSortKey;
 use codex_utils_absolute_path::AbsolutePathBuf;
 use codex_utils_output_truncation::TruncationPolicy;
 use codex_utils_output_truncation::truncate_text;
-use dirs::home_dir;
 use std::cmp::Reverse;
 use std::collections::HashMap;
 use std::collections::HashSet;
@@ -67,7 +66,8 @@ pub(crate) async fn build_realtime_startup_context(
     };
     let recent_threads = load_recent_threads(sess).await;
     let recent_work_section = build_recent_work_section(&cwd, &recent_threads).await;
-    let workspace_section = build_workspace_section_with_user_root(&cwd, home_dir()).await;
+    let user_home = codex_home::find_codex_home().ok().map(|p| p.into_path_buf());
+    let workspace_section = build_workspace_section_with_user_root(&cwd, user_home).await;
 
     if current_thread_section.is_none()
         && recent_work_section.is_none()

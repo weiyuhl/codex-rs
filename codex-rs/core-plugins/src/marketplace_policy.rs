@@ -488,7 +488,7 @@ fn managed_local_marketplace_name(codex_home: &Path, root: &Path) -> Option<&'st
         }
     }
 
-    let runtime_root = dirs::cache_dir()?
+    let runtime_root = std::env::temp_dir()
         .join("codex-runtimes/codex-primary-runtime/plugins")
         .join(OPENAI_PRIMARY_RUNTIME_MARKETPLACE_NAME);
     paths_match_after_normalization(root, &runtime_root)

@@ -77,7 +77,17 @@ PRoot 容器为嵌入在 App 内部的 Rust Agent 核心提供了一个完整的
 
 ---
 
-## 🌐 六、 Android 网络基础设施（代理、TLS CA、DNS）落地方案
+## 💻 六、 PRoot-Linux 沙箱环境下的 `shell-command` 命令行支持
+
+### 1. 架构兼容性说明
+- 在 Android App 内部集成 PRoot-Linux 沙箱并结合 App 内置终端视图（In-App Terminal View）时，用户与 Agent 需要在 PRoot 容器内部派生 Shell 命令行并交互。
+- **`shell-command` 模块的核心作用**：
+  - 负责派生子进程、管理 PGID 进程组、重定向 stdin/stdout 管道以及响应终端尺寸重置信号（`SIGWINCH`）。
+- **结论**：结合 App 的 PRoot-Linux 沙箱，`shell-command` 具备完全真实的运行场景，**100% 完整保留并正常提供服务**！
+
+---
+
+## 🌐 七、 Android 网络基础设施（代理、TLS CA、DNS）落地方案
 
 ### 1. 网络代理感知（`http-client/src/outbound_proxy.rs`）
 - **解决方案**：非 Windows/macOS 平台（如 Android）下，桌面 `sys_proxy` 检测自动禁用，退回为标准的 `reqwest` 环境变量代理解析（`HTTPS_PROXY` / `HTTP_PROXY` / `ALL_PROXY` / `NO_PROXY`）。
@@ -98,12 +108,14 @@ PRoot 容器为嵌入在 App 内部的 Rust Agent 核心提供了一个完整的
 
 ---
 
-## 📋 七、 总结与最佳实践 checklist
+## 📋 八、 总结与最佳实践 checklist
 
 1. **Rust 源码层面**：
    - 保持 `codex-rs` 中 `hooks/src/engine/command_runner.rs`、`shell-command/src/shell_detect.rs` 等模块现有的 `/bin/sh` 标准路径不变。
+   - 保持 `shell-command` 在 PRoot-Linux 沙箱下的命令行派生与 PTY 交互能力。
    - 保持 `rmcp-client` 的 Stdio 本地 MCP 派生能力不变。
-   - 已完成 `http-client` 的 `webpki-roots` 静态根证书回退机制。
+   - 物理删除 `tui` 控制台 UI 模块。
+   - `realtime_prompt.rs` 补充 Android `u0_a*` 隔离 UID 软过滤。
 
 2. **Android App 接入层 Checklist**：
    - [x] 指定根目录挂载：`proot -r /data/data/<pkg>/files/rootfs`

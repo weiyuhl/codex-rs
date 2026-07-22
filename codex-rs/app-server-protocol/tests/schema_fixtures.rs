@@ -115,18 +115,14 @@ Run `just write-app-server-schema` to overwrite with your changes.\n\n{diff}",
 fn schema_root() -> Result<PathBuf> {
     // In Bazel runfiles (especially manifest-only mode), resolving directories is not
     // reliable. Resolve a known file, then walk up to the schema root.
-    let typescript_index = codex_utils_cargo_bin::find_resource!("schema/typescript/index.ts")
-        .context("resolve TypeScript schema index.ts")?;
+    let typescript_index = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("schema/typescript/index.ts");
     let schema_root = typescript_index
         .parent()
         .and_then(|p| p.parent())
         .context("derive schema root from schema/typescript/index.ts")?
         .to_path_buf();
 
-    // Sanity check that the JSON fixtures resolve to the same schema root.
-    let json_bundle =
-        codex_utils_cargo_bin::find_resource!("schema/json/codex_app_server_protocol.schemas.json")
-            .context("resolve JSON schema bundle")?;
+    let json_bundle = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("schema/json/codex_app_server_protocol.schemas.json");
     let json_root = json_bundle
         .parent()
         .and_then(|p| p.parent())

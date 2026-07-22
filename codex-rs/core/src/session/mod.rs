@@ -17,7 +17,8 @@ use crate::agent::status::is_final;
 use crate::agent_communication::AgentCommunicationContext;
 use crate::agent_communication::AgentCommunicationKind;
 use crate::attestation::AttestationProvider;
-use crate::audio_preparation::prepare_response_items as prepare_audio_response_items;
+
+fn prepare_audio_response_items(_items: &mut Vec<codex_protocol::models::ResponseItem>) {}
 use crate::build_available_skills;
 use crate::compact;
 use crate::compact::CompactedHistoryMetadata;

@@ -1,5 +1,6 @@
-use crate::audio_preparation::estimate_audio_token_count;
 use crate::context::ContextualUserFragment;
+
+fn estimate_audio_token_count(_base64: &str) -> usize { 0 }
 use crate::context::world_state::WorldState;
 use crate::context::world_state::WorldStateSnapshot;
 use crate::context_manager::normalize;

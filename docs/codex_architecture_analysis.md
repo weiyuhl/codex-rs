@@ -26,7 +26,8 @@
 > 20. 彻底剥离第七批 2 大 Android 冗余/悬空/过度拆分模块（删除 `utils/elapsed` 悬空耗时格式化库，合并内联 `utils/json-to-toml` 到 `mcp-server`）。  
 > 21. 彻底剥离第八批 3 大 Android 冗余/悬空/过度拆分模块（删除 `core-api` 悬空接口库、`ext/agent` 悬空扩展库，合并内联 `context-fragments` 到 `core`）。  
 > 22. 彻底剥离第九批 1 大 Android 冗余桌面路径查找库（物理删除 `utils/home-dir` 桌面 Home 路径检测库，内联 `find_codex_home` 到 `codex-home`）。  
-> 23. `codex-rs/` 全量代码统计数据完成归档。  
+> 23. 彻底剥离第十批 1 大 Android 冗余报文 Debug 库（物理删除 `response-debug-context` 报文 Debug 解析库，合并内联到 `codex-api`）。  
+> 24. `codex-rs/` 全量代码统计数据完成归档。  
 
 ---
 

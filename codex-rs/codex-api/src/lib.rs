@@ -3,6 +3,7 @@ pub(crate) mod auth;
 pub(crate) mod common;
 pub(crate) mod endpoint;
 pub(crate) mod error;
+pub mod debug_context;
 pub(crate) mod files;
 pub(crate) mod images;
 pub(crate) mod provider;

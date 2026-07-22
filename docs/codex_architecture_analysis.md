@@ -7,8 +7,9 @@
 > 1. `codex-rs/tui` 模块已于 2026-07-22 成功从中移除，Workspace 依赖项已同步完成清理。  
 > 2. `codex-rs/app-server` 及 `codex-rs/app-server-client` 模块已于 2026-07-22 成功从中移除，Workspace 依赖项已同步完成清理。  
 > 3. 清理非 Rust 构建链文件（Bazel、SDK、Node/pnpm）。  
-> 4. `codex-rs/` 目录全量 94 个子 Crate 功能拓扑树与模块明细梳理。  
-> 5. `codex-rs/` 2091 个 Rust 源文件及 102 万行全量代码统计数据完成归档。  
+> 4. `codex-rs/cli` 桌面命令行二进制模块已于 2026-07-22 成功从中移除，Workspace 依赖项已同步完成清理。  
+> 5. `codex-rs/` 目录全量子 Crate 功能拓扑树与模块明细梳理。  
+> 6. `codex-rs/` 全量代码统计数据完成归档。  
 
 ---
 

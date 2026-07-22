@@ -14,7 +14,6 @@ use chrono::DateTime;
 use chrono::Datelike;
 use chrono::Local;
 use chrono::Utc;
-use codex_async_utils::CancelErr;
 use codex_utils_string::truncate_middle_chars;
 use codex_utils_string::truncate_middle_with_token_budget;
 use reqwest::StatusCode;
@@ -166,11 +165,7 @@ pub enum CodexErr {
     EnvVar(EnvVarError),
 }
 
-impl From<CancelErr> for CodexErr {
-    fn from(_: CancelErr) -> Self {
-        CodexErr::TurnAborted
-    }
-}
+
 
 impl CodexErr {
     pub fn is_retryable(&self) -> bool {

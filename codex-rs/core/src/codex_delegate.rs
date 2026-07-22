@@ -4,7 +4,7 @@ use std::sync::Arc;
 use async_channel::Receiver;
 use async_channel::Sender;
 use codex_analytics::GuardianApprovalRequestSource;
-use codex_async_utils::OrCancelExt;
+use crate::async_utils::OrCancelExt;
 use codex_extension_api::LoadedUserInstructions;
 use codex_protocol::protocol::ApplyPatchApprovalRequestEvent;
 use codex_protocol::protocol::Event;

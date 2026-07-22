@@ -32,7 +32,6 @@ members = [
     "exec-server",
     "execpolicy",
     "ext/agent",
-    "ext/connectors",
     "ext/extension-api",
     "ext/goal",
     "ext/image-generation",
@@ -75,7 +74,6 @@ members = [
     "utils/output-truncation",
     "utils/path-utils",
     "utils/plugins",
-    "utils/fuzzy-match",
     "utils/stream-parser",
     "utils/template",
     "codex-client",
@@ -106,7 +104,6 @@ codex-api = { path = "codex-api" }
 codex-app-server-protocol = { path = "app-server-protocol" }
 codex-apply-patch = { path = "apply-patch" }
 codex-arg0 = { path = "arg0" }
-codex-async-utils = { path = "async-utils" }
 codex-backend-client = { path = "backend-client" }
 codex-chatgpt = { path = "chatgpt" }
 codex-client = { path = "codex-client" }
@@ -117,7 +114,6 @@ codex-http-client = { path = "http-client" }
 codex-config = { path = "config" }
 codex-connectors = { path = "connectors" }
 codex-agent-extension = { path = "ext/agent" }
-codex-connectors-extension = { path = "ext/connectors" }
 codex-context-fragments = { path = "context-fragments" }
 codex-core = { path = "core" }
 codex-core-api = { path = "core-api" }
@@ -170,7 +166,6 @@ codex-tools = { path = "tools" }
 codex-utils-absolute-path = { path = "utils/absolute-path" }
 codex-utils-cache = { path = "utils/cache" }
 codex-utils-elapsed = { path = "utils/elapsed" }
-codex-utils-fuzzy-match = { path = "utils/fuzzy-match" }
 codex-utils-home-dir = { path = "utils/home-dir" }
 codex-utils-image = { path = "utils/image" }
 codex-utils-json-to-toml = { path = "utils/json-to-toml" }

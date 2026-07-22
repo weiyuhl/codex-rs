@@ -73,7 +73,7 @@ use codex_analytics::CompactionReason;
 use codex_analytics::InvocationType;
 use codex_analytics::TurnResolvedConfigFact;
 use codex_analytics::build_track_events_context;
-use codex_async_utils::OrCancelExt;
+use crate::async_utils::OrCancelExt;
 use codex_core_plugins::RecommendedPluginCandidatesInput;
 use codex_core_skills::injection::InjectedHostSkillPrompts;
 use codex_extension_api::TurnInputContext;
@@ -2029,7 +2029,7 @@ async fn try_run_sampling_request(
             .await
         {
             Ok(event) => event,
-            Err(codex_async_utils::CancelErr::Cancelled) => break Err(CodexErr::TurnAborted),
+            Err(crate::async_utils::CancelErr::Cancelled) => break Err(CodexErr::TurnAborted),
         };
 
         let event = match event {

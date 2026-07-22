@@ -1,4 +1,5 @@
-use codex_connectors_extension::ExecutorPluginConnectorProvider;
+pub trait ExecutorPluginConnectorProvider: Send + Sync {}
+impl<T: Send + Sync> ExecutorPluginConnectorProvider for T {}
 use codex_core::config::Config;
 use codex_core_plugins::ExecutorPluginProvider;
 use codex_exec_server::EnvironmentManager;

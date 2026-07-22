@@ -11,7 +11,7 @@ use pretty_assertions::assert_eq;
 use serde_json::json;
 use tempfile::tempdir;
 
-use codex_keyring_store::tests::MockKeyringStore;
+use codex_secrets::keyring_tests::MockKeyringStore;
 use keyring::Error as KeyringError;
 
 #[tokio::test]

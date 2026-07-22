@@ -6,7 +6,7 @@ use std::time::Instant;
 use anyhow::Context;
 use anyhow::Result;
 use codex_config::types::AuthKeyringBackendKind;
-use codex_keyring_store::tests::MockKeyringStore;
+use codex_secrets::keyring_tests::MockKeyringStore;
 use oauth2::AccessToken;
 use oauth2::RefreshToken;
 use oauth2::Scope;

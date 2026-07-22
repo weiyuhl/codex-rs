@@ -936,3 +936,18 @@ pub struct SandboxWorkspaceWrite {
 #[cfg(test)]
 #[path = "types_tests.rs"]
 mod tests;
+
+#[derive(Debug, Clone, Default, clap::Args)]
+pub struct SharedCliOptions {
+    #[arg(long = "config", global = true)]
+    pub config: Vec<String>,
+}
+
+impl SharedCliOptions {
+    pub fn config_overrides(&self) -> Result<Vec<(String, serde_json::Value)>, anyhow::Error> {
+        Ok(Vec::new())
+    }
+}
+
+pub type CliConfigOverrides = Vec<(String, serde_json::Value)>;
+

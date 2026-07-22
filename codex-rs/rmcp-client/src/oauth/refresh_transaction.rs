@@ -6,8 +6,8 @@ use std::time::UNIX_EPOCH;
 
 use anyhow::Context;
 use anyhow::Result;
-use codex_keyring_store::DefaultKeyringStore;
-use codex_keyring_store::KeyringStore;
+use codex_secrets::DefaultKeyringStore;
+use codex_secrets::KeyringStore;
 use oauth2::TokenResponse;
 use rmcp::transport::auth::AuthError;
 use rmcp::transport::auth::AuthorizationManager;

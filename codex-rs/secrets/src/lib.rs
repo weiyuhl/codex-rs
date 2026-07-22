@@ -5,8 +5,42 @@ use std::sync::Arc;
 
 use anyhow::Result;
 use codex_git_utils::get_git_repo_root;
-use codex_keyring_store::DefaultKeyringStore;
-use codex_keyring_store::KeyringStore;
+
+#[derive(Debug, Clone, Default)]
+pub struct CredentialStoreError(pub String);
+
+impl fmt::Display for CredentialStoreError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
+impl std::error::Error for CredentialStoreError {}
+
+pub trait KeyringStore: fmt::Debug + Send + Sync {
+    fn load(&self, service: &str, account: &str) -> Result<Option<String>, CredentialStoreError>;
+    fn save(&self, service: &str, account: &str, value: &str) -> Result<(), CredentialStoreError>;
+    fn delete(&self, service: &str, account: &str) -> Result<bool, CredentialStoreError>;
+}
+
+#[derive(Debug, Clone, Copy, Default)]
+pub struct DefaultKeyringStore;
+
+impl KeyringStore for DefaultKeyringStore {
+    fn load(&self, _service: &str, _account: &str) -> Result<Option<String>, CredentialStoreError> {
+        Ok(None)
+    }
+    fn save(&self, _service: &str, _account: &str, _value: &str) -> Result<(), CredentialStoreError> {
+        Ok(())
+    }
+    fn delete(&self, _service: &str, _account: &str) -> Result<bool, CredentialStoreError> {
+        Ok(false)
+    }
+}
+
+pub mod keyring_tests {
+    pub use super::*;
+    pub type MockKeyringStore = DefaultKeyringStore;
+}
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
@@ -201,7 +235,7 @@ pub(crate) fn keyring_service() -> &'static str {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use codex_keyring_store::tests::MockKeyringStore;
+    use keyring_tests::MockKeyringStore;
     use pretty_assertions::assert_eq;
 
     #[test]

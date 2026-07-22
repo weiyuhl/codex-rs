@@ -17,7 +17,8 @@
 > 11. 彻底剥离 V8 引擎 POC 模块（删除 `v8-poc`）。  
 > 12. 彻底剥离桌面 Linux Bubblewrap 隔离包装模块（删除 `bwrap`）。  
 > 13. 彻底剥离 app-server 残留守护进程/Socket传输/测试模块（删除 `app-server-daemon`、`app-server-transport`、`app-server-test-client`，保留 `app-server-protocol` Schema 数据定义库）。  
-> 14. `codex-rs/` 全量代码统计数据完成归档。  
+> 14. 彻底剥离 5 大 Android 平台冗余与不可用模块（删除 `terminal-detection` 桌面终端检测、`keyring-store` 桌面系统凭据锁、`utils/cli` 桌面命令行辅助、`thread-manager-sample` 样例代码，精简重构 `utils/pty` 虚拟终端控制）。  
+> 15. `codex-rs/` 全量代码统计数据完成归档。  
 
 ---
 

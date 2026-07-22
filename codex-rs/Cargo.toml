@@ -44,7 +44,6 @@ members = [
     "ext/mcp",
     "ext/skills",
     "ext/web-search",
-    "keyring-store",
     "file-search",
     "file-watcher",
     "linux-sandbox",
@@ -81,7 +80,6 @@ members = [
     "utils/readiness",
     "utils/rustls-provider",
     "utils/string",
-    "utils/cli",
     "utils/elapsed",
     "utils/sandbox-summary",
     "utils/approval-presets",
@@ -95,9 +93,7 @@ members = [
     "codex-client",
     "codex-api",
     "state",
-    "terminal-detection",
     "test-binary-support",
-    "thread-manager-sample",
     "thread-store",
     "uds",
     "codex-experimental-api-macros",
@@ -159,7 +155,6 @@ codex-file-search = { path = "file-search" }
 codex-file-watcher = { path = "file-watcher" }
 codex-git-utils = { path = "git-utils" }
 codex-hooks = { path = "hooks" }
-codex-keyring-store = { path = "keyring-store" }
 codex-linux-sandbox = { path = "linux-sandbox" }
 codex-lmstudio = { path = "lmstudio" }
 codex-login = { path = "login" }
@@ -192,7 +187,6 @@ codex-shell-escalation = { path = "shell-escalation" }
 codex-skills-extension = { path = "ext/skills" }
 codex-skills = { path = "skills" }
 codex-state = { path = "state" }
-codex-terminal-detection = { path = "terminal-detection" }
 codex-test-binary-support = { path = "test-binary-support" }
 codex-thread-store = { path = "thread-store" }
 codex-tools = { path = "tools" }
@@ -201,7 +195,6 @@ codex-utils-absolute-path = { path = "utils/absolute-path" }
 codex-utils-approval-presets = { path = "utils/approval-presets" }
 codex-utils-cache = { path = "utils/cache" }
 codex-utils-cargo-bin = { path = "utils/cargo-bin" }
-codex-utils-cli = { path = "utils/cli" }
 codex-utils-elapsed = { path = "utils/elapsed" }
 codex-utils-fuzzy-match = { path = "utils/fuzzy-match" }
 codex-utils-home-dir = { path = "utils/home-dir" }

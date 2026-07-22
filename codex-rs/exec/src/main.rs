@@ -14,7 +14,7 @@ use codex_arg0::Arg0DispatchPaths;
 use codex_arg0::arg0_dispatch_or_else;
 use codex_exec::Cli;
 use codex_exec::run_main;
-use codex_utils_cli::CliConfigOverrides;
+use codex_config::types::CliConfigOverrides;
 
 #[derive(Parser, Debug)]
 struct TopCli {

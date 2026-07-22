@@ -4,7 +4,7 @@ use anyhow::Context;
 use anyhow::Result;
 use codex_config::types::AuthKeyringBackendKind;
 use codex_config::types::OAuthCredentialsStoreMode;
-use codex_keyring_store::KeyringStore;
+use codex_secrets::KeyringStore;
 use tracing::warn;
 
 use super::OAuthKeyringLoadError;

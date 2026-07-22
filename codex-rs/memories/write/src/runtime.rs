@@ -34,7 +34,7 @@ use codex_protocol::protocol::TokenUsage;
 use codex_protocol::user_input::UserInput;
 use codex_rollout_trace::InferenceTraceContext;
 use codex_state::StateRuntime;
-use codex_terminal_detection::user_agent;
+use codex_login::default_client::user_agent;
 use futures::StreamExt;
 use std::sync::Arc;
 use std::time::Duration;

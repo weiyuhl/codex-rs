@@ -8,8 +8,6 @@ members = [
     "apply-patch",
     "features",
     "codex-backend-openapi-models",
-    "code-mode",
-    "code-mode-protocol",
     "codex-home",
     "connectors",
     "config",
@@ -51,7 +49,6 @@ members = [
     "git-utils",
     "utils/cache",
     "utils/image",
-    "utils/pty",
     "utils/rustls-provider",
     "utils/string",
     "utils/output-truncation",
@@ -89,8 +86,6 @@ codex-apply-patch = { path = "apply-patch" }
 codex-backend-client = { path = "backend-client" }
 codex-chatgpt = { path = "chatgpt" }
 codex-client = { path = "codex-client" }
-codex-code-mode = { path = "code-mode" }
-codex-code-mode-protocol = { path = "code-mode-protocol" }
 codex-home = { path = "codex-home" }
 codex-http-client = { path = "http-client" }
 codex-config = { path = "config" }
@@ -142,7 +137,6 @@ codex-utils-output-truncation = { path = "utils/output-truncation" }
 codex-utils-path = { path = "utils/path-utils" }
 codex-utils-path-uri = { path = "utils/path-uri" }
 codex-utils-plugins = { path = "utils/plugins" }
-codex-utils-pty = { path = "utils/pty" }
 codex-utils-rustls-provider = { path = "utils/rustls-provider" }
 codex-utils-stream-parser = { path = "utils/stream-parser" }
 codex-utils-string = { path = "utils/string" }
@@ -340,10 +334,8 @@ unicode-width = "0.2"
 url = "2"
 urlencoding = "2.1"
 uuid = "1"
-v8 = "=149.2.0"
 vt100 = "0.16.2"
 walkdir = "2.5.0"
-webbrowser = "1.0"
 which = "8"
 whoami = "1.6.1"
 wildmatch = "2.6.1"

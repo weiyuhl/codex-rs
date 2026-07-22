@@ -93,7 +93,7 @@ impl Drop for ChildProcessCleanupGuard {
     fn drop(&mut self) {
         #[cfg(unix)]
         {
-            let _ = codex_utils_pty::process_group::kill_process_group(self.0);
+            
         }
 
         #[cfg(windows)]

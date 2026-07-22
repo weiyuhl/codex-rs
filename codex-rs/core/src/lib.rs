@@ -6,6 +6,7 @@
 #![deny(clippy::print_stdout, clippy::print_stderr)]
 
 pub mod async_utils;
+pub mod code_mode_stub;
 mod apply_patch;
 mod apps;
 mod audio_preparation;

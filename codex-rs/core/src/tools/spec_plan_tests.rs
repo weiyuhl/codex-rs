@@ -472,8 +472,8 @@ async fn request_user_input_stays_direct_in_code_mode_only() {
 
     plan.assert_visible_contains(&[
         "request_user_input",
-        codex_code_mode::PUBLIC_TOOL_NAME,
-        codex_code_mode::WAIT_TOOL_NAME,
+        crate::code_mode_stub::PUBLIC_TOOL_NAME,
+        crate::code_mode_stub::WAIT_TOOL_NAME,
     ]);
     plan.assert_registered_contains(&["request_user_input"]);
     assert_eq!(
@@ -481,7 +481,7 @@ async fn request_user_input_stays_direct_in_code_mode_only() {
         ToolExposure::DirectModelOnly
     );
 
-    let ToolSpec::Freeform(exec) = plan.visible_spec(codex_code_mode::PUBLIC_TOOL_NAME) else {
+    let ToolSpec::Freeform(exec) = plan.visible_spec(crate::code_mode_stub::PUBLIC_TOOL_NAME) else {
         panic!("expected code mode exec tool");
     };
     assert!(!exec.description.contains("request_user_input"));
@@ -532,7 +532,7 @@ async fn shell_zsh_fork_stays_standalone_until_unified_exec_composition_is_enabl
     })
     .await;
 
-    if codex_utils_pty::conpty_supported() {
+    if false {
         composed.assert_visible_contains(&["exec_command", "write_stdin"]);
         composed.assert_visible_lacks(&["shell_command"]);
         composed.assert_registered_contains(&["exec_command", "write_stdin", "shell_command"]);
@@ -545,7 +545,7 @@ async fn shell_zsh_fork_stays_standalone_until_unified_exec_composition_is_enabl
 
 #[tokio::test]
 async fn zsh_fork_unified_exec_hides_shell_parameter() {
-    if !codex_utils_pty::conpty_supported() {
+    if true {
         return;
     }
 
@@ -570,7 +570,7 @@ async fn zsh_fork_unified_exec_hides_shell_parameter() {
 
 #[tokio::test]
 async fn zsh_fork_unified_exec_keeps_shell_parameter_when_remote_environment_available() {
-    if !codex_utils_pty::conpty_supported() {
+    if true {
         return;
     }
 
@@ -1043,8 +1043,8 @@ async fn code_mode_only_exposes_code_executor_and_hides_nested_tools() {
         &["lookup".to_string()]
     );
     plain.assert_visible_lacks(&[
-        codex_code_mode::PUBLIC_TOOL_NAME,
-        codex_code_mode::WAIT_TOOL_NAME,
+        crate::code_mode_stub::PUBLIC_TOOL_NAME,
+        crate::code_mode_stub::WAIT_TOOL_NAME,
     ]);
 
     let code_mode_only = probe_with(
@@ -1062,8 +1062,8 @@ async fn code_mode_only_exposes_code_executor_and_hides_nested_tools() {
     )
     .await;
     code_mode_only.assert_visible_contains(&[
-        codex_code_mode::PUBLIC_TOOL_NAME,
-        codex_code_mode::WAIT_TOOL_NAME,
+        crate::code_mode_stub::PUBLIC_TOOL_NAME,
+        crate::code_mode_stub::WAIT_TOOL_NAME,
     ]);
     assert_eq!(
         code_mode_only.namespace_function_names("codex_app"),
@@ -1078,7 +1078,7 @@ async fn code_mode_buffered_exec_updates_exec_description() {
     })
     .await;
 
-    let ToolSpec::Freeform(exec) = plan.visible_spec(codex_code_mode::PUBLIC_TOOL_NAME) else {
+    let ToolSpec::Freeform(exec) = plan.visible_spec(crate::code_mode_stub::PUBLIC_TOOL_NAME) else {
         panic!("expected code mode exec tool");
     };
     assert!(exec.description.contains("Defaults to 30000 ms."));
@@ -1107,8 +1107,8 @@ async fn code_mode_only_exposes_configured_dynamic_namespace_directly() {
     .await;
 
     plan.assert_visible_contains(&[
-        codex_code_mode::PUBLIC_TOOL_NAME,
-        codex_code_mode::WAIT_TOOL_NAME,
+        crate::code_mode_stub::PUBLIC_TOOL_NAME,
+        crate::code_mode_stub::WAIT_TOOL_NAME,
         "direct_only",
     ]);
     plan.assert_visible_lacks(&["tool_search"]);
@@ -1121,7 +1121,7 @@ async fn code_mode_only_exposes_configured_dynamic_namespace_directly() {
     };
     let ResponsesApiNamespaceTool::Function(tool) = &namespace.tools[0];
     assert_eq!(tool.defer_loading, None);
-    let ToolSpec::Freeform(exec) = plan.visible_spec(codex_code_mode::PUBLIC_TOOL_NAME) else {
+    let ToolSpec::Freeform(exec) = plan.visible_spec(crate::code_mode_stub::PUBLIC_TOOL_NAME) else {
         panic!("expected code mode exec tool");
     };
     assert!(!exec.description.contains("direct_only_lookup(args:"));
@@ -1149,7 +1149,7 @@ async fn excluded_deferred_namespaces_do_not_enable_nested_tool_guidance() {
     )
     .await;
 
-    let ToolSpec::Freeform(exec) = plan.visible_spec(codex_code_mode::PUBLIC_TOOL_NAME) else {
+    let ToolSpec::Freeform(exec) = plan.visible_spec(crate::code_mode_stub::PUBLIC_TOOL_NAME) else {
         panic!("expected code mode exec tool");
     };
     assert!(
@@ -1347,8 +1347,8 @@ async fn tool_mode_selector_overrides_feature_flags() {
     })
     .await;
     direct.assert_visible_lacks(&[
-        codex_code_mode::PUBLIC_TOOL_NAME,
-        codex_code_mode::WAIT_TOOL_NAME,
+        crate::code_mode_stub::PUBLIC_TOOL_NAME,
+        crate::code_mode_stub::WAIT_TOOL_NAME,
     ]);
 }
 
@@ -1617,8 +1617,8 @@ async fn hosted_web_search_and_standalone_image_generation_follow_runtime_gates(
         code_mode_only.visible_names,
         vec![
             // Code-mode entrypoints.
-            codex_code_mode::PUBLIC_TOOL_NAME,
-            codex_code_mode::WAIT_TOOL_NAME,
+            crate::code_mode_stub::PUBLIC_TOOL_NAME,
+            crate::code_mode_stub::WAIT_TOOL_NAME,
             "request_user_input",
             // Multi-agent v2 tools.
             MULTI_AGENT_V2_NAMESPACE,

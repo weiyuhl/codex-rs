@@ -21,7 +21,7 @@
 
 ## 🚀 二、已完成的裁剪与重构成果
 
-目前已累计完成 **18 轮深度裁剪**，彻底物理剥离与合并解耦了 **43 个桌面冗余/不可用/悬空/过度拆分 Crate**，清理干掉了 **约 146,000+ 行桌面冗余代码**，将工作区 Crate 数量从 108+ 成功瘦身降至 **66 个**。
+目前已累计完成 **19 轮深度裁剪**，彻底物理剥离与合并解耦了 **46 个桌面冗余/不可用/悬空/过度拆分 Crate**，清理干掉了 **约 153,300+ 行桌面冗余代码**，将工作区 Crate 数量从 108+ 成功瘦身降至 **63 个**。
 
 ### 明细剥离清单：
 
@@ -44,6 +44,7 @@
 | **第十六轮** | `exec-server`, `network-proxy`, `mcp-server`, `code-mode-host` | 物理删除 4 大 Android 严重不兼容中大型 Crate（守护进程服务器、MITM CA 代理、Stdio MCP 服务端、Node.js 宿主，共 57,000+ 行代码） |
 | **第十七轮** | `windows-sandbox-rs`, `process-hardening`, `app-server-client` | 物理删除 Windows 沙箱实现、进程加固模块及 App Server 客户端残留 |
 | **第十八轮** | `sandboxing`, `exec`, `arg0`, `execpolicy` | 物理删除 4 大 Android 严重不兼容/桌面控制台 Crate（系统沙箱包装器、CLI 命令行入口、argv[0] 符号链接分发器、PowerShell/Brew 安全策略规则库，共 16,338 行代码） |
+| **第十九轮** | `utils/pty`, `code-mode`, `code-mode-protocol` | 物理删除 3 大 PTY 伪终端系统调用库、V8 CodeMode 宿主与 Protocol 传输库（7,290 行代码）并物理清除 `webbrowser` 依赖 |
 | **遥测控制** | `analytics`, `otel` 网络分发暂停 | 封堵静默用户事件 POST 与 OTLP/Statsig 线程组，消除电量与流量隐患 |
 
 ---
@@ -52,10 +53,10 @@
 
 经最新盘点，`codex-rs/` 工作区代码库数据如下：
 
-- 📦 **Workspace Crate 总数**：**66 个**（从 108+ 降至 66 个，达成极高纯度瘦身）
-- 📄 **Rust 源码文件数 (`.rs`)**：**1,544 个**
-- 📝 **Rust 代码总行数 (LoC)**：**585,688 行**
-- 🧹 **依赖与引用状态**：全工作区针对上述已删除 43 个 Crate 的代码引用与 Cargo 依赖已 **100% 清零**，Git 工作区处于完全干净（Clean）状态。
+- 📦 **Workspace Crate 总数**：**63 个**（从 108+ 降至 63 个，达成极高纯度瘦身）
+- 📄 **Rust 源码文件数 (`.rs`)**：**1,520 个**
+- 📝 **Rust 代码总行数 (LoC)**：**578,398 行**
+- 🧹 **依赖与引用状态**：全工作区针对上述已删除 46 个 Crate 的代码引用与 Cargo 依赖已 **100% 清零**，Git 工作区处于完全干净（Clean）状态。
 
 ---
 

@@ -105,11 +105,7 @@ pub fn shell_type_for_model_and_features(
         match unified_exec_feature_mode {
             UnifiedExecFeatureMode::Disabled => shell_command_type,
             UnifiedExecFeatureMode::Direct | UnifiedExecFeatureMode::ZshFork => {
-                if codex_utils_pty::conpty_supported() {
-                    ConfigShellToolType::UnifiedExec
-                } else {
-                    ConfigShellToolType::ShellCommand
-                }
+                ConfigShellToolType::ShellCommand
             }
         }
     }

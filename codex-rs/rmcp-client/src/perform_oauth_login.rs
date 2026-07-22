@@ -572,19 +572,9 @@ impl OauthLoginFlow {
             let server_name = &self.server_name;
             let auth_url = &self.auth_url;
             if emit_browser_url {
-                println!(
-                    "Authorize `{server_name}` by opening this URL in your browser:\n{auth_url}\n"
-                );
-            }
-
-            if webbrowser::open(auth_url).is_err() {
-                if !emit_browser_url {
-                    eprintln!(
-                        "Authorize `{server_name}` by opening this URL in your browser:\n{auth_url}\n"
-                    );
-                }
-                eprintln!("(Browser launch failed; please copy the URL above manually.)");
-            }
+            println!(
+                "Authorize `{server_name}` by opening this URL in your browser:\n{auth_url}\n"
+            );
         }
 
         let result = async {

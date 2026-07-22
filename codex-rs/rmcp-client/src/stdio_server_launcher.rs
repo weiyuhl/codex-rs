@@ -34,10 +34,6 @@ use codex_config::types::McpServerEnvVar;
 use codex_protocol::config_types::ShellEnvironmentPolicyInherit;
 use codex_utils_path_uri::LegacyAppPathString;
 use codex_utils_path_uri::PathUri;
-#[cfg(unix)]
-use codex_utils_pty::process_group::kill_process_group;
-#[cfg(unix)]
-use codex_utils_pty::process_group::terminate_process_group;
 use futures::FutureExt;
 use futures::future::BoxFuture;
 use rmcp::service::RoleClient;
@@ -322,22 +318,7 @@ impl LocalProcessTerminator {
 
     #[cfg(unix)]
     fn terminate(&self) {
-        let process_group_id = self.process_group_id;
-        let should_escalate = match terminate_process_group(process_group_id) {
-            Ok(exists) => exists,
-            Err(error) => {
-                warn!("Failed to terminate MCP process group {process_group_id}: {error}");
-                false
-            }
-        };
-        if should_escalate {
-            spawn(move || {
-                sleep(PROCESS_GROUP_TERM_GRACE_PERIOD);
-                if let Err(error) = kill_process_group(process_group_id) {
-                    warn!("Failed to kill MCP process group {process_group_id}: {error}");
-                }
-            });
-        }
+        let _ = self.child.lock().unwrap().kill();
     }
 
     #[cfg(windows)]

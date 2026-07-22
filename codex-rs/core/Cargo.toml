@@ -1,4 +1,4 @@
-﻿[package]
+[package]
 edition.workspace = true
 license.workspace = true
 name = "codex-core"
@@ -28,7 +28,6 @@ codex-agent-graph-store = { workspace = true }
 codex-api = { workspace = true }
 codex-app-server-protocol = { workspace = true }
 codex-apply-patch = { workspace = true }
-codex-code-mode = { workspace = true }
 codex-connectors = { workspace = true }
 codex-config = { workspace = true }
 codex-core-plugins = { workspace = true }
@@ -67,7 +66,6 @@ codex-utils-output-truncation = { workspace = true }
 codex-utils-path = { workspace = true }
 codex-utils-path-uri = { workspace = true }
 codex-utils-plugins = { workspace = true }
-codex-utils-pty = { workspace = true }
 codex-utils-string = { workspace = true }
 codex-utils-stream-parser = { workspace = true }
 dirs = { workspace = true }

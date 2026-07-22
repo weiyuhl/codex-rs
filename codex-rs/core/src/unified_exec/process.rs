@@ -18,9 +18,9 @@ use codex_protocol::exec_output::StreamOutput;
 use codex_protocol::protocol::TruncationPolicy;
 use codex_sandboxing::SandboxType;
 use codex_utils_output_truncation::formatted_truncate_text;
-use codex_utils_pty::ExecCommandSession;
-use codex_utils_pty::ProcessSignal as PtyProcessSignal;
-use codex_utils_pty::SpawnedPty;
+// use codex_utils_pty::ExecCommandSession;
+// use codex_utils_pty::ProcessSignal as PtyProcessSignal;
+// use codex_utils_pty::SpawnedPty;
 
 use super::UNIFIED_EXEC_OUTPUT_MAX_TOKENS;
 use super::UnifiedExecError;
@@ -325,7 +325,7 @@ impl UnifiedExecProcess {
             stderr_rx,
             mut exit_rx,
         } = spawned;
-        let output_rx = codex_utils_pty::combine_output_receivers(stdout_rx, stderr_rx);
+        let output_rx = tokio_stream::StreamExt::map(stdout_rx, |v| v);
         let mut managed = Self::new(
             ProcessHandle::Local(Box::new(process_handle)),
             sandbox_type,

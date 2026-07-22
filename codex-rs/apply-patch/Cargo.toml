@@ -9,10 +9,6 @@ name = "codex_apply_patch"
 path = "src/lib.rs"
 doctest = false
 
-[[bin]]
-name = "apply_patch"
-path = "src/main.rs"
-
 [lints]
 workspace = true
 

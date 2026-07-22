@@ -1,5 +1,4 @@
 use codex_config::McpServerConfig;
-use codex_exec_server_protocol::ExecutorCapabilityDiscoverySnapshot;
 use codex_protocol::capabilities::SelectedCapabilityRoot;
 
 use crate::ExtensionData;
@@ -22,7 +21,7 @@ pub struct McpServerContributionContext<'a, C> {
     /// Selected roots resolved against ready environments for this exact step.
     ready_selected_capability_roots: Option<&'a [SelectedCapabilityRoot]>,
     /// Executor-materialized capability files shared by all consumers in this exact step.
-    executor_capability_discovery: Option<&'a ExecutorCapabilityDiscoverySnapshot>,
+    executor_capability_discovery: Option<&'a ()>,
 }
 
 impl<C> Clone for McpServerContributionContext<'_, C> {
@@ -53,7 +52,7 @@ impl<'a, C> McpServerContributionContext<'a, C> {
         thread_store: &'a ExtensionData,
         originator: &'a str,
         ready_selected_capability_roots: &'a [SelectedCapabilityRoot],
-        executor_capability_discovery: Option<&'a ExecutorCapabilityDiscoverySnapshot>,
+        executor_capability_discovery: Option<&'a ()>,
     ) -> Self {
         Self {
             config,
@@ -91,7 +90,7 @@ impl<'a, C> McpServerContributionContext<'a, C> {
     }
 
     /// Returns the executor-materialized capability files for this model step, when enabled.
-    pub fn executor_capability_discovery(&self) -> Option<&'a ExecutorCapabilityDiscoverySnapshot> {
+    pub fn executor_capability_discovery(&self) -> Option<&'a ()> {
         self.executor_capability_discovery
     }
 }

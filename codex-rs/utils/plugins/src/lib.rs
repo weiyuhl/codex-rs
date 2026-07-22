@@ -7,7 +7,12 @@ pub mod mcp_connector;
 pub mod mention_syntax;
 pub mod plugin_namespace;
 
-pub use codex_exec_server_protocol::DISCOVERABLE_PLUGIN_MANIFEST_PATHS;
+pub const DISCOVERABLE_PLUGIN_MANIFEST_PATHS: &[&str] = &[
+    ".codex/plugin.json",
+    ".codex/plugin.toml",
+    ".codex/plugin.yaml",
+    ".codex/plugin.yml",
+];
 pub use plugin_namespace::find_plugin_manifest_path;
 pub use plugin_namespace::plugin_namespace_for_root_uri;
 pub use plugin_namespace::plugin_namespace_for_skill_path;

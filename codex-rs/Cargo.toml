@@ -16,11 +16,9 @@ members = [
     "codex-home",
     "connectors",
     "config",
-    "context-fragments",
     "shell-command",
     "skills",
     "core",
-    "core-api",
     "core-plugins",
     "core-skills",
     "hooks",
@@ -31,7 +29,6 @@ members = [
     "exec-server-protocol",
     "exec-server",
     "execpolicy",
-    "ext/agent",
     "ext/extension-api",
     "ext/goal",
     "ext/image-generation",
@@ -111,10 +108,7 @@ codex-home = { path = "codex-home" }
 codex-http-client = { path = "http-client" }
 codex-config = { path = "config" }
 codex-connectors = { path = "connectors" }
-codex-agent-extension = { path = "ext/agent" }
-codex-context-fragments = { path = "context-fragments" }
 codex-core = { path = "core" }
-codex-core-api = { path = "core-api" }
 codex-core-plugins = { path = "core-plugins" }
 codex-core-skills = { path = "core-skills" }
 codex-exec = { path = "exec" }

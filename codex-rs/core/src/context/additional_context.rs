@@ -1,6 +1,6 @@
 use codex_utils_string::truncate_middle_with_token_budget;
 
-use crate::ContextualUserFragment;
+use super::fragments::ContextualUserFragment;
 
 const MAX_ADDITIONAL_CONTEXT_VALUE_TOKENS: usize = 1_000;
 const ADDITIONAL_CONTEXT_END_MARKER_SUFFIX: &str = ">";

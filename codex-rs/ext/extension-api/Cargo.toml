@@ -15,7 +15,7 @@ workspace = true
 
 [dependencies]
 codex-config = { workspace = true }
-codex-context-fragments = { workspace = true }
+codex-core = { workspace = true }
 codex-exec-server-protocol = { workspace = true }
 codex-protocol = { workspace = true }
 codex-tools = { workspace = true }

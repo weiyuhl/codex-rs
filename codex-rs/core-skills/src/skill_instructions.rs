@@ -1,4 +1,4 @@
-use codex_context_fragments::ContextualUserFragment;
+use codex_core::context::ContextualUserFragment;
 
 use crate::injection::SkillInjection;
 

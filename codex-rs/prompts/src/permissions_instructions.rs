@@ -1,4 +1,4 @@
-use codex_context_fragments::ContextualUserFragment;
+use codex_core::context::ContextualUserFragment;
 use codex_execpolicy::Policy;
 use codex_protocol::config_types::ApprovalsReviewer;
 use codex_protocol::config_types::SandboxMode;

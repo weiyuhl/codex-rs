@@ -24,7 +24,8 @@
 > 18. 彻底剥离第五批 4 大 Android 冗余/桌面模型管理器模块（删除 `ext/guardian` 悬空审查扩展、`lmstudio` 桌面本地大模型连接器、`ollama` 桌面本地大模型连接器、`utils/oss` 本地模型包装库）。  
 > 19. 彻底剥离第六批 3 大 Android 冗余/悬空/过度拆分模块（删除 `ext/connectors` 悬空连接器扩展、`utils/fuzzy-match` 桌面终端补全库，合并内联 `async-utils` 到 `core`）。  
 > 20. 彻底剥离第七批 2 大 Android 冗余/悬空/过度拆分模块（删除 `utils/elapsed` 悬空耗时格式化库，合并内联 `utils/json-to-toml` 到 `mcp-server`）。  
-> 21. `codex-rs/` 全量代码统计数据完成归档。  
+> 21. 彻底剥离第八批 3 大 Android 冗余/悬空/过度拆分模块（删除 `core-api` 悬空接口库、`ext/agent` 悬空扩展库，合并内联 `context-fragments` 到 `core`）。  
+> 22. `codex-rs/` 全量代码统计数据完成归档。  
 
 ---
 

@@ -76,7 +76,7 @@ fn sandbox_detection_uses_aggregated_output() {
         "cargo failed: Read-only file system when writing target",
     );
     assert!(is_likely_sandbox_denied(
-        SandboxType::MacosSeatbelt,
+        SandboxType::LinuxSeccomp,
         &output
     ));
 }

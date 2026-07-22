@@ -202,8 +202,6 @@ pub enum SandboxTransformError {
     EnvironmentNetworkProxy(String),
     #[cfg(target_os = "linux")]
     Wsl1UnsupportedForBubblewrap,
-    #[cfg(not(target_os = "macos"))]
-    SeatbeltUnavailable,
     #[cfg(target_os = "windows")]
     WindowsSandboxPreparation(String),
 }
@@ -229,8 +227,6 @@ impl std::fmt::Display for SandboxTransformError {
             }
             #[cfg(target_os = "linux")]
             Self::Wsl1UnsupportedForBubblewrap => write!(f, "{WSL1_BWRAP_WARNING}"),
-            #[cfg(not(target_os = "macos"))]
-            Self::SeatbeltUnavailable => write!(f, "seatbelt sandbox is only available on macOS"),
             #[cfg(target_os = "windows")]
             Self::WindowsSandboxPreparation(err) => {
                 write!(f, "failed to prepare windows sandbox wrapper: {err}")
@@ -248,8 +244,6 @@ impl std::error::Error for SandboxTransformError {
             Self::EnvironmentNetworkProxy(_) => None,
             #[cfg(target_os = "linux")]
             Self::Wsl1UnsupportedForBubblewrap => None,
-            #[cfg(not(target_os = "macos"))]
-            Self::SeatbeltUnavailable => None,
             #[cfg(target_os = "windows")]
             Self::WindowsSandboxPreparation(_) => None,
         }
@@ -343,32 +337,6 @@ impl SandboxManager {
 
         let (argv, arg0_override, pending_sandboxed_request) = match sandbox {
             SandboxType::None => (os_argv_to_strings(argv), None, None),
-            #[cfg(target_os = "macos")]
-            SandboxType::MacosSeatbelt => {
-                use crate::seatbelt::CreateSeatbeltCommandArgsParams;
-                use crate::seatbelt::MACOS_PATH_TO_SEATBELT_EXECUTABLE;
-                use crate::seatbelt::create_seatbelt_command_args;
-
-                let pending = pending_sandboxed_request?;
-                let mut args = create_seatbelt_command_args(CreateSeatbeltCommandArgsParams {
-                    command: os_argv_to_strings(argv),
-                    file_system_sandbox_policy: &pending.effective_file_system_policy,
-                    network_sandbox_policy: pending.effective_network_policy,
-                    sandbox_policy_cwd: pending.native_sandbox_policy_cwd.as_path(),
-                    enforce_managed_network,
-                    managed_network,
-                    environment_id,
-                    network,
-                    extra_allow_unix_sockets: &[],
-                })
-                .map_err(SandboxTransformError::EnvironmentNetworkProxy)?;
-                let mut full_command = Vec::with_capacity(1 + args.len());
-                full_command.push(MACOS_PATH_TO_SEATBELT_EXECUTABLE.to_string());
-                full_command.append(&mut args);
-                (full_command, None, Some(pending))
-            }
-            #[cfg(not(target_os = "macos"))]
-            SandboxType::MacosSeatbelt => return Err(SandboxTransformError::SeatbeltUnavailable),
             SandboxType::LinuxSeccomp => {
                 let pending = pending_sandboxed_request?;
                 let exe = codex_linux_sandbox_exe

@@ -31,7 +31,7 @@ where
 {
     let sandbox_type = get_platform_sandbox(/*windows_sandbox_enabled*/ false)
         .expect("should be able to get sandbox type");
-    assert_eq!(sandbox_type, SandboxType::MacosSeatbelt);
+    assert_eq!(sandbox_type, SandboxType::LinuxSeccomp);
     let cwd = tmp.path().abs();
 
     let params = ExecParams {

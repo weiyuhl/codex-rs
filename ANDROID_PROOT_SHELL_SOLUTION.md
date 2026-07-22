@@ -108,7 +108,27 @@ PRoot 容器为嵌入在 App 内部的 Rust Agent 核心提供了一个完整的
 
 ---
 
-## 📋 八、 总结与最佳实践 checklist
+## 🔑 八、 凭据存储、时区感知与 Rollout 持久化存储机制
+
+### 1. 凭据存储 (Keyring vs File Mode)
+- **机制说明**：Agent 的 Token 存储提供 `Keyring`（桌面系统钥匙串）与 `File`（私有文件）两种模式。
+- **Android 落地方案**：禁用桌面级 DBus / Keychain 依赖，将凭据存储锁定为 **`AuthStoreMode::File` 模式**。Tokens 会以加密 JSON 形式直接储存在 Android App 的私有存储目录 (`/data/data/<package_name>/files/auth.json`) 中，安全且天然隔离。
+
+### 2. 系统时区感知 (`iana_time_zone`)
+- **机制说明**：Android 根目录无 `/etc/localtime` 软链接。
+- **Android 落地方案**：由 JNI 在 App 初始化时读取 Android 的 `java.util.TimeZone.getDefault().id`，并通过环境变量注入：
+  ```kotlin
+  android.system.Os.setenv("TZ", TimeZone.getDefault().id, true)
+  ```
+  同时结合 `realtime_prompt.rs` 中的软过滤防护，确保 Agent 准确识别 Android 手机本地时区（如 `Asia/Shanghai`）。
+
+### 3. Rollout 模块性质说明
+- **澄清说明**：Agent 核心中**不存在任何桌面二进制自动更新（Auto-Update）逻辑**。工作区中的 `rollout` 模块本质上是 **SQLite 对话历史与 Thread 数据库存储器 (`state.db`)**。
+- **保留必要性**：`rollout` 用于在 Android App 私有目录中持久化保存用户的聊天记录与 Context 会话，属于核心数据持久化模块，必须完整保留。
+
+---
+
+## 📋 九、 总结与最佳实践 checklist
 
 1. **Rust 源码层面**：
    - 保持 `codex-rs` 中 `hooks/src/engine/command_runner.rs`、`shell-command/src/shell_detect.rs` 等模块现有的 `/bin/sh` 标准路径不变。
@@ -123,4 +143,5 @@ PRoot 容器为嵌入在 App 内部的 Rust Agent 核心提供了一个完整的
    - [x] 清除环境变量污染：`unset LD_PRELOAD`
    - [x] 启用无 seccomp 兼容模式：`export PROOT_NO_SECCOMP=1`
    - [x] JNI 注入 App 缓存路径：`Os.setenv("TMPDIR", context.cacheDir.absolutePath, true)`
+   - [x] JNI 注入 App 时区：`Os.setenv("TZ", TimeZone.getDefault().id, true)`
    - [x] JNI 注入移动端代理（如需）：`Os.setenv("HTTP_PROXY", proxyUrl, true)`

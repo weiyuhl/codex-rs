@@ -82,7 +82,6 @@ codex-api = { path = "codex-api" }
 codex-app-server-protocol = { path = "app-server-protocol" }
 codex-apply-patch = { path = "apply-patch" }
 codex-backend-client = { path = "backend-client" }
-codex-chatgpt = { path = "chatgpt" }
 codex-client = { path = "codex-client" }
 codex-home = { path = "codex-home" }
 codex-http-client = { path = "http-client" }

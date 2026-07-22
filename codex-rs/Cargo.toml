@@ -1,6 +1,5 @@
 [workspace]
 members = [
-    "aws-auth",
     "analytics",
     "agent-graph-store",
     "agent-identity",
@@ -136,7 +135,6 @@ codex-analytics = { path = "analytics" }
 codex-agent-graph-store = { path = "agent-graph-store" }
 codex-agent-identity = { path = "agent-identity" }
 codex-api = { path = "codex-api" }
-codex-aws-auth = { path = "aws-auth" }
 codex-app-server-transport = { path = "app-server-transport" }
 codex-app-server-daemon = { path = "app-server-daemon" }
 codex-app-server-protocol = { path = "app-server-protocol" }
@@ -260,10 +258,6 @@ assert_matches = "1.5.0"
 async-channel = "2.3.1"
 async-io = "2.6.0"
 async-stream = "0.3.6"
-aws-config = "1"
-aws-credential-types = "1"
-aws-sigv4 = "1"
-aws-types = "1"
 axum = { version = "0.8", default-features = false }
 base64 = "0.22.1"
 bm25 = "2.3.2"

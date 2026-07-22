@@ -178,7 +178,6 @@ pub enum HookHandlerConfig {
 #[derive(Debug, Default, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ManagedHooksRequirementsToml {
     pub managed_dir: Option<PathBuf>,
-    pub windows_managed_dir: Option<PathBuf>,
     #[serde(flatten)]
     pub hooks: HookEventsToml,
 }
@@ -187,10 +186,9 @@ impl ManagedHooksRequirementsToml {
     pub fn is_empty(&self) -> bool {
         let Self {
             managed_dir,
-            windows_managed_dir,
             hooks,
         } = self;
-        managed_dir.is_none() && windows_managed_dir.is_none() && hooks.is_empty()
+        managed_dir.is_none() && hooks.is_empty()
     }
 
     pub fn handler_count(&self) -> usize {

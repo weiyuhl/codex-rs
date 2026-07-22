@@ -3473,7 +3473,6 @@ allowed_approvals_reviewers = ["user"]
     fn deserialize_managed_hooks_requirements() -> Result<()> {
         let toml_str = r#"
 managed_dir = "/enterprise/hooks"
-windows_managed_dir = 'C:\enterprise\hooks'
 
 [[PreToolUse]]
 matcher = "^Bash$"
@@ -3571,7 +3570,6 @@ command = "python3 /enterprise/hooks/pre.py"
         let err = managed_hooks
             .set(ManagedHooksRequirementsToml {
                 managed_dir: Some(std::path::PathBuf::from("/other/hooks")),
-                windows_managed_dir: None,
                 hooks: HookEventsToml::default(),
             })
             .expect_err("managed hooks should reject drift");

@@ -6,7 +6,6 @@ builds sandbox transform inputs, and runs them under the current SandboxAttempt.
 */
 #[cfg(unix)]
 pub(crate) mod unix_escalation;
-pub(crate) mod zsh_fork_backend;
 
 use crate::command_canonicalization::canonicalize_command_for_approval;
 use crate::exec::ExecCapturePolicy;
@@ -298,20 +297,7 @@ impl ToolRuntime<ShellRequest, ExecToolCallOutput> for ShellRuntime {
         );
         let command = if matches!(shell.shell_type, ShellType::PowerShell) {
             prefix_powershell_script_with_utf8(&command)
-        } else {
-            command
         };
-
-        if self.backend == ShellRuntimeBackend::ShellCommandZshFork {
-            match zsh_fork_backend::maybe_run_shell_command(req, attempt, ctx, &command).await? {
-                Some(out) => return Ok(out),
-                None => {
-                    tracing::warn!(
-                        "ZshFork backend specified, but conditions for using it were not met, falling back to normal execution",
-                    );
-                }
-            }
-        }
 
         let command =
             build_sandbox_command(&command, &req.cwd, &env, req.additional_permissions.clone())?;

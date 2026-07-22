@@ -9,7 +9,6 @@ mod util;
 
 mod external_bearer;
 mod manager;
-mod revoke;
 
 pub use auth_headers::AuthHeaders;
 pub use error::RefreshTokenFailedError;

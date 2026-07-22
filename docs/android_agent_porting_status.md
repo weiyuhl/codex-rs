@@ -1,6 +1,6 @@
 # 📱 Codex-RS Android 专用 Agent 核心重构与裁剪进度报告
 
-> **文档创建时间**：2026年7月  
+> **文档更新时间**：2026年7月  
 > **项目状态**：进行中 (Active Refactoring & Porting)  
 > **代码库路径**：`codex-rs/`  
 
@@ -21,11 +21,11 @@
 
 ## 🚀 二、已完成的裁剪与重构成果
 
-目前已完成 **9 轮深度裁剪**，累计彻底物理剥离了 **23 个桌面冗余/不可用/悬空 Crate**，清理干掉了 **64,000+ 行桌面冗余代码**，将工作区 Crate 数量从 108+ 成功瘦身降至 **85 个**。
+目前已累计完成 **12 轮深度裁剪**，彻底物理剥离与合并解耦了 **28 个桌面冗余/不可用/悬空/过度拆分 Crate**，清理干掉了 **66,000+ 行桌面冗余代码**，将工作区 Crate 数量从 108+ 成功瘦身降至 **80 个**。
 
 ### 明细剥离清单：
 
-| 剥离阶段 | 彻底删除的 Crate 模块 | 剥离原因与移动端替代方案 |
+| 剥离阶段 | 彻底删除/内联的 Crate 模块 | 剥离原因与移动端替代方案 |
 | :--- | :--- | :--- |
 | **第一/二轮** | `feedback`, `install-context`, `stdio-to-uds`, `utils/sleep-inhibitor` | 桌面用户反馈弹窗、Homebrew 路径检测与桌面休眠抑制器完全冗余 |
 | **第三轮** | `v8-poc` | 避免 30MB+ C++ V8 静态库打包进 APK，转用 Android 原生 JIT |
@@ -35,6 +35,9 @@
 | **第七轮** | `shell-escalation`, `uds`, `test-binary-support`, `utils/approval-presets`, `utils/cargo-bin` | 移除桌面 OSAScript/sudo 提权界面、悬空 UDS 库、测试 Mock 二进制与 Cargo 路径查找器 |
 | **第八轮** | `linux-sandbox`, `file-watcher`, `websocket-client` | 移除桌面 Linux Landlock 沙箱镜像（8,203行）、Inotify 文件监听悬空库与桌面 WebSocket 传输客户端 |
 | **第九轮** | `ext/guardian`, `lmstudio`, `ollama`, `utils/oss` | 移除 Guardian 悬空审查扩展、LMStudio/Ollama 桌面本地模型连接器及 OSS 包装库 |
+| **第十轮** | `utils/readiness`, `utils/sandbox-summary`, 内联 `collaboration-mode-templates` | 移除悬空环境就绪库、桌面 CLI 彩色报告库，将 4 行模版 Crate 内联合并至 `models-manager` |
+| **第十一轮** | `ext/connectors`, `utils/fuzzy-match`, 内联 `async-utils` | 移除悬空 Connector 扩展、桌面终端补全库，将 86 行 Async 库内联合并至 `core` |
+| **第十二轮** | `utils/elapsed`, 内联 `utils/json-to-toml` | 移除悬空耗时格式化库，将 83 行 JSON->TOML 转换库内联合并至 `mcp-server` |
 | **遥测控制** | `analytics`, `otel` 网络分发暂停 | 封堵静默用户事件 POST 与 OTLP/Statsig 线程组，消除电量与流量隐患 |
 
 ---
@@ -43,10 +46,10 @@
 
 经最新盘点，`codex-rs/` 工作区代码库数据如下：
 
-- 📦 **Workspace Crate 总数**：**85 个**（已完成极高纯度瘦身）
-- 📄 **Rust 源码文件数 (`.rs`)**：**1,757 个**
-- 📝 **Rust 代码总行数 (LoC)**：**715,628 行**
-- 🧹 **依赖与引用状态**：全工作区针对上述已删除 23 个 Crate 的代码引用与 Cargo 依赖已 **100% 清零**，Git 工作区处于完全干净（Clean）状态。
+- 📦 **Workspace Crate 总数**：**80 个**（从 108+ 降至 80 个，达成极高纯度瘦身）
+- 📄 **Rust 源码文件数 (`.rs`)**：**1,756 个**
+- 📝 **Rust 代码总行数 (LoC)**：**715,486 行**
+- 🧹 **依赖与引用状态**：全工作区针对上述已删除 28 个 Crate 的代码引用与 Cargo 依赖已 **100% 清零**，Git 工作区处于完全干净（Clean）状态。
 
 ---
 

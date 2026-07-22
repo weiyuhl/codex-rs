@@ -18,9 +18,6 @@ use std::sync::Arc;
 use std::sync::Mutex;
 use tracing::warn;
 
-use crate::token_data::TokenData;
-use codex_agent_identity::AgentIdentityJwtClaims;
-use codex_agent_identity::decode_agent_identity_jwt;
 use codex_config::types::AuthCredentialsStoreMode;
 pub use codex_config::types::AuthKeyringBackendKind;
 use codex_secrets::DefaultKeyringStore;

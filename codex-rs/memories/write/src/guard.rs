@@ -1,15 +1,8 @@
-use codex_backend_client::Client as BackendClient;
 use codex_core::config::Config;
 use codex_login::AuthManager;
-use codex_protocol::protocol::RateLimitSnapshot;
-use codex_protocol::protocol::RateLimitWindow;
-use tracing::info;
-use tracing::warn;
 
-pub(crate) async fn rate_limits_ok(auth_manager: &AuthManager, config: &Config) -> bool {
-    rate_limits_check(auth_manager, config)
-        .await
-        .unwrap_or(true)
+pub(crate) async fn rate_limits_ok(_auth_manager: &AuthManager, _config: &Config) -> bool {
+    true
 }
 
 async fn rate_limits_check(auth_manager: &AuthManager, config: &Config) -> Option<bool> {

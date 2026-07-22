@@ -2,8 +2,6 @@ use std::sync::Arc;
 use std::sync::atomic::AtomicBool;
 use std::sync::atomic::Ordering;
 
-use codex_agent_identity::AgentIdentityKey;
-use codex_agent_identity::authorization_header_for_agent_task;
 use codex_api::AgentIdentityTelemetry;
 use codex_api::AuthProvider;
 use codex_api::SharedAuthProvider;

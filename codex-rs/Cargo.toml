@@ -2,12 +2,9 @@
 members = [
     "analytics",
     "agent-graph-store",
-    "agent-identity",
-    "backend-client",
     "app-server-protocol",
     "apply-patch",
     "features",
-    "codex-backend-openapi-models",
     "codex-home",
     "connectors",
     "config",
@@ -77,11 +74,9 @@ license = "Apache-2.0"
 # Internal
 codex-analytics = { path = "analytics" }
 codex-agent-graph-store = { path = "agent-graph-store" }
-codex-agent-identity = { path = "agent-identity" }
 codex-api = { path = "codex-api" }
 codex-app-server-protocol = { path = "app-server-protocol" }
 codex-apply-patch = { path = "apply-patch" }
-codex-backend-client = { path = "backend-client" }
 codex-client = { path = "codex-client" }
 codex-home = { path = "codex-home" }
 codex-http-client = { path = "http-client" }

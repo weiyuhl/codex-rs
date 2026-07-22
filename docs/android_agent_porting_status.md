@@ -45,6 +45,7 @@
 | **第十七轮** | `windows-sandbox-rs`, `process-hardening`, `app-server-client` | 物理删除 Windows 沙箱实现、进程加固模块及 App Server 客户端残留 |
 | **第十八轮** | `sandboxing`, `exec`, `arg0`, `execpolicy` | 物理删除 4 大 Android 严重不兼容/桌面控制台 Crate（系统沙箱包装器、CLI 命令行入口、argv[0] 符号链接分发器、PowerShell/Brew 安全策略规则库，共 16,338 行代码） |
 | **第十九轮** | `utils/pty`, `code-mode`, `code-mode-protocol` | 物理删除 3 大 PTY 伪终端系统调用库、V8 CodeMode 宿主与 Protocol 传输库（7,290 行代码）并物理清除 `webbrowser` 依赖 |
+| **第二十轮** | 音频预处理与 `symphonia` 库 | 物理彻底删除 `audio_preparation.rs` 语音 Token 预处理模块及 `symphonia` 音频解码库，物理清除 AWS SDK 凭据残留，纯粹保留移动端图像处理能力 |
 | **遥测控制** | `analytics`, `otel` 网络分发暂停 | 封堵静默用户事件 POST 与 OTLP/Statsig 线程组，消除电量与流量隐患 |
 
 ---
@@ -54,9 +55,9 @@
 经最新盘点，`codex-rs/` 工作区代码库数据如下：
 
 - 📦 **Workspace Crate 总数**：**63 个**（从 108+ 降至 63 个，达成极高纯度瘦身）
-- 📄 **Rust 源码文件数 (`.rs`)**：**1,520 个**
-- 📝 **Rust 代码总行数 (LoC)**：**578,398 行**
-- 🧹 **依赖与引用状态**：全工作区针对上述已删除 46 个 Crate 的代码引用与 Cargo 依赖已 **100% 清零**，Git 工作区处于完全干净（Clean）状态。
+- 📄 **Rust 源码文件数 (`.rs`)**：**1,518 个**
+- 📝 **Rust 代码总行数 (LoC)**：**577,970 行**
+- 🧹 **依赖与引用状态**：全工作区针对上述已删除 46 个 Crate 及音频/AWS 模块的代码引用与 Cargo 依赖已 **100% 清零**，Git 工作区处于完全干净（Clean）状态。
 
 ---
 

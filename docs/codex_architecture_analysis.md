@@ -30,7 +30,8 @@
 > 24. 彻底剥离第十一批 4 大 Android 严重不兼容/不可用中大型模块（删除 `exec-server` 守护服务器、`network-proxy` MITM CA 代理、`mcp-server` Stdio MCP 服务端、`code-mode-host` Node.js 宿主，共 57,000+ 行代码）。  
 > 25. 彻底剥离第十二批 4 大 Android 严重不兼容/桌面控制台模块（物理删除 `sandboxing` 桌面系统沙箱包装器、`exec` CLI 命令行二进制入口、`arg0` 命令行符号链接路由分发器、`execpolicy` 桌面 PowerShell/Brew 安全策略规则库，共 16,338 行代码）。  
 > 26. 彻底剥离第十三批 3 大 Android PTY 伪终端与 V8 JS 模式 Crate（物理删除 `utils/pty` PTY 伪终端系统调用库、`code-mode` V8 JavaScript 代码模式宿主库、`code-mode-protocol` 代码模式传输协议库，以及 `webbrowser` 桌面浏览器拉起依赖，共 7,290 行代码）。  
-> 27. `codex-rs/` 全量代码统计数据完成归档。  
+> 27. 彻底剥离第二十批音频预处理与媒体解码库（物理删除 `audio_preparation.rs` 与 `symphonia` 媒体解码库，物理清除 AWS SDK 凭据残留，纯粹保留移动端图像预处理能力）。  
+> 28. `codex-rs/` 全量代码统计数据完成归档。  
 > 26. 彻底剥离 Windows 沙箱及进程加固残余模块（删除 `windows-sandbox-rs`、`process-hardening`、`app-server-client` 引用）。  
 > 27. 全面清理 152 个 Rust 源文件中残留引用（移除 `use codex_exec_server/network_proxy/...` 等，-539 行）。  
 > 28. `codex-rs/` 目录树重建：基于实际 70 个 Crate 重写架构明细（1,587 文件 / 602,026 LoC）。  

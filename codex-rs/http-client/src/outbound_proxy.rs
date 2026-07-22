@@ -495,17 +495,6 @@ fn resolve_system_proxy_with(
     decision
 }
 
-#[cfg(target_os = "macos")]
-fn resolve_platform_system_proxy(request_url: &str, origin: &RequestOrigin) -> SystemProxyDecision {
-    macos::resolve(request_url, origin)
-}
-
-#[cfg(target_os = "windows")]
-fn resolve_platform_system_proxy(request_url: &str, origin: &RequestOrigin) -> SystemProxyDecision {
-    windows::resolve(request_url, origin)
-}
-
-#[cfg(not(any(target_os = "windows", target_os = "macos")))]
 fn resolve_platform_system_proxy(
     _request_url: &str,
     _origin: &RequestOrigin,

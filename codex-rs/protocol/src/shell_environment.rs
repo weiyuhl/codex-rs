@@ -22,25 +22,7 @@ pub fn create_env_from_vars<I>(
 where
     I: IntoIterator<Item = (String, String)>,
 {
-    let mut env_map = populate_env(vars, policy, thread_id);
-
-    if cfg!(target_os = "windows") {
-        // This is a workaround to address the failures we are seeing in the
-        // following tests when run via Bazel on Windows:
-        //
-        // ```
-        // suite::shell_command::unicode_output::with_login
-        // suite::shell_command::unicode_output::without_login
-        // ```
-        //
-        // Currently, we can only reproduce these failures in CI, which makes
-        // iteration times long, so we include this quick fix for now to unblock
-        // getting the Windows Bazel build running.
-        if !env_map.keys().any(|k| k.eq_ignore_ascii_case("PATHEXT")) {
-            env_map.insert("PATHEXT".to_string(), ".COM;.EXE;.BAT;.CMD".to_string());
-        }
-    }
-    env_map
+    populate_env(vars, policy, thread_id)
 }
 
 pub fn populate_env<I>(
@@ -57,10 +39,7 @@ where
         ShellEnvironmentPolicyInherit::All => vars.into_iter().collect(),
         ShellEnvironmentPolicyInherit::None => HashMap::new(),
         ShellEnvironmentPolicyInherit::Core => {
-            #[cfg(not(target_os = "windows"))]
             let core_env_vars = UNIX_CORE_ENV_VARS;
-            #[cfg(target_os = "windows")]
-            let core_env_vars = WINDOWS_CORE_ENV_VARS;
 
             vars.into_iter()
                 .filter(|(k, _)| {

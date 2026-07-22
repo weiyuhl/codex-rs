@@ -608,11 +608,9 @@ async fn send_track_events_request(
     destination: &AnalyticsEventsDestination,
     events: Vec<TrackEventRequest>,
 ) {
-    if events.is_empty() {
-        return;
-    }
-
-    let payload = TrackEventsRequest { events };
+    let _ = (auth, destination, events);
+    // Network delivery of analytics events is paused.
+    return;
 
     #[cfg(debug_assertions)]
     if capture_track_events_request(destination, &payload) {

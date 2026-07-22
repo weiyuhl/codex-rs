@@ -140,7 +140,6 @@ pub struct SandboxTransformRequest<'a> {
 pub struct SandboxDirectSpawnTransformRequest<'a> {
     pub transform: SandboxTransformRequest<'a>,
     pub workspace_roots: &'a [AbsolutePathBuf],
-    pub windows_sandbox_proxy_settings_mode: codex_windows_sandbox::WindowsSandboxProxySettingsMode,
 }
 
 // TODO(anp): Revisit this preparation type once this module's PathUri migration is complete.
@@ -485,115 +484,6 @@ impl SandboxManager {
         }
         Ok(request)
     }
-}
-
-#[cfg(target_os = "windows")]
-fn wrap_windows_sandbox_exec_request_for_direct_spawn(
-    request: &mut SandboxExecRequest,
-    workspace_roots: &[AbsolutePathBuf],
-    codex_home: &Path,
-    proxy_settings_mode: codex_windows_sandbox::WindowsSandboxProxySettingsMode,
-) -> Result<(), SandboxTransformError> {
-    // TODO(anp): Keep PathUri through the Windows sandbox wrapper boundary.
-    let native_cwd =
-        request
-            .cwd
-            .to_abs_path()
-            .map_err(|source| SandboxTransformError::InvalidCommandCwd {
-                cwd: request.cwd.clone(),
-                source,
-            })?;
-    let native_sandbox_policy_cwd = request.sandbox_policy_cwd.to_abs_path().map_err(|source| {
-        SandboxTransformError::InvalidSandboxPolicyCwd {
-            cwd: request.sandbox_policy_cwd.clone(),
-            source,
-        }
-    })?;
-    let Some(program) = request.command.first_mut() else {
-        return Err(SandboxTransformError::WindowsSandboxPreparation(
-            "sandbox command was empty".to_string(),
-        ));
-    };
-    let source = std::path::PathBuf::from(&program);
-    let helper = codex_windows_sandbox::resolve_exe_for_launch(source.as_path(), codex_home);
-    *program = helper.to_string_lossy().into_owned();
-
-    let inner_command = std::mem::take(&mut request.command);
-    let proxy_enforced = request.network.is_some();
-    let network_proxy_restricting_sid = request
-        .network
-        .as_ref()
-        .map(|network| {
-            network
-                .network_proxy_restricting_sid(request.network_environment_id.as_deref())
-                .ok_or_else(|| {
-                    SandboxTransformError::WindowsSandboxPreparation(
-                        "managed Windows proxy route is missing its restricting SID".to_string(),
-                    )
-                })
-        })
-        .transpose()?;
-    let use_elevated =
-        windows_sandbox_uses_elevated_backend(request.windows_sandbox_level, proxy_enforced);
-    let overrides = if use_elevated {
-        resolve_windows_elevated_filesystem_overrides(
-            request.sandbox,
-            &request.permission_profile,
-            &native_sandbox_policy_cwd,
-            use_elevated,
-        )
-    } else {
-        resolve_windows_restricted_token_filesystem_overrides(
-            request.sandbox,
-            &request.permission_profile,
-            &native_sandbox_policy_cwd,
-            request.windows_sandbox_level,
-        )
-    }
-    .map_err(SandboxTransformError::WindowsSandboxPreparation)?;
-    let empty_paths: &[AbsolutePathBuf] = &[];
-    let read_roots_override = overrides
-        .as_ref()
-        .and_then(|overrides| overrides.read_roots_override.as_deref());
-    let read_roots_include_platform_defaults = overrides
-        .as_ref()
-        .is_some_and(|overrides| overrides.read_roots_include_platform_defaults);
-    let write_roots_override = overrides
-        .as_ref()
-        .and_then(|overrides| overrides.write_roots_override.as_deref());
-    let deny_read_paths_override = overrides.as_ref().map_or(empty_paths, |overrides| {
-        overrides.additional_deny_read_paths.as_slice()
-    });
-    let deny_write_paths_override = overrides.as_ref().map_or(empty_paths, |overrides| {
-        overrides.additional_deny_write_paths.as_slice()
-    });
-    let mut wrapper_args =
-        codex_windows_sandbox::create_windows_sandbox_command_args_for_permission_profile(
-            inner_command,
-            &native_cwd,
-            workspace_roots,
-            &request.env,
-            &request.permission_profile,
-            request.windows_sandbox_level,
-            request.windows_sandbox_private_desktop,
-            proxy_enforced,
-            network_proxy_restricting_sid.as_deref(),
-            proxy_settings_mode,
-            read_roots_override,
-            read_roots_include_platform_defaults,
-            write_roots_override,
-            deny_read_paths_override,
-            deny_write_paths_override,
-            codex_home,
-        );
-
-    request.command = Vec::with_capacity(1 + wrapper_args.len());
-    request.command.push(source.to_string_lossy().into_owned());
-    request.command.append(&mut wrapper_args);
-    request.sandbox = SandboxType::None;
-    request.arg0 = None;
-    add_windows_sandbox_wrapper_setup_env(&mut request.env);
-    Ok(())
 }
 
 #[cfg(target_os = "windows")]

@@ -94,37 +94,6 @@ const UNIX_CORE_ENV_VARS: &[&str] = &[
     "USER",
 ];
 
-#[cfg(target_os = "windows")]
-pub const WINDOWS_CORE_ENV_VARS: &[&str] = &[
-    // Core path resolution
-    "PATH",
-    "PATHEXT",
-    // Shell and system roots
-    "SHELL",
-    "COMSPEC",
-    "SYSTEMROOT",
-    "SYSTEMDRIVE",
-    // User context and profiles
-    "USERNAME",
-    "USERDOMAIN",
-    "USERPROFILE",
-    "HOMEDRIVE",
-    "HOMEPATH",
-    // Program locations
-    "PROGRAMFILES",
-    "PROGRAMFILES(X86)",
-    "PROGRAMW6432",
-    "PROGRAMDATA",
-    // App data and caches
-    "LOCALAPPDATA",
-    "APPDATA",
-    // Temp locations
-    "TEMP",
-    "TMP",
-    "TMPDIR",
-    // Common shells/pwsh hints
-    "POWERSHELL",
-    "PWSH",
 ];
 
 #[cfg(all(test, target_os = "windows"))]

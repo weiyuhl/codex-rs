@@ -518,18 +518,6 @@ async fn get_raw_output_result(
         &WindowsSandboxFilesystemOverrides,
     >,
 ) -> Result<RawExecToolCallOutput> {
-    #[cfg(target_os = "windows")]
-    if sandbox == SandboxType::WindowsRestrictedToken {
-        return exec_windows_sandbox(
-            params,
-            permission_profile,
-            windows_sandbox_policy_cwd,
-            windows_sandbox_workspace_roots,
-            windows_sandbox_filesystem_overrides,
-        )
-        .await;
-    }
-
     exec(params, network_sandbox_policy, stdout_stream, after_spawn).await
 }
 

@@ -12,9 +12,7 @@ members = [
     "app-server-test-client",
     "apply-patch",
     "arg0",
-    "feedback",
     "features",
-    "install-context",
     "codex-backend-openapi-models",
     "code-mode",
     "code-mode-host",
@@ -72,7 +70,6 @@ members = [
     "responses-api-proxy",
     "response-debug-context",
     "sandboxing",
-    "stdio-to-uds",
     "otel",
     "tools",
     "v8-poc",
@@ -92,7 +89,6 @@ members = [
     "utils/cli",
     "utils/elapsed",
     "utils/sandbox-summary",
-    "utils/sleep-inhibitor",
     "utils/approval-presets",
     "utils/oss",
     "utils/output-truncation",
@@ -167,8 +163,6 @@ codex-guardian = { path = "ext/guardian" }
 codex-image-generation-extension = { path = "ext/image-generation" }
 codex-experimental-api-macros = { path = "codex-experimental-api-macros" }
 codex-features = { path = "features" }
-codex-feedback = { path = "feedback" }
-codex-install-context = { path = "install-context" }
 codex-file-search = { path = "file-search" }
 codex-file-watcher = { path = "file-watcher" }
 codex-git-utils = { path = "git-utils" }
@@ -206,7 +200,6 @@ codex-shell-escalation = { path = "shell-escalation" }
 codex-skills-extension = { path = "ext/skills" }
 codex-skills = { path = "skills" }
 codex-state = { path = "state" }
-codex-stdio-to-uds = { path = "stdio-to-uds" }
 codex-terminal-detection = { path = "terminal-detection" }
 codex-test-binary-support = { path = "test-binary-support" }
 codex-thread-store = { path = "thread-store" }
@@ -230,7 +223,6 @@ codex-utils-plugins = { path = "utils/plugins" }
 codex-utils-pty = { path = "utils/pty" }
 codex-utils-rustls-provider = { path = "utils/rustls-provider" }
 codex-utils-sandbox-summary = { path = "utils/sandbox-summary" }
-codex-utils-sleep-inhibitor = { path = "utils/sleep-inhibitor" }
 codex-utils-stream-parser = { path = "utils/stream-parser" }
 codex-utils-string = { path = "utils/string" }
 codex-utils-template = { path = "utils/template" }

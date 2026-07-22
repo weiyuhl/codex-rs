@@ -13,7 +13,8 @@
 > 7. 彻底剥离 AWS Bedrock 凭据与 `aws-auth` 签名 Crate 及外部 AWS 依赖。  
 > 8. 彻底剥离云端服务模块（删除 `cloud-config`、`cloud-tasks`、`cloud-tasks-client`、`cloud-tasks-mock-client`）。  
 > 9. 彻底剥离外部 Agent 迁移模块（删除 `external-agent-migration`）。  
-> 10. `codex-rs/` 全量代码统计数据完成归档。  
+> 10. 彻底剥离 4 大桌面端冗余模块（删除 `feedback` 桌面反馈、`install-context` 包管理器检测、`stdio-to-uds` 管道重定向、`utils/sleep-inhibitor` 防休眠锁）。  
+> 11. `codex-rs/` 全量代码统计数据完成归档。  
 
 ---
 

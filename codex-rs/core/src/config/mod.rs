@@ -73,7 +73,7 @@ use codex_features::TokenBudgetConfigToml;
 use codex_git_utils::resolve_root_git_project_for_trust;
 use codex_http_client::HttpClientFactory;
 use codex_http_client::OutboundProxyPolicy;
-use codex_install_context::InstallContext;
+use codex_protocol::config_types::InstallContext;
 use codex_login::AuthManagerConfig;
 use codex_login::AuthRouteConfig;
 use codex_mcp::McpConfig;

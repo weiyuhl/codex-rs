@@ -913,3 +913,17 @@ mod tests {
         assert_eq!(expected, base.merge(&overlay));
     }
 }
+
+/// Minimal InstallContext stub for desktop-package-manager-free environments (Android / Embedded).
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize, JsonSchema, TS)]
+pub struct InstallContext;
+
+impl InstallContext {
+    pub fn is_homebrew_installed(&self) -> bool {
+        false
+    }
+    pub fn package_path_dir(&self) -> Option<std::path::PathBuf> {
+        None
+    }
+}
+

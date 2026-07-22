@@ -8,7 +8,7 @@ use codex_apply_patch::CODEX_CORE_APPLY_PATCH_ARG1;
 #[cfg(unix)]
 use codex_exec_server::CODEX_ARG0_EXEC_HELPER_ARG1;
 use codex_exec_server::CODEX_FS_HELPER_ARG1;
-use codex_install_context::InstallContext;
+use codex_protocol::config_types::InstallContext;
 use codex_sandboxing::landlock::CODEX_LINUX_SANDBOX_ARG0;
 use codex_utils_home_dir::find_codex_home;
 #[cfg(unix)]
@@ -522,9 +522,7 @@ mod tests {
     use super::run_main_with_arg0_guard;
     #[cfg(unix)]
     use anyhow::ensure;
-    use codex_install_context::CodexPackageLayout;
-    use codex_install_context::InstallContext;
-    use codex_install_context::InstallMethod;
+    use codex_protocol::config_types::InstallContext;
     use codex_utils_absolute_path::AbsolutePathBuf;
     use pretty_assertions::assert_eq;
     use std::fs;
@@ -563,15 +561,7 @@ mod tests {
         fs::create_dir_all(&path_dir)?;
         fs::create_dir_all(&existing_dir)?;
         let path_dir = AbsolutePathBuf::from_absolute_path(path_dir.canonicalize()?)?;
-        let install_context = InstallContext {
-            method: InstallMethod::Other,
-            package_layout: Some(CodexPackageLayout {
-                package_dir: AbsolutePathBuf::from_absolute_path(package_dir.canonicalize()?)?,
-                bin_dir: AbsolutePathBuf::from_absolute_path(bin_dir.canonicalize()?)?,
-                resources_dir: None,
-                path_dir: Some(path_dir.clone()),
-            }),
-        };
+        let install_context = InstallContext;
 
         Ok(PackagePathTestFixture {
             _temp_dir: temp_dir,

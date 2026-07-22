@@ -11,7 +11,7 @@ use crate::shell::Shell;
 use crate::shell::ShellType;
 use crate::tools::sandboxing::ToolError;
 #[cfg(unix)]
-use codex_install_context::InstallContext;
+use codex_protocol::config_types::InstallContext;
 #[cfg(target_os = "macos")]
 use codex_network_proxy::CODEX_PROXY_GIT_SSH_COMMAND_MARKER;
 use codex_network_proxy::CUSTOM_CA_ENV_KEYS;

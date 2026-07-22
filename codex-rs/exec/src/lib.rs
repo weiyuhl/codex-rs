@@ -71,7 +71,6 @@ use codex_core::config::resolve_profile_v2_config_path;
 use codex_core::find_thread_meta_by_name_str;
 use codex_core::format_exec_policy_error_with_source;
 use codex_core::path_utils;
-use codex_feedback::CodexFeedback;
 use codex_git_utils::get_git_repo_root;
 use codex_login::AuthConfig;
 use codex_login::default_client::set_default_client_residency_requirement;

@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use codex_install_context::InstallContext;
+use codex_protocol::config_types::InstallContext;
 use codex_rollout::RolloutConfig;
 use codex_rollout::first_rollout_content_match_snippet;
 use codex_rollout::parse_cursor;

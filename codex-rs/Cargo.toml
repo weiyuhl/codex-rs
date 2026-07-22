@@ -28,8 +28,6 @@ members = [
     "codex-mcp",
     "memories/read",
     "memories/write",
-    "model-provider-info",
-    "models-manager",
     "protocol",
     "prompts",
     "rollout",
@@ -53,7 +51,6 @@ members = [
     "codex-api",
     "state",
     "thread-store",
-    "plugin",
     "model-provider",
 ]
 resolver = "2"
@@ -97,10 +94,7 @@ codex-memories-read = { path = "memories/read" }
 codex-memories-write = { path = "memories/write" }
 codex-mcp = { path = "codex-mcp" }
 codex-mcp-extension = { path = "ext/mcp" }
-codex-model-provider-info = { path = "model-provider-info" }
-codex-models-manager = { path = "models-manager" }
 codex-otel = { path = "otel" }
-codex-plugin = { path = "plugin" }
 codex-model-provider = { path = "model-provider" }
 codex-protocol = { path = "protocol" }
 codex-prompts = { path = "prompts" }

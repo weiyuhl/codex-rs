@@ -9,40 +9,24 @@ pub fn find_codex_home() -> std::io::Result<AbsolutePathBuf> {
 }
 
 fn find_codex_home_from_env(codex_home_env: Option<&str>) -> std::io::Result<AbsolutePathBuf> {
-    match codex_home_env {
-        Some(val) => {
-            let path = PathBuf::from(val);
-            let metadata = std::fs::metadata(&path).map_err(|err| match err.kind() {
-                std::io::ErrorKind::NotFound => std::io::Error::new(
-                    std::io::ErrorKind::NotFound,
-                    format!("CODEX_HOME points to {val:?}, but that path does not exist"),
-                ),
-                _ => std::io::Error::new(
-                    err.kind(),
-                    format!("failed to read CODEX_HOME {val:?}: {err}"),
-                ),
-            })?;
-
-            if !metadata.is_dir() {
-                Err(std::io::Error::new(
-                    std::io::ErrorKind::InvalidInput,
-                    format!("CODEX_HOME points to {val:?}, but that path is not a directory"),
-                ))
+    let raw_path = match codex_home_env {
+        Some(val) => PathBuf::from(val),
+        None => {
+            // Android App internal storage path: if TMPDIR is set to /data/data/<pkg>/cache, derive /data/data/<pkg>/files
+            if let Ok(tmp) = std::env::var("TMPDIR") {
+                let tmp_path = PathBuf::from(tmp);
+                if let Some(parent) = tmp_path.parent() {
+                    parent.join("files")
+                } else {
+                    tmp_path.join("files")
+                }
             } else {
-                let canonical = path.canonicalize().map_err(|err| {
-                    std::io::Error::new(
-                        err.kind(),
-                        format!("failed to canonicalize CODEX_HOME {val:?}: {err}"),
-                    )
-                })?;
-                AbsolutePathBuf::from_absolute_path(canonical)
+                PathBuf::from("/data/data/com.codex.agent/files")
             }
         }
-        None => {
-            let mut p = std::env::temp_dir();
-            p.push("codex_home");
-            let _ = std::fs::create_dir_all(&p);
-            AbsolutePathBuf::from_absolute_path(p)
-        }
-    }
+    };
+
+    let _ = std::fs::create_dir_all(&raw_path);
+    let canonical = raw_path.canonicalize().unwrap_or(raw_path);
+    AbsolutePathBuf::from_absolute_path(canonical)
 }

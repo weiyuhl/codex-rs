@@ -97,8 +97,12 @@ use codex_protocol::user_input::UserInput;
 use codex_utils_absolute_path::AbsolutePathBuf;
 use codex_utils_absolute_path::canonicalize_existing_preserving_symlinks;
 use codex_config::types::SharedCliOptions;
-use codex_utils_oss::ensure_oss_provider_ready;
-use codex_utils_oss::get_default_model_for_oss_provider;
+async fn ensure_oss_provider_ready(_provider_id: &str, _config: &Config) -> anyhow::Result<()> {
+    Ok(())
+}
+fn get_default_model_for_oss_provider(_provider_id: &str) -> Option<&'static str> {
+    None
+}
 use event_processor_with_human_output::EventProcessorWithHumanOutput;
 pub use event_processor_with_jsonl_output::CodexStatus;
 pub use event_processor_with_jsonl_output::CollectedThreadEvents;

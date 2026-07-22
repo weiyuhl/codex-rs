@@ -21,7 +21,8 @@
 > 15. 彻底剥离第二批 5 大 Android 冗余/不可用/悬空模块（删除 `shell-escalation` 桌面提权、`uds` 悬空 Socket 库、`test-binary-support` 测试 Mock 库、`utils/approval-presets` 桌面 CLI 预设、`utils/cargo-bin` 桌面 Cargo 查找器）。  
 > 16. 彻底剥离第三批 3 大 Android 冗余/不可用模块（删除 `linux-sandbox` 桌面 Linux 沙箱镜像、`file-watcher` 悬空监听库、`websocket-client` 桌面 WebSocket 传输层）。  
 > 17. 彻底剥离第四批 3 大 Android 冗余/悬空/空壳模块（删除 `utils/readiness` 悬空就绪检测库、`utils/sandbox-summary` 桌面 CLI 彩色报告库，合并内联 `collaboration-mode-templates` 空壳库）。  
-> 18. `codex-rs/` 全量代码统计数据完成归档。  
+> 18. 彻底剥离第五批 4 大 Android 冗余/桌面模型管理器模块（删除 `ext/guardian` 悬空审查扩展、`lmstudio` 桌面本地大模型连接器、`ollama` 桌面本地大模型连接器、`utils/oss` 本地模型包装库）。  
+> 19. `codex-rs/` 全量代码统计数据完成归档。  
 
 ---
 

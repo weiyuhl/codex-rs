@@ -43,7 +43,7 @@ use codex_protocol::protocol::AskForApproval;
 use codex_utils_absolute_path::AbsolutePathBuf;
 use codex_utils_absolute_path::AbsolutePathBufGuard;
 use codex_utils_path_uri::PathUri;
-use dunce::canonicalize as normalize_path;
+use std::fs::canonicalize as normalize_path;
 use serde::Deserialize;
 use std::io;
 use std::path::Path;

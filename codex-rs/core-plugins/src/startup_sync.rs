@@ -105,7 +105,7 @@ pub fn sync_openai_plugins_repo(
         Ok(git_path) => macos_git_binary_from_path(git_path, apple_developer_tools_available()),
         Err(_) => None,
     };
-    #[cfg(not(target_os = "macos"))]
+    // Under embedded PRoot Linux container, `which::which` resolves binary paths inside the container's RootFS $PATH.
     let git_binary = Some(PathBuf::from("git"));
 
     sync_openai_plugins_repo_with_transport_overrides(

@@ -860,14 +860,7 @@ async fn consume_output(
                         }
                     }
                     (synthetic_exit_status_for_code(/*code*/ 1), false)
-                }
-                None => unreachable!("expiration wait only resolves while expiration is active"),
             }
-        }
-        _ = tokio::signal::ctrl_c() => {
-            kill_child_process_group(&mut child)?;
-            child.start_kill()?;
-            (synthetic_exit_status(EXIT_CODE_SIGNAL_BASE + SIGKILL_CODE), false)
         }
     };
 

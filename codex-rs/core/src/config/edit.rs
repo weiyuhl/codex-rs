@@ -650,7 +650,7 @@ impl ConfigDocument {
 }
 
 fn normalize_skill_config_path(path: &Path) -> String {
-    dunce::canonicalize(path)
+    std::fs::canonicalize(path)
         .unwrap_or_else(|_| path.to_path_buf())
         .to_string_lossy()
         .to_string()

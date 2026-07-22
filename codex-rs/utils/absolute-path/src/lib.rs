@@ -95,7 +95,7 @@ impl AbsolutePathBuf {
     }
 
     pub fn canonicalize(&self) -> std::io::Result<Self> {
-        dunce::canonicalize(&self.0).map(Self)
+        std::fs::canonicalize(&self.0).map(Self)
     }
 
     pub fn parent(&self) -> Option<Self> {
@@ -189,7 +189,7 @@ fn is_windows_drive_absolute_path(path: &str) -> bool {
 pub fn canonicalize_preserving_symlinks(path: &Path) -> std::io::Result<PathBuf> {
     let logical = AbsolutePathBuf::from_absolute_path(path)?.into_path_buf();
     let preserve_logical_path = should_preserve_logical_path(&logical);
-    match dunce::canonicalize(path) {
+    match std::fs::canonicalize(path) {
         Ok(canonical) if preserve_logical_path && canonical != logical => Ok(logical),
         Ok(canonical) => Ok(canonical),
         Err(_) => Ok(logical),
@@ -203,7 +203,7 @@ pub fn canonicalize_preserving_symlinks(path: &Path) -> std::io::Result<PathBuf>
 /// propagated so callers can reject invalid working directories early.
 pub fn canonicalize_existing_preserving_symlinks(path: &Path) -> std::io::Result<PathBuf> {
     let logical = AbsolutePathBuf::from_absolute_path(path)?.into_path_buf();
-    let canonical = dunce::canonicalize(path)?;
+    let canonical = std::fs::canonicalize(path)?;
     if should_preserve_logical_path(&logical) && canonical != logical {
         Ok(logical)
     } else {

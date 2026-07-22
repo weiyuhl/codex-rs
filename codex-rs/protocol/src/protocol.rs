@@ -478,8 +478,7 @@ pub struct ThreadSettingsOverrides {
     /// update selected a profile rather than supplying raw permissions.
     pub active_permission_profile: Option<ActivePermissionProfile>,
 
-    /// Updated Windows sandbox mode for tool execution.
-    pub windows_sandbox_level: Option<WindowsSandboxLevel>,
+
 
     /// Updated model slug. When set, the model info is derived automatically.
     pub model: Option<String>,

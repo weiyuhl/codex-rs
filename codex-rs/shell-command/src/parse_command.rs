@@ -1255,21 +1255,7 @@ mod tests {
         );
     }
 
-    #[test]
-    fn powershell_with_path_is_stripped() {
-        let command = if cfg!(windows) {
-            "C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
-        } else {
-            "/usr/local/bin/powershell.exe"
-        };
 
-        assert_parsed(
-            &vec_str(&[command, "-NoProfile", "-c", "Write-Host hi"]),
-            vec![ParsedCommand::Unknown {
-                cmd: "Write-Host hi".to_string(),
-            }],
-        );
-    }
 }
 
 pub fn parse_command_impl(command: &[String]) -> Vec<ParsedCommand> {

@@ -18,7 +18,8 @@
 > 12. 彻底剥离桌面 Linux Bubblewrap 隔离包装模块（删除 `bwrap`）。  
 > 13. 彻底剥离 app-server 残留守护进程/Socket传输/测试模块（删除 `app-server-daemon`、`app-server-transport`、`app-server-test-client`，保留 `app-server-protocol` Schema 数据定义库）。  
 > 14. 彻底剥离 5 大 Android 平台冗余与不可用模块（删除 `terminal-detection` 桌面终端检测、`keyring-store` 桌面系统凭据锁、`utils/cli` 桌面命令行辅助、`thread-manager-sample` 样例代码，精简重构 `utils/pty` 虚拟终端控制）。  
-> 15. `codex-rs/` 全量代码统计数据完成归档。  
+> 15. 彻底剥离第二批 5 大 Android 冗余/不可用/悬空模块（删除 `shell-escalation` 桌面提权、`uds` 悬空 Socket 库、`test-binary-support` 测试 Mock 库、`utils/approval-presets` 桌面 CLI 预设、`utils/cargo-bin` 桌面 Cargo 查找器）。  
+> 16. `codex-rs/` 全量代码统计数据完成归档。  
 
 ---
 

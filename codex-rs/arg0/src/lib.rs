@@ -64,36 +64,7 @@ pub fn arg0_dispatch() -> Option<Arg0PathEntryGuard> {
         .and_then(|s| s.to_str())
         .unwrap_or("");
 
-    #[cfg(unix)]
-    if exe_name == EXECVE_WRAPPER_ARG0 {
-        let mut args = std::env::args();
-        let _ = args.next();
-        let file = match args.next() {
-            Some(file) => file,
-            None => std::process::exit(1),
-        };
-        let argv = args.collect::<Vec<_>>();
-
-        let runtime = match tokio::runtime::Builder::new_current_thread()
-            .enable_all()
-            .build()
-        {
-            Ok(runtime) => runtime,
-            Err(_) => std::process::exit(1),
-        };
-        let exit_code = runtime.block_on(
-            codex_shell_escalation::run_shell_escalation_execve_wrapper(file, argv),
-        );
-        match exit_code {
-            Ok(exit_code) => std::process::exit(exit_code),
-            Err(_) => std::process::exit(1),
-        }
-    }
-
-    if exe_name == CODEX_LINUX_SANDBOX_ARG0 {
-        // Safety: [`run_main`] never returns.
-        codex_linux_sandbox::run_main();
-    } else if exe_name == APPLY_PATCH_ARG0 || exe_name == MISSPELLED_APPLY_PATCH_ARG0 {
+    if exe_name == APPLY_PATCH_ARG0 || exe_name == MISSPELLED_APPLY_PATCH_ARG0 {
         codex_apply_patch::main();
     }
 

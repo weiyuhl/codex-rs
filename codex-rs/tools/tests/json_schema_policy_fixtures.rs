@@ -184,7 +184,7 @@ fn json_schema_policy_oversized_golden_schema_triggers_compaction() {
 }
 
 fn load_fixture<T: DeserializeOwned>(path: &str) -> T {
-    let path = codex_utils_cargo_bin::find_resource!(path).expect("fixture should resolve");
+    let path = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join(path);
     let fixture = fs::read_to_string(&path).expect("fixture should be readable");
     serde_json::from_str(&fixture).expect("fixture should contain valid JSON")
 }

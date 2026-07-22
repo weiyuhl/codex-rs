@@ -19,7 +19,6 @@ members = [
     "config",
     "context-fragments",
     "shell-command",
-    "shell-escalation",
     "skills",
     "core",
     "core-api",
@@ -82,7 +81,6 @@ members = [
     "utils/string",
     "utils/elapsed",
     "utils/sandbox-summary",
-    "utils/approval-presets",
     "utils/oss",
     "utils/output-truncation",
     "utils/path-utils",
@@ -93,9 +91,7 @@ members = [
     "codex-client",
     "codex-api",
     "state",
-    "test-binary-support",
     "thread-store",
-    "uds",
     "codex-experimental-api-macros",
     "plugin",
     "model-provider",
@@ -183,18 +179,13 @@ codex-rollout-trace = { path = "rollout-trace" }
 codex-sandboxing = { path = "sandboxing" }
 codex-secrets = { path = "secrets" }
 codex-shell-command = { path = "shell-command" }
-codex-shell-escalation = { path = "shell-escalation" }
 codex-skills-extension = { path = "ext/skills" }
 codex-skills = { path = "skills" }
 codex-state = { path = "state" }
-codex-test-binary-support = { path = "test-binary-support" }
 codex-thread-store = { path = "thread-store" }
 codex-tools = { path = "tools" }
-codex-uds = { path = "uds" }
 codex-utils-absolute-path = { path = "utils/absolute-path" }
-codex-utils-approval-presets = { path = "utils/approval-presets" }
 codex-utils-cache = { path = "utils/cache" }
-codex-utils-cargo-bin = { path = "utils/cargo-bin" }
 codex-utils-elapsed = { path = "utils/elapsed" }
 codex-utils-fuzzy-match = { path = "utils/fuzzy-match" }
 codex-utils-home-dir = { path = "utils/home-dir" }

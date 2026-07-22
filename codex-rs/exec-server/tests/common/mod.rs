@@ -10,40 +10,11 @@ use codex_exec_server::CODEX_ARG0_EXEC_HELPER_ARG1;
 use codex_exec_server::CODEX_FS_HELPER_ARG1;
 use codex_exec_server::ExecServerRuntimePaths;
 use codex_sandboxing::landlock::CODEX_LINUX_SANDBOX_ARG0;
-use codex_test_binary_support::TestBinaryDispatchGuard;
-use codex_test_binary_support::TestBinaryDispatchMode;
-use codex_test_binary_support::configure_test_binary_dispatch;
-use ctor::ctor;
-
-pub(crate) mod exec_server;
-
 pub(crate) const DELAYED_OUTPUT_AFTER_EXIT_PARENT_ARG: &str =
     "--codex-test-delayed-output-after-exit-parent";
 
 const CODEX_WINDOWS_SANDBOX_ARG1: &str = "--run-as-windows-sandbox";
 const DELAYED_OUTPUT_AFTER_EXIT_CHILD_ARG: &str = "--codex-test-delayed-output-after-exit-child";
-
-#[ctor]
-pub static TEST_BINARY_DISPATCH_GUARD: Option<TestBinaryDispatchGuard> = {
-    let guard = configure_test_binary_dispatch("codex-exec-server-tests", |exe_name, argv1| {
-        if argv1 == Some(CODEX_ARG0_EXEC_HELPER_ARG1) {
-            return TestBinaryDispatchMode::DispatchArg0Only;
-        }
-        if argv1 == Some(CODEX_FS_HELPER_ARG1) {
-            return TestBinaryDispatchMode::DispatchArg0Only;
-        }
-        if argv1 == Some(CODEX_WINDOWS_SANDBOX_ARG1) {
-            return TestBinaryDispatchMode::DispatchArg0Only;
-        }
-        if exe_name == CODEX_LINUX_SANDBOX_ARG0 {
-            return TestBinaryDispatchMode::DispatchArg0Only;
-        }
-        TestBinaryDispatchMode::InstallAliases
-    });
-    maybe_run_delayed_output_after_exit_from_test_binary();
-    maybe_run_exec_server_from_test_binary(guard.as_ref());
-    guard
-};
 
 pub(crate) fn current_test_binary_helper_paths() -> anyhow::Result<(PathBuf, Option<PathBuf>)> {
     let current_exe = env::current_exe()?;

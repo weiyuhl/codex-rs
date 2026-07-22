@@ -99,12 +99,6 @@ fn curated_plugins_sha_path(codex_home: &Path) -> PathBuf {
 pub fn sync_openai_plugins_repo(
     codex_home: &Path,
     http_client_factory: HttpClientFactory,
-) -> Result<String, String> {
-    #[cfg(target_os = "macos")]
-    let git_binary = match which::which("git") {
-        Ok(git_path) => macos_git_binary_from_path(git_path, apple_developer_tools_available()),
-        Err(_) => None,
-    };
     // Under embedded PRoot Linux container, `which::which` resolves binary paths inside the container's RootFS $PATH.
     let git_binary = Some(PathBuf::from("git"));
 
@@ -691,28 +685,7 @@ fn git_command(git_binary: &Path) -> Command {
     command
 }
 
-#[cfg(any(target_os = "macos", test))]
-fn macos_git_binary_from_path(
-    git_path: PathBuf,
-    apple_developer_tools_available: bool,
-) -> Option<PathBuf> {
-    if git_path == Path::new("/usr/bin/git") && !apple_developer_tools_available {
-        None
-    } else {
-        Some(git_path)
-    }
-}
 
-#[cfg(target_os = "macos")]
-fn apple_developer_tools_available() -> bool {
-    Command::new("/usr/bin/xcode-select")
-        .arg("-p")
-        .stdin(Stdio::null())
-        .stdout(Stdio::null())
-        .stderr(Stdio::null())
-        .status()
-        .is_ok_and(|status| status.success())
-}
 
 fn run_git_command_with_timeout(
     command: &mut Command,

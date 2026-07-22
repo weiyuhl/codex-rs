@@ -1,7 +1,3 @@
-#[cfg(target_os = "macos")]
-use super::macos::ManagedAdminConfigLayer;
-#[cfg(target_os = "macos")]
-use super::macos::load_managed_admin_config_layer;
 use crate::config_toml::ConfigToml;
 use crate::diagnostics::config_error_from_toml;
 use crate::diagnostics::io_error_from_config_error;
@@ -45,14 +41,6 @@ pub(super) async fn load_config_layers_internal(
     overrides: LoaderOverrides,
     strict_config: bool,
 ) -> io::Result<LoadedConfigLayers> {
-    #[cfg(target_os = "macos")]
-    let LoaderOverrides {
-        managed_config_path,
-        managed_preferences_base64,
-        ..
-    } = overrides;
-
-    #[cfg(not(target_os = "macos"))]
     let LoaderOverrides {
         managed_config_path,
         ..
@@ -74,21 +62,9 @@ pub(super) async fn load_config_layers_internal(
         file: managed_config_path.clone(),
     });
 
-    #[cfg(target_os = "macos")]
-    let managed_preferences = load_managed_admin_config_layer(
-        managed_preferences_base64.as_deref(),
-        strict_config,
-        codex_home,
-    )
-    .await?
-    .map(map_managed_admin_layer);
-
-    #[cfg(not(target_os = "macos"))]
-    let managed_preferences = None;
-
     Ok(LoadedConfigLayers {
         managed_config,
-        managed_config_from_mdm: managed_preferences,
+        managed_config_from_mdm: None,
     })
 }
 

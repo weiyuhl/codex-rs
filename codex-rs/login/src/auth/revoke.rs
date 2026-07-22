@@ -11,7 +11,6 @@ use codex_http_client::HttpClient;
 use codex_protocol::auth::AuthMode;
 
 use super::manager::REFRESH_TOKEN_URL_OVERRIDE_ENV_VAR;
-use super::manager::REVOKE_TOKEN_URL;
 use super::manager::REVOKE_TOKEN_URL_OVERRIDE_ENV_VAR;
 use super::manager::oauth_client_id;
 use super::storage::AuthDotJson;
@@ -142,7 +141,7 @@ fn revoke_token_endpoint() -> String {
         return endpoint;
     }
 
-    REVOKE_TOKEN_URL.to_string()
+    String::new()
 }
 
 fn derive_revoke_token_endpoint(refresh_endpoint: &str) -> Option<String> {

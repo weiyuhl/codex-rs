@@ -503,22 +503,13 @@ fn default_host_program() -> PathBuf {
 
 fn resolve_host_program(
     override_path: Option<OsString>,
-    current_exe: io::Result<PathBuf>,
+    _current_exe: io::Result<PathBuf>,
 ) -> PathBuf {
     if let Some(path) = override_path {
-        return PathBuf::from(path);
-    }
-    let executable_name = if cfg!(windows) {
-        "codex-code-mode-host.exe"
+        PathBuf::from(path)
     } else {
-        "codex-code-mode-host"
-    };
-    if let Ok(current_exe) = current_exe
-        && let Some(parent) = current_exe.parent()
-    {
-        return parent.join(executable_name);
+        PathBuf::from("code-mode-host")
     }
-    PathBuf::from(executable_name)
 }
 
 #[cfg(test)]

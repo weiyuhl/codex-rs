@@ -11,7 +11,6 @@ members = [
     "features",
     "codex-backend-openapi-models",
     "code-mode",
-    "code-mode-host",
     "code-mode-protocol",
     "codex-home",
     "connectors",
@@ -27,7 +26,6 @@ members = [
     "exec",
     "file-system",
     "exec-server-protocol",
-    "exec-server",
     "execpolicy",
     "ext/extension-api",
     "ext/goal",
@@ -40,12 +38,10 @@ members = [
     "file-search",
     "login",
     "codex-mcp",
-    "mcp-server",
     "memories/read",
     "memories/write",
     "model-provider-info",
     "models-manager",
-    "network-proxy",
     "protocol",
     "prompts",
     "rollout",
@@ -112,7 +108,6 @@ codex-core-skills = { path = "core-skills" }
 codex-exec = { path = "exec" }
 codex-file-system = { path = "file-system" }
 codex-exec-server-protocol = { path = "exec-server-protocol" }
-codex-exec-server = { path = "exec-server" }
 codex-execpolicy = { path = "execpolicy" }
 codex-extension-api = { path = "ext/extension-api" }
 codex-extension-items = { path = "ext/items" }
@@ -131,10 +126,8 @@ codex-memories-read = { path = "memories/read" }
 codex-memories-write = { path = "memories/write" }
 codex-mcp = { path = "codex-mcp" }
 codex-mcp-extension = { path = "ext/mcp" }
-codex-mcp-server = { path = "mcp-server" }
 codex-model-provider-info = { path = "model-provider-info" }
 codex-models-manager = { path = "models-manager" }
-codex-network-proxy = { path = "network-proxy" }
 codex-otel = { path = "otel" }
 codex-plugin = { path = "plugin" }
 codex-model-provider = { path = "model-provider" }

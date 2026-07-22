@@ -5,9 +5,7 @@ use std::path::Path;
 use std::path::PathBuf;
 
 use codex_apply_patch::CODEX_CORE_APPLY_PATCH_ARG1;
-#[cfg(unix)]
-use codex_exec_server::CODEX_ARG0_EXEC_HELPER_ARG1;
-use codex_exec_server::CODEX_FS_HELPER_ARG1;
+pub const CODEX_FS_HELPER_ARG1: &str = "__fs_helper__";
 use codex_protocol::config_types::InstallContext;
 use codex_sandboxing::landlock::CODEX_LINUX_SANDBOX_ARG0;
 use codex_home::find_codex_home;
@@ -68,13 +66,6 @@ pub fn arg0_dispatch() -> Option<Arg0PathEntryGuard> {
     }
 
     let argv1 = args.next().unwrap_or_default();
-    #[cfg(unix)]
-    if argv1 == CODEX_ARG0_EXEC_HELPER_ARG1 {
-        codex_exec_server::run_arg0_exec_helper_main();
-    }
-    if argv1 == CODEX_FS_HELPER_ARG1 {
-        codex_exec_server::run_fs_helper_main();
-    }
     if argv1 == CODEX_CORE_APPLY_PATCH_ARG1 {
         let patch_arg = args.next().and_then(|s| s.to_str().map(str::to_owned));
         let exit_code = match patch_arg {
@@ -98,7 +89,7 @@ pub fn arg0_dispatch() -> Option<Arg0PathEntryGuard> {
                     &cwd,
                     &mut stdout,
                     &mut stderr,
-                    codex_exec_server::LOCAL_FS.as_ref(),
+                    &codex_file_system::LOCAL_FS,
                     /*sandbox*/ None,
                 )) {
                     Ok(_) => 0,

@@ -72,7 +72,7 @@ pub fn run_main() -> i32 {
         &cwd,
         &mut stdout,
         &mut stderr,
-        codex_exec_server::LOCAL_FS.as_ref(),
+        &codex_file_system::LOCAL_FS,
         /*sandbox*/ None,
     )) {
         Ok(_) => {

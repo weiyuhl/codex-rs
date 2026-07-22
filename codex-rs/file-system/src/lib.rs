@@ -1,4 +1,7 @@
 mod find_up;
+mod local_fs;
+
+pub use local_fs::*;
 
 use bytes::Bytes;
 use codex_protocol::config_types::WindowsSandboxLevel;

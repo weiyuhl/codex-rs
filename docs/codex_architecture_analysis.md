@@ -27,7 +27,8 @@
 > 21. 彻底剥离第八批 3 大 Android 冗余/悬空/过度拆分模块（删除 `core-api` 悬空接口库、`ext/agent` 悬空扩展库，合并内联 `context-fragments` 到 `core`）。  
 > 22. 彻底剥离第九批 1 大 Android 冗余桌面路径查找库（物理删除 `utils/home-dir` 桌面 Home 路径检测库，内联 `find_codex_home` 到 `codex-home`）。  
 > 23. 彻底剥离第十批 1 大 Android 冗余报文 Debug 库（物理删除 `response-debug-context` 报文 Debug 解析库，合并内联到 `codex-api`）。  
-> 24. `codex-rs/` 全量代码统计数据完成归档。  
+> 24. 彻底剥离第十一批 4 大 Android 严重不兼容/不可用中大型模块（删除 `exec-server` 守护服务器、`network-proxy` MITM CA 代理、`mcp-server` Stdio MCP 服务端、`code-mode-host` Node.js 宿主，共 57,000+ 行代码）。  
+> 25. `codex-rs/` 全量代码统计数据完成归档。  
 
 ---
 

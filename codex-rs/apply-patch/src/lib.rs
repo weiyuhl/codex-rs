@@ -10,10 +10,10 @@ use std::path::PathBuf;
 
 use anyhow::Context;
 use anyhow::Result;
-use codex_exec_server::CreateDirectoryOptions;
-use codex_exec_server::ExecutorFileSystem;
-use codex_exec_server::FileSystemSandboxContext;
-use codex_exec_server::RemoveOptions;
+use codex_file_system::CreateDirectoryOptions;
+use codex_file_system::ExecutorFileSystem;
+use codex_file_system::FileSystemSandboxContext;
+use codex_file_system::RemoveOptions;
 use codex_utils_path_uri::PathUri;
 use codex_utils_path_uri::PathUriParseError;
 pub use parser::Hunk;
@@ -888,7 +888,7 @@ pub fn print_summary(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use codex_exec_server::LOCAL_FS;
+    use codex_file_system::LOCAL_FS;
     use pretty_assertions::assert_eq;
     use std::fs;
     use std::string::ToString;

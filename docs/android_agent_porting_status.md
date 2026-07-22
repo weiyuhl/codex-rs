@@ -21,7 +21,7 @@
 
 ## 🚀 二、已完成的裁剪与重构成果
 
-目前已累计完成 **15 轮深度裁剪**，彻底物理剥离与合并解耦了 **33 个桌面冗余/不可用/悬空/过度拆分 Crate**，清理干掉了 **66,800+ 行桌面冗余代码**，将工作区 Crate 数量从 108+ 成功瘦身降至 **75 个**。
+目前已累计完成 **16 轮深度裁剪**，彻底物理剥离与合并解耦了 **37 个桌面冗余/不可用/悬空/过度拆分 Crate**，清理干掉了 **123,800+ 行桌面冗余代码**，将工作区 Crate 数量从 108+ 成功瘦身降至 **71 个**。
 
 ### 明细剥离清单：
 
@@ -41,6 +41,7 @@
 | **第十三轮** | `core-api`, `ext/agent`, 内联 `context-fragments` | 移除 Core API 悬空接口库、Agent Extension 悬空扩展库，将 231 行 Fragment 库内联合并至 `core` |
 | **第十四轮** | 内联 `utils/home-dir` | 物理删除 134 行 `utils/home-dir` 桌面 Home 路径查找库，将 `find_codex_home` 内联合并至 `codex-home` |
 | **第十五轮** | 内联 `response-debug-context` | 物理删除 166 行 `response-debug-context` 报文 Debug 解析库，合并内联至 `codex-api` |
+| **第十六轮** | `exec-server`, `network-proxy`, `mcp-server`, `code-mode-host` | 物理删除 4 大 Android 严重不兼容中大型 Crate（守护进程服务器、MITM CA 代理、Stdio MCP 服务端、Node.js 宿主，共 57,000+ 行代码） |
 | **遥测控制** | `analytics`, `otel` 网络分发暂停 | 封堵静默用户事件 POST 与 OTLP/Statsig 线程组，消除电量与流量隐患 |
 
 ---
@@ -49,10 +50,10 @@
 
 经最新盘点，`codex-rs/` 工作区代码库数据如下：
 
-- 📦 **Workspace Crate 总数**：**75 个**（从 108+ 降至 75 个，达成极高纯度瘦身）
-- 📄 **Rust 源码文件数 (`.rs`)**：**1,755 个**
-- 📝 **Rust 代码总行数 (LoC)**：**715,402 行**
-- 🧹 **依赖与引用状态**：全工作区针对上述已删除 33 个 Crate 的代码引用与 Cargo 依赖已 **100% 清零**，Git 工作区处于完全干净（Clean）状态。
+- 📦 **Workspace Crate 总数**：**71 个**（从 108+ 降至 71 个，达成极高纯度瘦身）
+- 📄 **Rust 源码文件数 (`.rs`)**：**1,605 个**
+- 📝 **Rust 代码总行数 (LoC)**：**658,402 行**
+- 🧹 **依赖与引用状态**：全工作区针对上述已删除 37 个 Crate 的代码引用与 Cargo 依赖已 **100% 清零**，Git 工作区处于完全干净（Clean）状态。
 
 ---
 

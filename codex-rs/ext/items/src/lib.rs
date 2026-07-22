@@ -8,24 +8,10 @@ use serde::Deserialize;
 use serde::Serialize;
 use ts_rs::TS;
 
-pub mod image_generation;
 pub mod sleep;
 pub mod web_search;
 
 /// Canonical extension-owned turn item carried through core lifecycle events.
-///
-/// The item is serialized as a flattened, namespaced envelope:
-///
-/// ```json
-/// {
-///   "kind": "image_gen.generation",
-///   "id": "call-id",
-///   "status": "completed",
-///   "revisedPrompt": "A blue square",
-///   "result": "cG5n",
-///   "savedPath": "/tmp/image.png"
-/// }
-/// ```
 ///
 /// `kind` values follow `<extension_namespace>.<item_kind>`. Adding a variant
 /// also requires app-server to add its typed public wrapper.
@@ -33,9 +19,6 @@ pub mod web_search;
 #[serde(tag = "kind")]
 #[ts(tag = "kind")]
 pub enum ExtensionItem {
-    #[serde(rename = "image_gen.generation")]
-    #[ts(rename = "image_gen.generation")]
-    ImageGeneration(image_generation::ImageGenerationItem),
     #[serde(rename = "clock.sleep")]
     #[ts(rename = "clock.sleep")]
     Sleep(sleep::SleepItem),
@@ -49,7 +32,6 @@ impl ExtensionItem {
     /// core or rollout persistence.
     pub fn id(&self) -> &str {
         match self {
-            Self::ImageGeneration(item) => &item.id,
             Self::Sleep(item) => &item.id,
             Self::WebSearch(item) => &item.id,
         }

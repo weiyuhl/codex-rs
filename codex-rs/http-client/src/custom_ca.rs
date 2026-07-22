@@ -258,6 +258,10 @@ fn build_rustls_client_config(
     }
     let _ = root_store.add_parsable_certificates(certs);
 
+    if root_store.is_empty() {
+        root_store.extend(webpki_roots::TLS_SERVER_ROOTS.iter().cloned());
+    }
+
     if let Some(bundle) = bundle {
         let certificates = bundle.load_certificates()?;
         for (idx, cert) in certificates.into_iter().enumerate() {

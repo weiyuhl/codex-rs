@@ -5,21 +5,17 @@ use serde::Serialize;
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy, Serialize, Deserialize)]
 pub enum ShellType {
-    Zsh,
     Bash,
-    PowerShell,
     Sh,
-    Cmd,
+    Zsh,
 }
 
 impl ShellType {
     pub fn name(self) -> &'static str {
         match self {
-            Self::Zsh => "zsh",
             Self::Bash => "bash",
-            Self::PowerShell => "powershell",
             Self::Sh => "sh",
-            Self::Cmd => "cmd",
+            Self::Zsh => "zsh",
         }
     }
 }
@@ -39,12 +35,9 @@ impl DetectedShell {
 pub fn detect_shell_type(shell_path: impl AsRef<std::path::Path>) -> Option<ShellType> {
     let shell_path = shell_path.as_ref();
     match shell_path.as_os_str().to_str() {
-        Some("zsh") => Some(ShellType::Zsh),
-        Some("sh") => Some(ShellType::Sh),
-        Some("cmd") => Some(ShellType::Cmd),
         Some("bash") => Some(ShellType::Bash),
-        Some("pwsh") => Some(ShellType::PowerShell),
-        Some("powershell") => Some(ShellType::PowerShell),
+        Some("sh") => Some(ShellType::Sh),
+        Some("zsh") => Some(ShellType::Zsh),
         _ => {
             let shell_name = shell_path.file_stem();
             if let Some(shell_name) = shell_name {

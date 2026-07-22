@@ -59,10 +59,32 @@
 
 ---
 
-## 📌 四、当前正在推进与下一步计划
+## 🔍 四、Android 平台兼容性排查与降级指引
+
+### 1. 沙箱与权限隔离 (Linux/Desktop 专属)
+- **`bwrap` / `landlock` / `sandboxing`**：全部完成物理剥离。Android 拥有原生 SELinux + App 独占 UID 内核级隔离沙箱，无需且禁止调用 Linux Landlock / Bubblewrap 或 Windows AppContainer。
+
+### 2. 桌面级 IPC 与守护进程
+- **`app-server-daemon` / `app-server-transport` / `uds`**：全部彻底物理删除。移动端场景中，Agent 核心被编译为 `libcodex.so` 嵌入到 Android App 内部，无需在本地监听 Unix Domain Socket 或运行独立的桌面 IPC 守护进程。保留 `app-server-protocol` 作为 JNI DTO 传输定义。
+
+### 3. 系统集成与终端机制
+- **`utils/pty`**：禁用与清除 ConPTY/Windows/macOS 系统特有 API，Android 上改用基于管道 (Pipe) 的标准 IO 交互。
+- **`codex-home`**：移除了硬编码桌面 `~/.codex` 的路径依赖，由 Android App 在 Agent 初始化时显式传入 App 内部私有存储目录 (`/data/data/<pkg>/files/codex`)。
+- **剪贴板依赖 (`arboard`)**：彻底移除了带 `wayland-data-control` 桌面 GUI 特性的剪贴板依赖。
+
+### 4. 后端集成与功能降级建议
+- **本地大模型 (`ollama` / `lmstudio`)**：已完成剥离，Android 上不运行桌面级 GUI 服务，统一推荐云端 API 或轻量级端侧小模型。
+- **V8 JavaScript 引擎 (`code-mode`)**：已剥离 C++ V8 静态库（~50MB+），建议 Android 编译选项中默认禁用 V8 特性。
+- **OAuth 浏览器流程 (`rmcp-client`)**：移除桌面 `webbrowser::open` 自动拉起机制，改用 Android Chrome Custom Tabs / Deep Link 重定向。
+
+---
+
+## 📌 五、下一步计划
 
 1. **JNI / UniFFI 接口层设计**：
    - 围绕 `app-server-protocol` 的 Schema DTO 定义，建立 Kotlin 与 Rust Agent Core 之间的 JSON/Memory 传输协议。
+2. **Android NDK 工具链编译验证**：
+   - 配置 `aarch64-linux-android` 交叉编译 Target，验证 NDK 构建输出。
 2. **Android NDK 交叉编译构建**：
    - 验证 `aarch64-linux-android` 架构下的 Rust 动态库 (`libcodex_android.so`) 编译。
 3. **嵌入式沙箱与执行器调优**：

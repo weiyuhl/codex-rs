@@ -424,13 +424,12 @@ impl TurnContext {
 }
 
 fn local_time_context() -> (String, String) {
-    match iana_time_zone::get_timezone() {
-        Ok(timezone) => (Local::now().format("%Y-%m-%d").to_string(), timezone),
-        Err(_) => (
-            Utc::now().format("%Y-%m-%d").to_string(),
-            "Etc/UTC".to_string(),
-        ),
-    }
+    let timezone = std::env::var("TZ")
+        .ok()
+        .filter(|tz| !tz.is_empty())
+        .or_else(|| iana_time_zone::get_timezone().ok())
+        .unwrap_or_else(|| "Asia/Shanghai".to_string());
+    (Local::now().format("%Y-%m-%d").to_string(), timezone)
 }
 
 impl Session {

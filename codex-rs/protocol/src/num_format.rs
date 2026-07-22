@@ -6,7 +6,11 @@ use icu_decimal::options::DecimalFormatterOptions;
 use icu_locale_core::Locale;
 
 fn make_local_formatter() -> Option<DecimalFormatter> {
-    let loc: Locale = sys_locale::get_locale()?.parse().ok()?;
+    let raw_locale = std::env::var("LANG")
+        .or_else(|_| std::env::var("LC_ALL"))
+        .ok()
+        .or_else(sys_locale::get_locale);
+    let loc: Locale = raw_locale?.parse().ok()?;
     DecimalFormatter::try_new(loc.into(), DecimalFormatterOptions::default()).ok()
 }
 

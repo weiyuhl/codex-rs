@@ -1,4 +1,4 @@
-﻿# 📱 Codex-RS Android 专用 Agent 核心重构与裁剪进度报告
+# 📱 Codex-RS Android 专用 Agent 核心重构与裁剪进度报告
 
 > **文档更新时间**：2026年7月  
 > **项目状态**：进行中 (Active Refactoring & Porting)  
@@ -21,7 +21,7 @@
 
 ## 🚀 二、已完成的裁剪与重构成果
 
-目前已累计完成 **16 轮深度裁剪**，彻底物理剥离与合并解耦了 **39 个桌面冗余/不可用/悬空/过度拆分 Crate**，清理干掉了 **约 130,000+ 行桌面冗余代码**，将工作区 Crate 数量从 108+ 成功瘦身降至 **70 个**。
+目前已累计完成 **18 轮深度裁剪**，彻底物理剥离与合并解耦了 **43 个桌面冗余/不可用/悬空/过度拆分 Crate**，清理干掉了 **约 146,000+ 行桌面冗余代码**，将工作区 Crate 数量从 108+ 成功瘦身降至 **66 个**。
 
 ### 明细剥离清单：
 
@@ -42,9 +42,8 @@
 | **第十四轮** | 内联 `utils/home-dir` | 物理删除 134 行 `utils/home-dir` 桌面 Home 路径查找库，将 `find_codex_home` 内联合并至 `codex-home` |
 | **第十五轮** | 内联 `response-debug-context` | 物理删除 166 行 `response-debug-context` 报文 Debug 解析库，合并内联至 `codex-api` |
 | **第十六轮** | `exec-server`, `network-proxy`, `mcp-server`, `code-mode-host` | 物理删除 4 大 Android 严重不兼容中大型 Crate（守护进程服务器、MITM CA 代理、Stdio MCP 服务端、Node.js 宿主，共 57,000+ 行代码） |
-
 | **第十七轮** | `windows-sandbox-rs`, `process-hardening`, `app-server-client` | 物理删除 Windows 沙箱实现、进程加固模块及 App Server 客户端残留 |
-| **引用清理** | 152 个文件中残留 `use` / 内联引用 | 清理所有 Cargo.toml 依赖声明、BUILD.bazel 目标、Rust 源码中 539 行引用 |
+| **第十八轮** | `sandboxing`, `exec`, `arg0`, `execpolicy` | 物理删除 4 大 Android 严重不兼容/桌面控制台 Crate（系统沙箱包装器、CLI 命令行入口、argv[0] 符号链接分发器、PowerShell/Brew 安全策略规则库，共 16,338 行代码） |
 | **遥测控制** | `analytics`, `otel` 网络分发暂停 | 封堵静默用户事件 POST 与 OTLP/Statsig 线程组，消除电量与流量隐患 |
 
 ---
@@ -53,10 +52,10 @@
 
 经最新盘点，`codex-rs/` 工作区代码库数据如下：
 
-- 📦 **Workspace Crate 总数**：**70 个**（从 108+ 降至 70 个，达成极高纯度瘦身）
-- 📄 **Rust 源码文件数 (`.rs`)**：**1,587 个**
-- 📝 **Rust 代码总行数 (LoC)**：**602,026 行**
-- 🧹 **依赖与引用状态**：全工作区针对上述已删除 39 个 Crate 的代码引用与 Cargo 依赖已在后续修复中 **100% 清零**（2026-07-22 完成源码级引用清理）。
+- 📦 **Workspace Crate 总数**：**66 个**（从 108+ 降至 66 个，达成极高纯度瘦身）
+- 📄 **Rust 源码文件数 (`.rs`)**：**1,544 个**
+- 📝 **Rust 代码总行数 (LoC)**：**585,688 行**
+- 🧹 **依赖与引用状态**：全工作区针对上述已删除 43 个 Crate 的代码引用与 Cargo 依赖已 **100% 清零**，Git 工作区处于完全干净（Clean）状态。
 
 ---
 

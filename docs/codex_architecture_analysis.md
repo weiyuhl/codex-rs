@@ -1,4 +1,4 @@
-﻿# Codex 项目与 `codex-rs` 深度架构分析报告
+# Codex 项目与 `codex-rs` 深度架构分析报告
 
 > **文档状态**：已归档  
 > **更新时间**：2026-07-22  
@@ -28,7 +28,8 @@
 > 22. 彻底剥离第九批 1 大 Android 冗余桌面路径查找库（物理删除 `utils/home-dir` 桌面 Home 路径检测库，内联 `find_codex_home` 到 `codex-home`）。  
 > 23. 彻底剥离第十批 1 大 Android 冗余报文 Debug 库（物理删除 `response-debug-context` 报文 Debug 解析库，合并内联到 `codex-api`）。  
 > 24. 彻底剥离第十一批 4 大 Android 严重不兼容/不可用中大型模块（删除 `exec-server` 守护服务器、`network-proxy` MITM CA 代理、`mcp-server` Stdio MCP 服务端、`code-mode-host` Node.js 宿主，共 57,000+ 行代码）。  
-> 25. `codex-rs/` 全量代码统计数据完成归档。  
+> 25. 彻底剥离第十二批 4 大 Android 严重不兼容/桌面控制台模块（物理删除 `sandboxing` 桌面系统沙箱包装器、`exec` CLI 命令行二进制入口、`arg0` 命令行符号链接路由分发器、`execpolicy` 桌面 PowerShell/Brew 安全策略规则库，共 16,338 行代码）。  
+> 26. `codex-rs/` 全量代码统计数据完成归档。  
 > 26. 彻底剥离 Windows 沙箱及进程加固残余模块（删除 `windows-sandbox-rs`、`process-hardening`、`app-server-client` 引用）。  
 > 27. 全面清理 152 个 Rust 源文件中残留引用（移除 `use codex_exec_server/network_proxy/...` 等，-539 行）。  
 > 28. `codex-rs/` 目录树重建：基于实际 70 个 Crate 重写架构明细（1,587 文件 / 602,026 LoC）。  

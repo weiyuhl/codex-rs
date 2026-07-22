@@ -1,4 +1,4 @@
-﻿[workspace]
+[workspace]
 members = [
     "analytics",
     "agent-graph-store",
@@ -6,7 +6,6 @@ members = [
     "backend-client",
     "app-server-protocol",
     "apply-patch",
-    "arg0",
     "features",
     "codex-backend-openapi-models",
     "code-mode",
@@ -22,10 +21,8 @@ members = [
     "hooks",
     "http-client",
     "secrets",
-    "exec",
     "file-system",
     "exec-server-protocol",
-    "execpolicy",
     "ext/extension-api",
     "ext/goal",
     "ext/image-generation",
@@ -47,7 +44,6 @@ members = [
     "rollout-trace",
     "rmcp-client",
     "responses-api-proxy",
-    "sandboxing",
     "otel",
     "tools",
     "utils/absolute-path",
@@ -90,7 +86,6 @@ codex-agent-identity = { path = "agent-identity" }
 codex-api = { path = "codex-api" }
 codex-app-server-protocol = { path = "app-server-protocol" }
 codex-apply-patch = { path = "apply-patch" }
-codex-arg0 = { path = "arg0" }
 codex-backend-client = { path = "backend-client" }
 codex-chatgpt = { path = "chatgpt" }
 codex-client = { path = "codex-client" }
@@ -103,10 +98,8 @@ codex-connectors = { path = "connectors" }
 codex-core = { path = "core" }
 codex-core-plugins = { path = "core-plugins" }
 codex-core-skills = { path = "core-skills" }
-codex-exec = { path = "exec" }
 codex-file-system = { path = "file-system" }
 codex-exec-server-protocol = { path = "exec-server-protocol" }
-codex-execpolicy = { path = "execpolicy" }
 codex-extension-api = { path = "ext/extension-api" }
 codex-extension-items = { path = "ext/items" }
 codex-goal-extension = { path = "ext/goal" }
@@ -135,7 +128,6 @@ codex-responses-api-proxy = { path = "responses-api-proxy" }
 codex-rmcp-client = { path = "rmcp-client" }
 codex-rollout = { path = "rollout" }
 codex-rollout-trace = { path = "rollout-trace" }
-codex-sandboxing = { path = "sandboxing" }
 codex-secrets = { path = "secrets" }
 codex-shell-command = { path = "shell-command" }
 codex-skills-extension = { path = "ext/skills" }

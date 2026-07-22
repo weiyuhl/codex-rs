@@ -34,18 +34,14 @@ const WINDOWS_SANDBOX_WRAPPER_SETUP_ENV_ALLOWLIST: &[&str] = &["USERNAME", "USER
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum SandboxType {
     None,
-    MacosSeatbelt,
     LinuxSeccomp,
-    WindowsRestrictedToken,
 }
 
 impl SandboxType {
     pub fn as_metric_tag(self) -> &'static str {
         match self {
             SandboxType::None => "none",
-            SandboxType::MacosSeatbelt => "seatbelt",
             SandboxType::LinuxSeccomp => "seccomp",
-            SandboxType::WindowsRestrictedToken => "windows_sandbox",
         }
     }
 }
@@ -57,17 +53,9 @@ pub enum SandboxablePreference {
     Forbid,
 }
 
-pub fn get_platform_sandbox(windows_sandbox_enabled: bool) -> Option<SandboxType> {
-    if cfg!(target_os = "macos") {
-        Some(SandboxType::MacosSeatbelt)
-    } else if cfg!(target_os = "linux") {
+pub fn get_platform_sandbox(_windows_sandbox_enabled: bool) -> Option<SandboxType> {
+    if cfg!(target_os = "linux") || cfg!(target_os = "android") {
         Some(SandboxType::LinuxSeccomp)
-    } else if cfg!(target_os = "windows") {
-        if windows_sandbox_enabled {
-            Some(SandboxType::WindowsRestrictedToken)
-        } else {
-            None
-        }
     } else {
         None
     }

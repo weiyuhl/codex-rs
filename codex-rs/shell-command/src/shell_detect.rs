@@ -189,59 +189,10 @@ fn get_sh_shell(path: Option<&PathBuf>) -> Option<DetectedShell> {
     })
 }
 
-// Note the `pwsh` and `powershell` fallback paths are where the respective
-// shells are commonly installed on GitHub Actions Windows runners, but may not
-// be present on all Windows machines:
-// https://docs.github.com/en/actions/tutorials/build-and-test-code/powershell
-
-#[cfg(windows)]
-const PWSH_FALLBACK_PATHS: &[&str] = &[r#"C:\Program Files\PowerShell\7\pwsh.exe"#];
-#[cfg(not(windows))]
-const PWSH_FALLBACK_PATHS: &[&str] = &["/usr/local/bin/pwsh"];
-
-#[cfg(windows)]
-const POWERSHELL_FALLBACK_PATHS: &[&str] =
-    &[r#"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe"#];
-#[cfg(not(windows))]
-const POWERSHELL_FALLBACK_PATHS: &[&str] = &[];
-
-fn get_powershell_shell(path: Option<&PathBuf>) -> Option<DetectedShell> {
-    let shell_path = get_shell_path(ShellType::PowerShell, path, "pwsh", PWSH_FALLBACK_PATHS)
-        .or_else(|| {
-            get_shell_path(
-                ShellType::PowerShell,
-                path,
-                "powershell",
-                POWERSHELL_FALLBACK_PATHS,
-            )
-        });
-
-    shell_path.map(|shell_path| DetectedShell {
-        shell_type: ShellType::PowerShell,
-        shell_path,
-    })
-}
-
-fn get_cmd_shell(path: Option<&PathBuf>) -> Option<DetectedShell> {
-    let shell_path = get_shell_path(ShellType::Cmd, path, "cmd", &[]);
-
-    shell_path.map(|shell_path| DetectedShell {
-        shell_type: ShellType::Cmd,
-        shell_path,
-    })
-}
-
 pub fn ultimate_fallback_shell() -> DetectedShell {
-    if cfg!(windows) {
-        DetectedShell {
-            shell_type: ShellType::Cmd,
-            shell_path: PathBuf::from("cmd.exe"),
-        }
-    } else {
-        DetectedShell {
-            shell_type: ShellType::Sh,
-            shell_path: PathBuf::from("/bin/sh"),
-        }
+    DetectedShell {
+        shell_type: ShellType::Sh,
+        shell_path: PathBuf::from("/bin/sh"),
     }
 }
 
@@ -255,9 +206,7 @@ pub fn get_shell(shell_type: ShellType, path: Option<&PathBuf>) -> Option<Detect
     match shell_type {
         ShellType::Zsh => get_zsh_shell(path),
         ShellType::Bash => get_bash_shell(path),
-        ShellType::PowerShell => get_powershell_shell(path),
         ShellType::Sh => get_sh_shell(path),
-        ShellType::Cmd => get_cmd_shell(path),
     }
 }
 

@@ -8,8 +8,9 @@
 > 2. `codex-rs/app-server` 及 `codex-rs/app-server-client` 模块已于 2026-07-22 成功从中移除，Workspace 依赖项已同步完成清理。  
 > 3. 清理非 Rust 构建链文件（Bazel、SDK、Node/pnpm）。  
 > 4. `codex-rs/cli` 桌面命令行二进制模块已于 2026-07-22 成功从中移除，Workspace 依赖项已同步完成清理。  
-> 5. 实施方案 B：彻底从源码层面剥离 Windows (`windows-sandbox-rs`, `process-hardening`) 及 macOS (`seatbelt.rs` 与 `.sb` 策略文件) 平台依赖，重构沙箱路由为纯 Linux / Android 模式。  
-> 6. `codex-rs/` 全量代码统计数据完成归档。  
+> 5. 实施方案 B：彻底从源码层面剥离 Windows 及 macOS 平台依赖，重构沙箱路由为纯 Linux / Android 模式。  
+> 6. 彻底剥离官方账号登录授权（删除 OAuth 2.0 PKCE 本地回调 Web 服务器 `LoginServer`、Device Code 设备码服务及 HTML 回调网页，保留 API Key 鉴权与安全存储）。  
+> 7. `codex-rs/` 全量代码统计数据完成归档。  
 
 ---
 

@@ -21,9 +21,6 @@ use http::HeaderValue;
 
 use crate::bearer_auth_provider::BearerAuthProvider;
 
-const BEDROCK_API_KEY_UNSUPPORTED_MESSAGE: &str =
-    "Bedrock API key auth is only supported by the Amazon Bedrock model provider";
-
 #[derive(Clone, Debug)]
 pub struct ProviderAuthScope {
     pub agent_identity_policy: AgentIdentityAuthPolicy,
@@ -317,7 +314,6 @@ mod tests {
     use codex_login::AuthCredentialsStoreMode;
     use codex_login::AuthKeyringBackendKind;
     use codex_login::auth::AgentIdentityAuthRecord;
-    use codex_login::auth::BedrockApiKeyAuth;
     use codex_login::auth::login_with_chatgpt_auth_tokens;
     use codex_model_provider_info::WireApi;
     use codex_model_provider_info::create_oss_provider_with_base_url;
@@ -459,23 +455,6 @@ mod tests {
         let actual = auth_provider_from_auth(&auth).to_auth_headers();
 
         assert_eq!(actual, expected);
-    }
-
-    #[test]
-    fn openai_provider_rejects_bedrock_api_key_auth() {
-        let provider = ModelProviderInfo::create_openai_provider(/*base_url*/ None);
-        let auth = CodexAuth::BedrockApiKey(BedrockApiKeyAuth {
-            api_key: "bedrock-api-key-test".to_string(),
-            region: "us-east-1".to_string(),
-        });
-
-        match resolve_provider_auth(Some(&auth), &provider) {
-            Err(CodexErr::UnsupportedOperation(message)) => {
-                assert_eq!(message, BEDROCK_API_KEY_UNSUPPORTED_MESSAGE);
-            }
-            Err(err) => panic!("unexpected auth error: {err:?}"),
-            Ok(_) => panic!("Bedrock API key auth should be rejected"),
-        }
     }
 
     #[tokio::test]

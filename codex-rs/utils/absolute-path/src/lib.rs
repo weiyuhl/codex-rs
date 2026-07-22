@@ -140,42 +140,7 @@ impl AbsolutePathBuf {
 }
 
 fn normalize_path_for_platform(path: &Path) -> Cow<'_, Path> {
-    if cfg!(windows)
-        && let Some(path) = path.to_str()
-        && let Some(normalized) = normalize_windows_device_path(path)
-    {
-        return Cow::Owned(PathBuf::from(normalized));
-    }
-
     Cow::Borrowed(path)
-}
-
-fn normalize_windows_device_path(path: &str) -> Option<String> {
-    if let Some(unc) = path.strip_prefix(r"\\?\UNC\") {
-        return Some(format!(r"\\{unc}"));
-    }
-    if let Some(unc) = path.strip_prefix(r"\\.\UNC\") {
-        return Some(format!(r"\\{unc}"));
-    }
-    if let Some(path) = path.strip_prefix(r"\\?\")
-        && is_windows_drive_absolute_path(path)
-    {
-        return Some(path.to_string());
-    }
-    if let Some(path) = path.strip_prefix(r"\\.\")
-        && is_windows_drive_absolute_path(path)
-    {
-        return Some(path.to_string());
-    }
-    None
-}
-
-fn is_windows_drive_absolute_path(path: &str) -> bool {
-    let bytes = path.as_bytes();
-    bytes.len() >= 3
-        && bytes[0].is_ascii_alphabetic()
-        && bytes[1] == b':'
-        && matches!(bytes[2], b'\\' | b'/')
 }
 
 /// Canonicalize a path when possible, but preserve the logical absolute path

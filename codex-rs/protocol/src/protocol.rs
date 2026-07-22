@@ -5127,16 +5127,8 @@ mod tests {
 
     #[test]
     fn file_system_policy_rejects_legacy_bridge_for_non_workspace_writes() {
-        let cwd = if cfg!(windows) {
-            Path::new(r"C:\workspace")
-        } else {
-            Path::new("/tmp/workspace")
-        };
-        let external_write_path = if cfg!(windows) {
-            AbsolutePathBuf::from_absolute_path(r"C:\temp").expect("absolute windows temp path")
-        } else {
-            AbsolutePathBuf::from_absolute_path("/tmp").expect("absolute tmp path")
-        };
+        let cwd = Path::new("/tmp/workspace");
+        let external_write_path = AbsolutePathBuf::from_absolute_path("/tmp").expect("absolute tmp path");
         let policy = FileSystemSandboxPolicy::restricted(vec![FileSystemSandboxEntry {
             path: FileSystemPath::Path {
                 path: external_write_path,

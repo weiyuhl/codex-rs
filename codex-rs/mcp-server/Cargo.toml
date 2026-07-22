@@ -27,7 +27,6 @@ codex-exec-server = { workspace = true }
 codex-extension-api = { workspace = true }
 codex-login = { workspace = true }
 codex-protocol = { workspace = true }
-codex-utils-json-to-toml = { workspace = true }
 rmcp = { workspace = true }
 schemars = { workspace = true }
 serde = { workspace = true, features = ["derive"] }

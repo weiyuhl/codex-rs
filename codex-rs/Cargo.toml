@@ -65,12 +65,10 @@ members = [
     "git-utils",
     "utils/cache",
     "utils/image",
-    "utils/json-to-toml",
     "utils/home-dir",
     "utils/pty",
     "utils/rustls-provider",
     "utils/string",
-    "utils/elapsed",
     "utils/output-truncation",
     "utils/path-utils",
     "utils/plugins",
@@ -165,10 +163,8 @@ codex-thread-store = { path = "thread-store" }
 codex-tools = { path = "tools" }
 codex-utils-absolute-path = { path = "utils/absolute-path" }
 codex-utils-cache = { path = "utils/cache" }
-codex-utils-elapsed = { path = "utils/elapsed" }
 codex-utils-home-dir = { path = "utils/home-dir" }
 codex-utils-image = { path = "utils/image" }
-codex-utils-json-to-toml = { path = "utils/json-to-toml" }
 codex-utils-output-truncation = { path = "utils/output-truncation" }
 codex-utils-path = { path = "utils/path-utils" }
 codex-utils-path-uri = { path = "utils/path-uri" }

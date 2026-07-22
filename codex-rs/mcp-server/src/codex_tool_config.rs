@@ -7,7 +7,30 @@ use codex_core::config::ConfigOverrides;
 use codex_protocol::ThreadId;
 use codex_protocol::config_types::SandboxMode;
 use codex_protocol::protocol::AskForApproval;
-use codex_utils_json_to_toml::json_to_toml;
+fn json_to_toml(v: serde_json::Value) -> toml::Value {
+    match v {
+        serde_json::Value::Null => toml::Value::String(String::new()),
+        serde_json::Value::Bool(b) => toml::Value::Boolean(b),
+        serde_json::Value::Number(n) => {
+            if let Some(i) = n.as_i64() {
+                toml::Value::Integer(i)
+            } else if let Some(f) = n.as_f64() {
+                toml::Value::Float(f)
+            } else {
+                toml::Value::String(n.to_string())
+            }
+        }
+        serde_json::Value::String(s) => toml::Value::String(s),
+        serde_json::Value::Array(arr) => toml::Value::Array(arr.into_iter().map(json_to_toml).collect()),
+        serde_json::Value::Object(map) => {
+            let tbl = map
+                .into_iter()
+                .map(|(k, v)| (k, json_to_toml(v)))
+                .collect::<toml::value::Table>();
+            toml::Value::Table(tbl)
+        }
+    }
+}
 use rmcp::model::JsonObject;
 use rmcp::model::Tool;
 use schemars::JsonSchema;

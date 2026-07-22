@@ -1,8 +1,5 @@
 use crate::bash::parse_shell_lc_literal_commands;
 use std::path::Path;
-#[cfg(windows)]
-#[path = "windows_dangerous_commands.rs"]
-mod windows_dangerous_commands;
 
 /// Identifies the dangerous-command rule matched by a command invocation.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -42,29 +39,13 @@ fn dangerous_command_match_with_depth(
         return Some(dangerous_match);
     }
 
-    #[cfg(windows)]
-    {
-        if windows_dangerous_commands::is_dangerous_command_windows(command) {
-            return Some(DangerousCommandMatch::Other);
-        }
-    }
-
     None
 }
 
 /// Returns the dangerous-command rule matched by tokenized PowerShell words.
 pub fn dangerous_powershell_words_match(command: &[String]) -> Option<DangerousCommandMatch> {
-    #[cfg(windows)]
-    {
-        windows_dangerous_commands::is_dangerous_powershell_words(command)
-            .then_some(DangerousCommandMatch::Other)
-    }
-
-    #[cfg(not(windows))]
-    {
-        let _ = command;
-        None
-    }
+    let _ = command;
+    None
 }
 
 fn is_git_global_option_with_value(arg: &str) -> bool {

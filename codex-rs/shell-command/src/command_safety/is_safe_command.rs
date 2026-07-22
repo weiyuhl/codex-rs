@@ -4,10 +4,6 @@ use crate::command_safety::is_dangerous_command::executable_name_lookup_key;
 // may appear before it (e.g., `-C`, `-c`, `--git-dir`).
 // Implemented in `is_dangerous_command` and shared here.
 use crate::command_safety::is_dangerous_command::find_git_subcommand;
-#[cfg(windows)]
-use crate::command_safety::windows_safe_commands::is_safe_command_windows;
-#[cfg(windows)]
-use crate::command_safety::windows_safe_commands::is_safe_powershell_words as is_safe_powershell_words_windows;
 
 pub fn is_known_safe_command(command: &[String]) -> bool {
     let command: Vec<String> = command
@@ -20,13 +16,6 @@ pub fn is_known_safe_command(command: &[String]) -> bool {
             }
         })
         .collect();
-
-    #[cfg(windows)]
-    {
-        if is_safe_command_windows(&command) {
-            return true;
-        }
-    }
 
     if is_safe_to_call_with_exec(&command) {
         return true;
@@ -49,19 +38,9 @@ pub fn is_known_safe_command(command: &[String]) -> bool {
     false
 }
 
-/// Returns whether already-tokenized PowerShell words are read-only enough to
-/// be auto-approved by the Windows safelist.
 pub fn is_safe_powershell_words(command: &[String]) -> bool {
-    #[cfg(windows)]
-    {
-        is_safe_powershell_words_windows(command)
-    }
-
-    #[cfg(not(windows))]
-    {
-        let _ = command;
-        false
-    }
+    let _ = command;
+    false
 }
 
 fn is_safe_to_call_with_exec(command: &[String]) -> bool {

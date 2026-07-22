@@ -24,12 +24,10 @@ codex-core = { workspace = true }
 codex-git-utils = { workspace = true }
 codex-login = { path = "../login" }
 codex-model-provider = { workspace = true }
-codex-tui = { workspace = true }
 codex-utils-cli = { workspace = true }
 crossterm = { workspace = true, features = ["event-stream"] }
 http = { workspace = true }
 owo-colors = { workspace = true, features = ["supports-colors"] }
-ratatui = { workspace = true }
 serde = { workspace = true, features = ["derive"] }
 serde_json = { workspace = true }
 supports-color = { workspace = true }

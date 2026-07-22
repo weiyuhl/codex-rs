@@ -10,10 +10,6 @@ use std::sync::Arc;
 use std::time::Duration;
 
 use arc_swap::ArcSwap;
-use codex_exec_server::Environment;
-use codex_exec_server::EnvironmentManager;
-use codex_exec_server::HttpClient;
-use codex_exec_server::ReqwestHttpClient;
 use codex_protocol::models::PermissionProfile;
 use codex_utils_path_uri::PathUri;
 use serde::Deserialize;
@@ -145,7 +141,6 @@ mod tests {
     use codex_config::DEFAULT_MCP_SERVER_ENVIRONMENT_ID;
     use codex_config::McpServerConfig;
     use codex_config::McpServerTransportConfig;
-    use codex_exec_server::EnvironmentManager;
     use codex_utils_path_uri::LegacyAppPathString;
     use pretty_assertions::assert_eq;
     use serde_json::Value;

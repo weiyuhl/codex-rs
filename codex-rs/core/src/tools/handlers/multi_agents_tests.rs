@@ -3874,7 +3874,7 @@ async fn multi_agent_v2_interrupt_agent_accepts_unloaded_task_name_target() {
         CodexAuth::from_api_key("dummy"),
         config.model_provider.clone(),
         config.codex_home.to_path_buf(),
-        Arc::new(codex_exec_server::EnvironmentManager::default_for_tests()),
+// REMOVED-DELETED-CRATE: Arc::new(codex_exec_server::EnvironmentManager::default_for_tests()),
         Some(state_db.clone()),
     );
     let root = manager
@@ -4204,7 +4204,7 @@ async fn tool_handlers_cascade_close_and_resume_and_keep_explicitly_closed_subtr
         crate::thread_manager::build_models_manager(&config, auth_manager),
         crate::CodexAppsToolsCache::default(),
         SessionSource::Exec,
-        Arc::new(codex_exec_server::EnvironmentManager::default_for_tests()),
+// REMOVED-DELETED-CRATE: Arc::new(codex_exec_server::EnvironmentManager::default_for_tests()),
         empty_extension_registry(),
         Arc::new(crate::test_support::EmptyUserInstructionsProvider),
         /*analytics_events_client*/ None,

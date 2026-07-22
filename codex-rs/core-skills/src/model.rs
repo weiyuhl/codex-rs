@@ -4,8 +4,6 @@ use std::fmt;
 use std::io;
 use std::sync::Arc;
 
-use codex_exec_server::ExecutorFileSystem;
-use codex_exec_server::LOCAL_FS;
 use codex_protocol::protocol::Product;
 pub use codex_skills::SkillDependencies;
 pub use codex_skills::SkillInterface;

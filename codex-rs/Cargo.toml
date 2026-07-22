@@ -1,10 +1,9 @@
-[workspace]
+﻿[workspace]
 members = [
     "analytics",
     "agent-graph-store",
     "agent-identity",
     "backend-client",
-    "async-utils",
     "app-server-protocol",
     "apply-patch",
     "arg0",
@@ -53,7 +52,6 @@ members = [
     "tools",
     "utils/absolute-path",
     "utils/path-uri",
-    "utils/cargo-bin",
     "git-utils",
     "utils/cache",
     "utils/image",

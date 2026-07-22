@@ -25,13 +25,6 @@ use std::sync::atomic::AtomicUsize;
 use std::sync::atomic::Ordering;
 
 use bytes::BytesMut;
-use codex_exec_server::ExecOutputStream;
-use codex_exec_server::ExecProcess;
-use codex_exec_server::ExecProcessEvent;
-use codex_exec_server::ExecProcessEventReceiver;
-use codex_exec_server::ProcessId;
-use codex_exec_server::ProcessOutputChunk;
-use codex_exec_server::WriteStatus;
 use memchr::memchr;
 use rmcp::service::RoleClient;
 use rmcp::service::RxJsonRpcMessage;

@@ -23,7 +23,6 @@ use codex_config::ConfigLayerStackOrdering;
 use codex_config::default_project_root_markers;
 use codex_config::merge_toml_values;
 use codex_config::project_root_markers_from_config;
-use codex_exec_server::ExecutorFileSystem;
 use codex_extension_api::UserInstructions;
 use codex_file_system::FindUpErrorPolicy;
 use codex_file_system::find_nearest_ancestor_with_markers;

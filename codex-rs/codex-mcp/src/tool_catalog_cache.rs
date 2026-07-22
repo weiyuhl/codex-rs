@@ -14,7 +14,6 @@ use std::time::Duration;
 
 use codex_config::McpServerConfig;
 use codex_config::McpServerTransportConfig;
-use codex_exec_server::Environment;
 use lru::LruCache;
 use rmcp::model::ElicitationCapability;
 use sha1::Digest;

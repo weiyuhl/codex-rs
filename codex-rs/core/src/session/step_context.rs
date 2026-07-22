@@ -4,8 +4,6 @@ use crate::agents_md::LoadedAgentsMd;
 use crate::environment_selection::TurnEnvironmentSnapshot;
 use crate::session::McpRuntimeSnapshot;
 use crate::session::turn_context::TurnContext;
-use codex_exec_server::ExecutorCapabilityDiscoverySnapshot;
-use codex_exec_server::ResolvedSelectedCapabilityRoot;
 use codex_extension_api::ExtensionData;
 use codex_mcp::ToolInfo;
 use tokio::sync::OnceCell;

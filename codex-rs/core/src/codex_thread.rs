@@ -5,7 +5,6 @@ use crate::session::SessionIo;
 use crate::session::SessionSettingsUpdate;
 use crate::session::SteerInputError;
 use crate::session::session::Session;
-use codex_exec_server::SelectedCapabilityRootsStatus;
 use codex_features::Feature;
 use codex_otel::SessionTelemetry;
 use codex_protocol::ThreadId;

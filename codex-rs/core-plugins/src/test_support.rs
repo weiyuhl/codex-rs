@@ -11,7 +11,6 @@ use crate::remote::RemotePluginServiceConfig;
 use codex_config::LoaderOverrides;
 use codex_config::NoopThreadConfigLoader;
 use codex_config::loader::load_config_layers_state;
-use codex_exec_server::LOCAL_FS;
 use codex_http_client::ClientRouteClass;
 use codex_http_client::HttpClientFactory;
 use codex_http_client::OutboundProxyPolicy;

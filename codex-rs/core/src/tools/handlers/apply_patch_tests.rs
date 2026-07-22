@@ -1,6 +1,5 @@
 use super::*;
 use codex_apply_patch::MaybeApplyPatchVerified;
-use codex_exec_server::LOCAL_FS;
 use codex_protocol::permissions::FileSystemSandboxPolicy;
 use codex_protocol::protocol::FileChange;
 use core_test_support::PathBufExt;

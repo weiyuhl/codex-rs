@@ -1,7 +1,6 @@
 use super::*;
 use crate::shell::ShellType;
 use crate::shell::default_user_shell;
-use codex_exec_server::Environment;
 use codex_tools::UnifiedExecShellMode;
 use codex_tools::ZshForkConfig;
 use codex_utils_absolute_path::AbsolutePathBuf;

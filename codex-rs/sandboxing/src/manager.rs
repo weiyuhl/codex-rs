@@ -13,8 +13,6 @@ use crate::resolve_windows_elevated_filesystem_overrides;
 use crate::resolve_windows_restricted_token_filesystem_overrides;
 #[cfg(target_os = "windows")]
 use crate::windows_sandbox_uses_elevated_backend;
-use codex_network_proxy::ManagedNetworkSandboxContext;
-use codex_network_proxy::NetworkProxy;
 use codex_protocol::config_types::WindowsSandboxLevel;
 use codex_protocol::models::AdditionalPermissionProfile;
 use codex_protocol::models::PermissionProfile;

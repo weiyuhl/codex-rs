@@ -1,4 +1,4 @@
-[package]
+﻿[package]
 name = "codex-arg0"
 version.workspace = true
 edition.workspace = true
@@ -23,7 +23,6 @@ tempfile = { workspace = true }
 tokio = { workspace = true, features = ["rt-multi-thread"] }
 
 [target.'cfg(windows)'.dependencies]
-codex-windows-sandbox = { workspace = true }
 
 [dev-dependencies]
 pretty_assertions = { workspace = true }

@@ -9,8 +9,6 @@ use anyhow::anyhow;
 use anyhow::bail;
 use base64::Engine;
 use base64::engine::general_purpose::URL_SAFE_NO_PAD;
-use codex_exec_server::HttpClient;
-use codex_exec_server::ReqwestHttpClient;
 use reqwest::Url;
 use rmcp::transport::AuthorizationManager;
 use rmcp::transport::AuthorizationSession;
@@ -714,7 +712,6 @@ mod tests {
     use axum::Json;
     use axum::Router;
     use axum::routing::get;
-    use codex_exec_server::ReqwestHttpClient;
     use pretty_assertions::assert_eq;
     use reqwest::Url;
     use reqwest::header::HeaderMap;

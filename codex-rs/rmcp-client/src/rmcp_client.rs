@@ -14,7 +14,6 @@ use anyhow::anyhow;
 use codex_api::SharedAuthProvider;
 use codex_config::types::AuthKeyringBackendKind;
 use codex_config::types::McpServerEnvVar;
-use codex_exec_server::HttpClient;
 use codex_secrets::DefaultKeyringStore;
 use futures::FutureExt;
 use futures::future::BoxFuture;

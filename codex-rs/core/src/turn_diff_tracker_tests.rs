@@ -1,7 +1,6 @@
 use super::*;
 use codex_apply_patch::AppliedPatchDelta;
 use codex_apply_patch::MaybeApplyPatchVerified;
-use codex_exec_server::LOCAL_FS;
 use codex_git_utils::ApplyGitRequest;
 use codex_git_utils::apply_git_patch;
 use codex_utils_path_uri::PathUri;

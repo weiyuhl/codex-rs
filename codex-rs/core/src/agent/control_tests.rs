@@ -143,7 +143,7 @@ impl AgentControlHarness {
             CodexAuth::from_api_key("dummy"),
             config.model_provider.clone(),
             config.codex_home.to_path_buf(),
-            std::sync::Arc::new(codex_exec_server::EnvironmentManager::default_for_tests()),
+// REMOVED-DELETED-CRATE: std::sync::Arc::new(codex_exec_server::EnvironmentManager::default_for_tests()),
             state_db.clone(),
         );
         let control = manager.agent_control();
@@ -811,7 +811,7 @@ async fn resume_agent_from_rollout_does_not_reopen_v2_descendants() {
         CodexAuth::from_api_key("dummy"),
         harness.config.model_provider.clone(),
         harness.config.codex_home.to_path_buf(),
-        std::sync::Arc::new(codex_exec_server::EnvironmentManager::default_for_tests()),
+// REMOVED-DELETED-CRATE: std::sync::Arc::new(codex_exec_server::EnvironmentManager::default_for_tests()),
         harness.state_db.clone(),
     );
     let resumed_control = resumed_manager.agent_control();
@@ -1966,7 +1966,7 @@ async fn spawn_agent_respects_legacy_max_threads_alias() {
         CodexAuth::from_api_key("dummy"),
         config.model_provider.clone(),
         config.codex_home.to_path_buf(),
-        std::sync::Arc::new(codex_exec_server::EnvironmentManager::default_for_tests()),
+// REMOVED-DELETED-CRATE: std::sync::Arc::new(codex_exec_server::EnvironmentManager::default_for_tests()),
     );
     let control = manager.agent_control();
 
@@ -2018,7 +2018,7 @@ async fn spawn_agent_releases_slot_after_shutdown() {
         CodexAuth::from_api_key("dummy"),
         config.model_provider.clone(),
         config.codex_home.to_path_buf(),
-        std::sync::Arc::new(codex_exec_server::EnvironmentManager::default_for_tests()),
+// REMOVED-DELETED-CRATE: std::sync::Arc::new(codex_exec_server::EnvironmentManager::default_for_tests()),
     );
     let control = manager.agent_control();
 
@@ -2061,7 +2061,7 @@ async fn spawn_agent_limit_shared_across_clones() {
         CodexAuth::from_api_key("dummy"),
         config.model_provider.clone(),
         config.codex_home.to_path_buf(),
-        std::sync::Arc::new(codex_exec_server::EnvironmentManager::default_for_tests()),
+// REMOVED-DELETED-CRATE: std::sync::Arc::new(codex_exec_server::EnvironmentManager::default_for_tests()),
     );
     let control = manager.agent_control();
     let cloned = control.clone();
@@ -2106,7 +2106,7 @@ async fn resume_agent_respects_max_threads_limit() {
         CodexAuth::from_api_key("dummy"),
         config.model_provider.clone(),
         config.codex_home.to_path_buf(),
-        std::sync::Arc::new(codex_exec_server::EnvironmentManager::default_for_tests()),
+// REMOVED-DELETED-CRATE: std::sync::Arc::new(codex_exec_server::EnvironmentManager::default_for_tests()),
     );
     let control = manager.agent_control();
 
@@ -2162,7 +2162,7 @@ async fn resume_agent_releases_slot_after_resume_failure() {
         CodexAuth::from_api_key("dummy"),
         config.model_provider.clone(),
         config.codex_home.to_path_buf(),
-        std::sync::Arc::new(codex_exec_server::EnvironmentManager::default_for_tests()),
+// REMOVED-DELETED-CRATE: std::sync::Arc::new(codex_exec_server::EnvironmentManager::default_for_tests()),
     );
     let control = manager.agent_control();
 
@@ -2644,7 +2644,7 @@ async fn resume_thread_subagent_restores_stored_metadata() {
         crate::thread_manager::build_models_manager(&config, auth_manager),
         crate::CodexAppsToolsCache::default(),
         SessionSource::Exec,
-        Arc::new(codex_exec_server::EnvironmentManager::default_for_tests()),
+// REMOVED-DELETED-CRATE: Arc::new(codex_exec_server::EnvironmentManager::default_for_tests()),
         empty_extension_registry(),
         Arc::new(crate::test_support::EmptyUserInstructionsProvider),
         /*analytics_events_client*/ None,
@@ -3034,7 +3034,7 @@ async fn list_agent_subtree_thread_ids_finds_live_descendants_of_unloaded_root()
         CodexAuth::from_api_key("dummy"),
         config.model_provider.clone(),
         config.codex_home.to_path_buf(),
-        std::sync::Arc::new(codex_exec_server::EnvironmentManager::default_for_tests()),
+// REMOVED-DELETED-CRATE: std::sync::Arc::new(codex_exec_server::EnvironmentManager::default_for_tests()),
         /*state_db*/ None,
     );
     let control = manager.agent_control();

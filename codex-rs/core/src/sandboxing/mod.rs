@@ -15,9 +15,6 @@ use crate::exec::execute_exec_request;
 use crate::spawn::CODEX_SANDBOX_ENV_VAR;
 use crate::spawn::CODEX_SANDBOX_NETWORK_DISABLED_ENV_VAR;
 use codex_file_system::FileSystemSandboxContext;
-use codex_network_proxy::ManagedNetworkSandboxContext;
-use codex_network_proxy::NetworkProxy;
-use codex_network_proxy::RemoteNetworkProxyLaunchConfig;
 use codex_protocol::config_types::WindowsSandboxLevel;
 use codex_protocol::exec_output::ExecToolCallOutput;
 use codex_protocol::models::PermissionProfile;
@@ -39,7 +36,7 @@ pub(crate) struct ExecOptions {
 
 #[derive(Clone, Debug)]
 pub(crate) struct ExecServerEnvConfig {
-    pub(crate) policy: codex_exec_server::ExecEnvPolicy,
+// REMOVED-DELETED-CRATE: // REMOVED: pub(crate) policy: codex_exec_server::ExecEnvPolicy,
     pub(crate) local_policy_env: HashMap<String, String>,
 }
 

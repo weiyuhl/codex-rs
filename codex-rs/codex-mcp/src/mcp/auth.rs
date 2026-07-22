@@ -7,7 +7,6 @@ use codex_config::McpServerConfig;
 use codex_config::McpServerTransportConfig;
 use codex_config::types::AuthKeyringBackendKind;
 use codex_config::types::OAuthCredentialsStoreMode;
-use codex_exec_server::HttpClient;
 use codex_login::CodexAuth;
 use codex_rmcp_client::McpAuthState;
 use codex_rmcp_client::OAuthProviderError;

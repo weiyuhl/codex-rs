@@ -3,8 +3,6 @@ use std::time::Duration;
 
 use anyhow::Context;
 use codex_core::NewThread;
-use codex_exec_server::ExecutorFileSystem;
-use codex_exec_server::RemoveOptions;
 use codex_protocol::models::PermissionProfile;
 use codex_protocol::protocol::AskForApproval;
 use codex_protocol::protocol::EventMsg;

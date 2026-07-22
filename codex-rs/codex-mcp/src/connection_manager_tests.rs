@@ -29,7 +29,6 @@ use codex_connectors::ConnectorRuntimeContext;
 use codex_connectors::ConnectorRuntimeContextKey;
 use codex_connectors::ConnectorRuntimeFetchSource;
 use codex_connectors::ConnectorRuntimeManager;
-use codex_exec_server::EnvironmentManager;
 use codex_protocol::ToolName;
 use codex_protocol::mcp::McpServerInfo;
 use codex_protocol::models::PermissionProfile;
@@ -1097,7 +1096,7 @@ async fn tool_catalog_cache_sanitizes_tools_and_tracks_environment_generation() 
             .expect("resolve environment")
             .expect("remote environment")
     };
-    let cache_context = |environment: &Arc<codex_exec_server::Environment>| {
+// REMOVED-DELETED-CRATE: // REMOVED: let cache_context = |environment: &Arc<codex_exec_server::Environment>| {
         cache
             .context(
                 "docs",

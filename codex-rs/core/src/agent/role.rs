@@ -18,7 +18,6 @@ use codex_config::ConfigLayerStack;
 use codex_config::ConfigLayerStackOrdering;
 use codex_config::config_toml::ConfigToml;
 use codex_config::loader::resolve_relative_paths_in_config_toml;
-use codex_exec_server::LOCAL_FS;
 use std::collections::BTreeMap;
 use std::collections::BTreeSet;
 use std::path::Path;

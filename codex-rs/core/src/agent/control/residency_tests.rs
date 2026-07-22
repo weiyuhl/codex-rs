@@ -30,7 +30,7 @@ async fn residency_slot_reservation_unloads_oldest_idle_v2_agent() {
         CodexAuth::from_api_key("dummy"),
         config.model_provider.clone(),
         config.codex_home.to_path_buf(),
-        Arc::new(codex_exec_server::EnvironmentManager::default_for_tests()),
+// REMOVED-DELETED-CRATE: Arc::new(codex_exec_server::EnvironmentManager::default_for_tests()),
     );
     let root = manager
         .start_thread(config.clone())
@@ -76,7 +76,7 @@ async fn interrupted_v2_agent_is_lost_after_residency_eviction() {
         CodexAuth::from_api_key("dummy"),
         config.model_provider.clone(),
         config.codex_home.to_path_buf(),
-        Arc::new(codex_exec_server::EnvironmentManager::default_for_tests()),
+// REMOVED-DELETED-CRATE: Arc::new(codex_exec_server::EnvironmentManager::default_for_tests()),
     );
     let root = manager
         .start_thread(config.clone())

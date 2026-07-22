@@ -18,7 +18,7 @@ use std::collections::HashMap;
 fn test_turn_environment(environment_id: &str) -> crate::session::turn_context::TurnEnvironment {
     crate::session::turn_context::TurnEnvironment::new(
         environment_id.to_string(),
-        std::sync::Arc::new(codex_exec_server::Environment::default_for_tests()),
+// REMOVED-DELETED-CRATE: std::sync::Arc::new(codex_exec_server::Environment::default_for_tests()),
         PathUri::from_abs_path(&std::env::temp_dir().abs()),
         Vec::new(),
         /*shell*/ None,
@@ -57,7 +57,7 @@ async fn approval_action_preserves_patch_path_uris() {
     let expected_cwd = action.cwd.clone();
     let expected_patch = action.patch.clone();
     let request = ApplyPatchRequest {
-        turn_environment: test_turn_environment(codex_exec_server::LOCAL_ENVIRONMENT_ID),
+// REMOVED-DELETED-CRATE: turn_environment: test_turn_environment(codex_exec_server::LOCAL_ENVIRONMENT_ID),
         action,
         file_paths: vec![path.clone()],
         changes: HashMap::new(),
@@ -75,7 +75,7 @@ async fn approval_action_preserves_patch_path_uris() {
         approval_action,
         ApprovalAction::ApplyPatch {
             id: "call-1".to_string(),
-            environment_id: codex_exec_server::LOCAL_ENVIRONMENT_ID.to_string(),
+// REMOVED-DELETED-CRATE: environment_id: codex_exec_server::LOCAL_ENVIRONMENT_ID.to_string(),
             cwd: expected_cwd,
             files: vec![path],
             patch: expected_patch,
@@ -93,7 +93,7 @@ async fn permission_request_payload_uses_apply_patch_hook_name_and_aliases() {
         ApplyPatchAction::new_add_for_test(&PathUri::from_abs_path(&path), "hello".to_string());
     let expected_patch = action.patch.clone();
     let req = ApplyPatchRequest {
-        turn_environment: test_turn_environment(codex_exec_server::LOCAL_ENVIRONMENT_ID),
+// REMOVED-DELETED-CRATE: turn_environment: test_turn_environment(codex_exec_server::LOCAL_ENVIRONMENT_ID),
         action,
         file_paths: vec![PathUri::from_abs_path(&path)],
         changes: HashMap::new(),
@@ -160,7 +160,7 @@ async fn sandbox_cwd_uses_patch_action_cwd() {
         .join("apply-patch-runtime-sandbox-cwd.txt")
         .abs();
     let req = ApplyPatchRequest {
-        turn_environment: test_turn_environment(codex_exec_server::LOCAL_ENVIRONMENT_ID),
+// REMOVED-DELETED-CRATE: turn_environment: test_turn_environment(codex_exec_server::LOCAL_ENVIRONMENT_ID),
         action: ApplyPatchAction::new_add_for_test(
             &PathUri::from_abs_path(&path),
             "hello".to_string(),
@@ -191,7 +191,7 @@ async fn file_system_sandbox_context_uses_active_attempt() {
         )),
     };
     let req = ApplyPatchRequest {
-        turn_environment: test_turn_environment(codex_exec_server::LOCAL_ENVIRONMENT_ID),
+// REMOVED-DELETED-CRATE: turn_environment: test_turn_environment(codex_exec_server::LOCAL_ENVIRONMENT_ID),
         action: ApplyPatchAction::new_add_for_test(
             &PathUri::from_abs_path(&path),
             "hello".to_string(),
@@ -264,7 +264,7 @@ async fn no_sandbox_attempt_has_no_file_system_context() {
         .join("apply-patch-runtime-none.txt")
         .abs();
     let req = ApplyPatchRequest {
-        turn_environment: test_turn_environment(codex_exec_server::LOCAL_ENVIRONMENT_ID),
+// REMOVED-DELETED-CRATE: turn_environment: test_turn_environment(codex_exec_server::LOCAL_ENVIRONMENT_ID),
         action: ApplyPatchAction::new_add_for_test(
             &PathUri::from_abs_path(&path),
             "hello".to_string(),

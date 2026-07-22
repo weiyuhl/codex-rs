@@ -2,7 +2,6 @@ pub trait ExecutorPluginConnectorProvider: Send + Sync {}
 impl<T: Send + Sync> ExecutorPluginConnectorProvider for T {}
 use codex_core::config::Config;
 use codex_core_plugins::ExecutorPluginProvider;
-use codex_exec_server::EnvironmentManager;
 use codex_extension_api::ExtensionFuture;
 use codex_extension_api::McpServerContribution;
 use codex_extension_api::McpServerContributionContext;

@@ -57,7 +57,6 @@ use crate::unified_exec::process::OutputBuffer;
 use crate::unified_exec::process::OutputHandles;
 use crate::unified_exec::process::SpawnLifecycleHandle;
 use crate::unified_exec::process::UnifiedExecProcess;
-use codex_network_proxy::NetworkProxy;
 use codex_protocol::config_types::ShellEnvironmentPolicy;
 use codex_protocol::error::CodexErr;
 use codex_protocol::error::SandboxErr;
@@ -111,7 +110,7 @@ fn apply_unified_exec_env(mut env: HashMap<String, String>) -> HashMap<String, S
 
 fn exec_env_policy_from_shell_policy(
     policy: &ShellEnvironmentPolicy,
-) -> codex_exec_server::ExecEnvPolicy {
+// REMOVED-DELETED-CRATE: ) -> codex_exec_server::ExecEnvPolicy {
     let mut exclude = policy
         .exclude
         .iter()
@@ -120,7 +119,7 @@ fn exec_env_policy_from_shell_policy(
     exclude.push(CODEX_PERMISSION_PROFILE_ENV_VAR.to_string());
     let mut r#set = policy.r#set.clone();
     r#set.retain(|key, _| !key.eq_ignore_ascii_case(CODEX_PERMISSION_PROFILE_ENV_VAR));
-    codex_exec_server::ExecEnvPolicy {
+// REMOVED-DELETED-CRATE: codex_exec_server::ExecEnvPolicy {
         inherit: policy.inherit.clone(),
         ignore_default_excludes: policy.ignore_default_excludes,
         exclude,
@@ -150,7 +149,7 @@ fn env_overlay_for_exec_server(
 fn exec_server_env_for_request(
     request: &ExecRequest,
 ) -> (
-    Option<codex_exec_server::ExecEnvPolicy>,
+// REMOVED-DELETED-CRATE: Option<codex_exec_server::ExecEnvPolicy>,
     HashMap<String, String>,
 ) {
     if let Some(exec_server_env_config) = &request.exec_server_env_config {
@@ -173,7 +172,7 @@ fn exec_server_params_for_request(
     process_id: i32,
     request: &ExecRequest,
     tty: bool,
-) -> codex_exec_server::ExecParams {
+// REMOVED-DELETED-CRATE: ) -> codex_exec_server::ExecParams {
     let (env_policy, env) = exec_server_env_for_request(request);
     // Sandbox retries reuse the unified-exec ID but start a distinct executor process.
     let exec_server_process_id = if request.exec_server_sandbox.is_some() {
@@ -181,7 +180,7 @@ fn exec_server_params_for_request(
     } else {
         process_id.to_string()
     };
-    codex_exec_server::ExecParams {
+// REMOVED-DELETED-CRATE: codex_exec_server::ExecParams {
         process_id: exec_server_process_id.into(),
         argv: request.command.clone(),
         cwd: request.cwd.clone(),
@@ -960,12 +959,12 @@ impl UnifiedExecProcessManager {
         options: ExecOptions,
         attempt: &SandboxAttempt<'_>,
         network: Option<&NetworkProxy>,
-        network_proxy_launch: Option<codex_network_proxy::RemoteNetworkProxyLaunchConfig>,
+// REMOVED-DELETED-CRATE: network_proxy_launch: Option<codex_network_proxy::RemoteNetworkProxyLaunchConfig>,
         environment_id: Option<&str>,
         exec_server_env_config: Option<ExecServerEnvConfig>,
         tty: bool,
         spawn_lifecycle: SpawnLifecycleHandle,
-        environment: &codex_exec_server::Environment,
+// REMOVED-DELETED-CRATE: environment: &codex_exec_server::Environment,
     ) -> Result<UnifiedExecProcess, ToolError> {
         let mut request = if environment.is_remote() {
             attempt.env_for_exec_server(command, options)
@@ -1000,7 +999,7 @@ impl UnifiedExecProcessManager {
         request: &ExecRequest,
         tty: bool,
         mut spawn_lifecycle: SpawnLifecycleHandle,
-        environment: &codex_exec_server::Environment,
+// REMOVED-DELETED-CRATE: environment: &codex_exec_server::Environment,
     ) -> Result<UnifiedExecProcess, UnifiedExecError> {
         let inherited_fds = spawn_lifecycle.inherited_fds();
 

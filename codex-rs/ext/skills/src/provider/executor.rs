@@ -2,7 +2,6 @@ use std::sync::Arc;
 
 use codex_core_skills::loader::load_environment_skills_from_discovery;
 use codex_core_skills::loader::load_environment_skills_from_root;
-use codex_exec_server::EnvironmentManager;
 use codex_protocol::capabilities::CapabilityRootLocation;
 use codex_protocol::protocol::Product;
 use codex_skills::EnvironmentSkillMetadata;
@@ -142,7 +141,7 @@ impl SkillProvider for ExecutorSkillProvider {
 impl ExecutorSkillProvider {
     fn list_from_discovery(
         &self,
-        snapshot: &codex_exec_server::ExecutorCapabilityDiscoverySnapshot,
+// REMOVED-DELETED-CRATE: // REMOVED: snapshot: &codex_exec_server::ExecutorCapabilityDiscoverySnapshot,
     ) -> SkillCatalog {
         let mut catalog = SkillCatalog::default();
         for root in snapshot.roots() {

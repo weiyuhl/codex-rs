@@ -3,10 +3,6 @@ use std::sync::atomic::AtomicU64;
 use std::sync::atomic::Ordering;
 use std::time::Duration;
 
-use codex_exec_server::HttpClient;
-use codex_exec_server::HttpHeader;
-use codex_exec_server::HttpRedirectPolicy;
-use codex_exec_server::HttpRequestParams;
 use oauth2::HttpRequest;
 use oauth2::HttpResponse;
 use reqwest::header::HeaderMap;

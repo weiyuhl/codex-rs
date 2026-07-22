@@ -6,19 +6,7 @@ use crate::shell::ShellType;
 use crate::tools::sandboxing::SandboxAttempt;
 use crate::tools::sandboxing::managed_network_for_sandbox_permissions;
 #[cfg(target_os = "macos")]
-use codex_network_proxy::CODEX_PROXY_GIT_SSH_COMMAND_MARKER;
-use codex_network_proxy::CUSTOM_CA_ENV_KEYS;
-use codex_network_proxy::ConfigReloader;
-use codex_network_proxy::ConfigReloaderFuture;
-use codex_network_proxy::ConfigState;
-use codex_network_proxy::NetworkProxy;
-use codex_network_proxy::NetworkProxyConfig;
-use codex_network_proxy::NetworkProxyConstraints;
-use codex_network_proxy::NetworkProxyState;
-use codex_network_proxy::PROXY_ACTIVE_ENV_KEY;
-use codex_network_proxy::PROXY_ENV_KEYS;
 #[cfg(target_os = "macos")]
-use codex_network_proxy::PROXY_GIT_SSH_COMMAND_ENV_KEY;
 use codex_protocol::config_types::WindowsSandboxLevel;
 use codex_protocol::models::PermissionProfile;
 use codex_sandboxing::SandboxManager;
@@ -63,7 +51,7 @@ fn shell_with_snapshot(
 }
 
 async fn test_network_proxy() -> anyhow::Result<NetworkProxy> {
-    let state = codex_network_proxy::build_config_state(
+// REMOVED-DELETED-CRATE: // REMOVED: let state = codex_network_proxy::build_config_state(
         NetworkProxyConfig::default(),
         NetworkProxyConstraints::default(),
     )?;

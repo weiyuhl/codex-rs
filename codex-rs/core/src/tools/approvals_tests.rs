@@ -26,7 +26,7 @@ fn guardian_cwd_preserves_drive_shaped_local_posix_path() {
     let cwd = PathUri::from_abs_path(&native_cwd);
 
     assert_eq!(
-        guardian_cwd(codex_exec_server::LOCAL_ENVIRONMENT_ID, cwd)
+// REMOVED-DELETED-CRATE: guardian_cwd(codex_exec_server::LOCAL_ENVIRONMENT_ID, cwd)
             .expect("local cwd should retain the host path convention"),
         native_cwd
     );
@@ -36,5 +36,5 @@ fn guardian_cwd_preserves_drive_shaped_local_posix_path() {
 fn guardian_cwd_rejects_foreign_remote_path() {
     let cwd = PathUri::parse("file:///C:/workspace").expect("valid Windows path URI");
 
-    assert!(guardian_cwd(codex_exec_server::REMOTE_ENVIRONMENT_ID, cwd).is_err());
+// REMOVED-DELETED-CRATE: assert!(guardian_cwd(codex_exec_server::REMOTE_ENVIRONMENT_ID, cwd).is_err());
 }

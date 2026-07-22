@@ -7,7 +7,6 @@ use codex_rmcp_client::ElicitationAction;
 use codex_rmcp_client::ElicitationResponse;
 use codex_rmcp_client::LocalStdioServerLauncher;
 use codex_rmcp_client::RmcpClient;
-use codex_utils_cargo_bin::CargoBinError;
 use futures::FutureExt as _;
 use rmcp::model::AnnotateAble;
 use rmcp::model::ClientCapabilities;

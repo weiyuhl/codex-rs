@@ -6,7 +6,6 @@ use std::time::UNIX_EPOCH;
 
 use codex_config::types::AuthKeyringBackendKind;
 use codex_config::types::OAuthCredentialsStoreMode;
-use codex_exec_server::Environment;
 use codex_rmcp_client::McpAuthState;
 use codex_rmcp_client::McpLoginRequirement;
 use codex_rmcp_client::RmcpClient;

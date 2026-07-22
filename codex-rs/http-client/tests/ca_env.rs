@@ -9,7 +9,6 @@
 //! parsing, and user-facing errors. The HTTPS probes go further and perform real POSTs against
 //! locally generated certificates, including through a TLS-intercepting CONNECT proxy.
 
-use codex_utils_cargo_bin::cargo_bin;
 use rcgen::BasicConstraints;
 use rcgen::CertificateParams;
 use rcgen::CertifiedIssuer;

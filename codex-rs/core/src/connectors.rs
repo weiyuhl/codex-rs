@@ -13,8 +13,6 @@ use codex_connectors::ConnectorDirectoryCacheKey;
 use codex_connectors::app_is_enabled;
 use codex_connectors::apps_config_from_layer_stack;
 use codex_connectors::connector_runtime_context_key;
-use codex_exec_server::EnvironmentManager;
-use codex_exec_server::ExecServerRuntimePaths;
 use codex_protocol::models::PermissionProfile;
 use codex_tools::DiscoverableTool;
 use tokio_util::sync::CancellationToken;

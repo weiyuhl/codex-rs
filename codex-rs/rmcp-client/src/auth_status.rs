@@ -3,7 +3,6 @@ use std::sync::Arc;
 use std::time::Duration;
 
 use anyhow::Result;
-use codex_exec_server::HttpClient;
 use codex_protocol::protocol::McpAuthStatus;
 use futures::FutureExt;
 use reqwest::Client;

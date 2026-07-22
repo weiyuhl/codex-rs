@@ -536,8 +536,6 @@ mod tests {
     use super::MAX_DEFAULT_PROMPT_LEN;
     use super::PluginManifest;
     use super::load_plugin_manifest;
-    use codex_exec_server::EnvironmentManager;
-    use codex_exec_server::LOCAL_ENVIRONMENT_ID;
     use codex_plugin::PluginProvider;
     use codex_plugin::ResolvedPlugin;
     use codex_plugin::manifest::PluginManifest as GenericPluginManifest;

@@ -2,7 +2,6 @@ use super::super::PreviousSectionState;
 use super::super::test_support::render_section_cases;
 use super::*;
 use anyhow::Result;
-use codex_exec_server::LOCAL_ENVIRONMENT_ID;
 use codex_protocol::models::PermissionProfile;
 use codex_protocol::permissions::NetworkSandboxPolicy;
 

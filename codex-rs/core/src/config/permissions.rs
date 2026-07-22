@@ -20,10 +20,7 @@ use codex_features::NetworkProxyConfigToml;
 use codex_features::NetworkProxyDomainPermissionToml;
 use codex_features::NetworkProxyModeToml;
 use codex_features::NetworkProxyUnixSocketPermissionToml;
-use codex_network_proxy::NetworkMode;
-use codex_network_proxy::NetworkProxyConfig;
 #[cfg(test)]
-use codex_network_proxy::NetworkUnixSocketPermission as ProxyNetworkUnixSocketPermission;
 use codex_protocol::config_types::WindowsSandboxLevel;
 use codex_protocol::models::BUILT_IN_PERMISSION_PROFILE_DANGER_FULL_ACCESS;
 use codex_protocol::models::BUILT_IN_PERMISSION_PROFILE_READ_ONLY;

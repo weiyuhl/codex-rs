@@ -4,7 +4,6 @@ use std::sync::Arc;
 use std::sync::RwLock;
 
 use codex_config::ConfigLayerStack;
-use codex_exec_server::ExecutorFileSystem;
 use codex_protocol::protocol::Product;
 use codex_protocol::protocol::SkillScope;
 use codex_utils_absolute_path::AbsolutePathBuf;

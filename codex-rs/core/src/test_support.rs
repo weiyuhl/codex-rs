@@ -7,7 +7,6 @@
 use std::path::PathBuf;
 use std::sync::Arc;
 
-use codex_exec_server::EnvironmentManager;
 use codex_extension_api::LoadUserInstructionsFuture;
 use codex_extension_api::LoadedUserInstructions;
 use codex_extension_api::UserInstructionsProvider;

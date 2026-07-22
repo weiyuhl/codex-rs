@@ -102,7 +102,6 @@ use codex_config::permissions_toml::PermissionsToml;
 use codex_execpolicy::Decision;
 use codex_execpolicy::NetworkRuleProtocol;
 use codex_execpolicy::Policy;
-use codex_network_proxy::NetworkProxyConfig;
 use codex_otel::MetricsClient;
 use codex_otel::MetricsConfig;
 use codex_otel::THREAD_SKILLS_DESCRIPTION_TRUNCATED_CHARS_METRIC;
@@ -876,11 +875,11 @@ async fn managed_network_proxy_decider_survives_full_access_start() -> anyhow::R
     )?;
     let exec_policy = Policy::empty();
     let decider_calls = Arc::new(std::sync::atomic::AtomicUsize::new(0));
-    let network_policy_decider: Arc<dyn codex_network_proxy::NetworkPolicyDecider> = Arc::new({
+// REMOVED-DELETED-CRATE: let network_policy_decider: Arc<dyn codex_network_proxy::NetworkPolicyDecider> = Arc::new({
         let decider_calls = Arc::clone(&decider_calls);
         move |_request| {
             decider_calls.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
-            async { codex_network_proxy::NetworkDecision::ask("not_allowed") }
+// REMOVED-DELETED-CRATE: async { codex_network_proxy::NetworkDecision::ask("not_allowed") }
         }
     });
 
@@ -1070,7 +1069,7 @@ async fn danger_full_access_tool_attempts_do_not_enforce_managed_network() -> an
         ) -> std::io::Result<crate::tools::sandboxing::ApprovalAction> {
             Ok(crate::tools::sandboxing::ApprovalAction::Shell {
                 id: ctx.call_id.to_string(),
-                environment_id: codex_exec_server::LOCAL_ENVIRONMENT_ID.to_string(),
+// REMOVED-DELETED-CRATE: environment_id: codex_exec_server::LOCAL_ENVIRONMENT_ID.to_string(),
                 command: Vec::new(),
                 #[allow(deprecated)]
                 cwd: PathUri::from_abs_path(&ctx.turn.cwd),
@@ -4885,7 +4884,7 @@ async fn new_default_turn_uses_config_aware_skills_for_role_overrides() {
         .environment_manager()
         .default_environment()
         .map(|environment| environment.get_filesystem())
-        .unwrap_or_else(|| std::sync::Arc::clone(&codex_exec_server::LOCAL_FS));
+// REMOVED-DELETED-CRATE: .unwrap_or_else(|| std::sync::Arc::clone(&codex_exec_server::LOCAL_FS));
     let parent_snapshot = session
         .services
         .skills_service
@@ -5867,7 +5866,7 @@ async fn notify_request_permissions_response_ignores_unmatched_call_id() {
 
     assert_eq!(
         session
-            .granted_turn_permissions(codex_exec_server::LOCAL_ENVIRONMENT_ID)
+// REMOVED-DELETED-CRATE: .granted_turn_permissions(codex_exec_server::LOCAL_ENVIRONMENT_ID)
             .await,
         None
     );
@@ -5897,7 +5896,7 @@ async fn record_granted_request_permissions_for_turn_uses_originating_turn() {
                 scope: PermissionGrantScope::Turn,
                 strict_auto_review: false,
             },
-            codex_exec_server::LOCAL_ENVIRONMENT_ID,
+// REMOVED-DELETED-CRATE: codex_exec_server::LOCAL_ENVIRONMENT_ID,
             Some(&originating_turn_state),
         )
         .await;
@@ -5906,19 +5905,19 @@ async fn record_granted_request_permissions_for_turn_uses_originating_turn() {
         originating_turn_state
             .lock()
             .await
-            .granted_permissions(codex_exec_server::LOCAL_ENVIRONMENT_ID),
+// REMOVED-DELETED-CRATE: .granted_permissions(codex_exec_server::LOCAL_ENVIRONMENT_ID),
         Some(requested_permissions.into())
     );
     assert_eq!(
         current_turn_state
             .lock()
             .await
-            .granted_permissions(codex_exec_server::LOCAL_ENVIRONMENT_ID),
+// REMOVED-DELETED-CRATE: .granted_permissions(codex_exec_server::LOCAL_ENVIRONMENT_ID),
         None
     );
     assert_eq!(
         session
-            .granted_turn_permissions(codex_exec_server::LOCAL_ENVIRONMENT_ID)
+// REMOVED-DELETED-CRATE: .granted_turn_permissions(codex_exec_server::LOCAL_ENVIRONMENT_ID)
             .await,
         None
     );
@@ -5997,7 +5996,7 @@ async fn enable_strict_auto_review_for_turn_uses_originating_turn() {
                 scope: PermissionGrantScope::Turn,
                 strict_auto_review: true,
             },
-            codex_exec_server::LOCAL_ENVIRONMENT_ID,
+// REMOVED-DELETED-CRATE: codex_exec_server::LOCAL_ENVIRONMENT_ID,
             Some(&originating_turn_state),
         )
         .await;
@@ -6110,7 +6109,7 @@ async fn request_permissions_emits_event_when_granular_policy_allows_requests() 
     assert_eq!(request.call_id, call_id);
     assert_eq!(
         request.environment_id.as_deref(),
-        Some(codex_exec_server::LOCAL_ENVIRONMENT_ID)
+// REMOVED-DELETED-CRATE: Some(codex_exec_server::LOCAL_ENVIRONMENT_ID)
     );
     #[allow(deprecated)]
     let turn_cwd = turn_context.cwd.clone();
@@ -6351,7 +6350,7 @@ async fn request_permissions_response_materializes_session_cwd_grants_before_rec
     };
     assert_eq!(
         request.environment_id.as_deref(),
-        Some(codex_exec_server::LOCAL_ENVIRONMENT_ID)
+// REMOVED-DELETED-CRATE: Some(codex_exec_server::LOCAL_ENVIRONMENT_ID)
     );
     let request_cwd = request.cwd.clone().expect("request cwd");
 
@@ -6387,7 +6386,7 @@ async fn request_permissions_response_materializes_session_cwd_grants_before_rec
     assert_eq!(response, Some(expected_response));
     assert_eq!(
         session
-            .granted_session_permissions(codex_exec_server::LOCAL_ENVIRONMENT_ID)
+// REMOVED-DELETED-CRATE: .granted_session_permissions(codex_exec_server::LOCAL_ENVIRONMENT_ID)
             .await,
         Some(expected_permissions.into())
     );
@@ -7793,13 +7792,13 @@ async fn refresh_mcp_servers_keeps_the_previous_runtime_alive() {
 
 struct PendingNoiseConnectProvider;
 
-impl codex_exec_server::NoiseRendezvousConnectProvider for PendingNoiseConnectProvider {
+// REMOVED-DELETED-CRATE: impl codex_exec_server::NoiseRendezvousConnectProvider for PendingNoiseConnectProvider {
     fn connect_bundle(
         &self,
-        _: codex_exec_server::NoiseChannelPublicKey,
+// REMOVED-DELETED-CRATE: _: codex_exec_server::NoiseChannelPublicKey,
     ) -> futures::future::BoxFuture<
         '_,
-        Result<codex_exec_server::NoiseRendezvousConnectBundle, codex_exec_server::ExecServerError>,
+// REMOVED-DELETED-CRATE: Result<codex_exec_server::NoiseRendezvousConnectBundle, codex_exec_server::ExecServerError>,
     > {
         Box::pin(futures::future::pending())
     }
@@ -7878,7 +7877,7 @@ async fn deferred_environment_roots_refresh_plugin_availability() {
         .expect("deferred environment");
     assert!(environment.selected_capability_roots().is_empty());
     registration
-        .complete(Ok(codex_exec_server::EnvironmentReadyInfo {
+// REMOVED-DELETED-CRATE: .complete(Ok(codex_exec_server::EnvironmentReadyInfo {
             selected_capability_roots: vec![selected_root.clone()],
         }))
         .expect("complete deferred environment");
@@ -7962,7 +7961,7 @@ async fn conflicting_ready_environment_root_ids_keep_first_location() {
             .get_environment(environment_id)
             .expect("deferred environment");
         registration
-            .complete(Ok(codex_exec_server::EnvironmentReadyInfo {
+// REMOVED-DELETED-CRATE: .complete(Ok(codex_exec_server::EnvironmentReadyInfo {
                 selected_capability_roots: vec![selected_root.clone()],
             }))
             .expect("complete deferred environment");
@@ -10830,7 +10829,7 @@ async fn rejects_escalated_permissions_when_policy_not_on_request() {
     pretty_assertions::assert_eq!(output, expected);
     pretty_assertions::assert_eq!(
         session
-            .granted_turn_permissions(codex_exec_server::LOCAL_ENVIRONMENT_ID)
+// REMOVED-DELETED-CRATE: .granted_turn_permissions(codex_exec_server::LOCAL_ENVIRONMENT_ID)
             .await,
         None
     );

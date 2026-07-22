@@ -598,7 +598,7 @@ async fn zsh_fork_unified_exec_keeps_shell_parameter_when_remote_environment_ava
                 crate::session::turn_context::TurnEnvironment::new(
                     "remote".to_string(),
                     Arc::new(
-                        codex_exec_server::Environment::create_for_tests(Some(
+// REMOVED-DELETED-CRATE: // REMOVED: codex_exec_server::Environment::create_for_tests(Some(
                             "ws://127.0.0.1:1/remote-exec-server".to_string(),
                         ))
                         .expect("remote test environment"),

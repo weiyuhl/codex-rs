@@ -23,9 +23,6 @@ use codex_core::resolve_installation_id;
 use codex_core::shell::Shell;
 use codex_core::shell::get_shell_by_model_provided_path;
 use codex_core::thread_store_from_config;
-use codex_exec_server::CreateDirectoryOptions;
-use codex_exec_server::ExecutorFileSystem;
-use codex_exec_server::RemoveOptions;
 use codex_extension_api::ExtensionRegistry;
 use codex_extension_api::LoadUserInstructionsFuture;
 use codex_extension_api::UserInstructionsProvider;
@@ -108,7 +105,7 @@ impl UserInstructionsProvider for RecordingUserInstructionsProvider {
 
 pub fn local(cwd: AbsolutePathBuf) -> TurnEnvironmentSelection {
     TurnEnvironmentSelection {
-        environment_id: codex_exec_server::LOCAL_ENVIRONMENT_ID.to_string(),
+// REMOVED-DELETED-CRATE: environment_id: codex_exec_server::LOCAL_ENVIRONMENT_ID.to_string(),
         cwd: PathUri::from_abs_path(&cwd),
         workspace_roots: vec![PathUri::from_abs_path(&cwd)],
     }
@@ -120,7 +117,7 @@ pub fn local_selections(cwd: AbsolutePathBuf) -> TurnEnvironmentSelections {
 
 #[derive(Debug)]
 pub struct TestEnv {
-    environment: codex_exec_server::Environment,
+// REMOVED-DELETED-CRATE: environment: codex_exec_server::Environment,
     exec_server_url: Option<String>,
     cwd: AbsolutePathBuf,
     selection: TurnEnvironmentSelection,
@@ -140,14 +137,14 @@ impl TestEnv {
         let cwd = local_cwd_temp_dir.abs();
         let selection = match exec_server_url {
             Some(_) => TurnEnvironmentSelection {
-                environment_id: codex_exec_server::REMOTE_ENVIRONMENT_ID.to_string(),
+// REMOVED-DELETED-CRATE: environment_id: codex_exec_server::REMOTE_ENVIRONMENT_ID.to_string(),
                 cwd: PathUri::from_abs_path(&cwd),
                 workspace_roots: vec![PathUri::from_abs_path(&cwd)],
             },
             None => local(cwd.clone()),
         };
         let environment =
-            codex_exec_server::Environment::create_for_tests(exec_server_url.clone())?;
+// REMOVED-DELETED-CRATE: codex_exec_server::Environment::create_for_tests(exec_server_url.clone())?;
         Ok(Self {
             environment,
             exec_server_url,
@@ -162,7 +159,7 @@ impl TestEnv {
         &self.cwd
     }
 
-    pub fn environment(&self) -> &codex_exec_server::Environment {
+// REMOVED-DELETED-CRATE: pub fn environment(&self) -> &codex_exec_server::Environment {
         &self.environment
     }
 
@@ -194,7 +191,7 @@ pub async fn test_env() -> Result<TestEnv> {
         remote_env @ (TestEnvironment::Docker { .. } | TestEnvironment::WineExec) => {
             let websocket_url = remote_exec_server_url()?;
             let environment =
-                codex_exec_server::Environment::create_for_tests(Some(websocket_url.clone()))?;
+// REMOVED-DELETED-CRATE: codex_exec_server::Environment::create_for_tests(Some(websocket_url.clone()))?;
             let cwd = remote_env
                 .remote_cwd(&remote_test_instance_id())?
                 .context("remote test environment should define a cwd")?;
@@ -208,7 +205,7 @@ pub async fn test_env() -> Result<TestEnv> {
                 )
                 .await?;
             let selection = TurnEnvironmentSelection {
-                environment_id: codex_exec_server::REMOTE_ENVIRONMENT_ID.to_string(),
+// REMOVED-DELETED-CRATE: environment_id: codex_exec_server::REMOTE_ENVIRONMENT_ID.to_string(),
                 cwd: cwd_uri.clone(),
                 workspace_roots: vec![cwd_uri.clone()],
             };
@@ -570,18 +567,18 @@ impl TestCodexBuilder {
         );
         #[cfg(not(target_os = "linux"))]
         let codex_linux_sandbox_exe = None;
-        let local_runtime_paths = codex_exec_server::ExecServerRuntimePaths::new(
+// REMOVED-DELETED-CRATE: let local_runtime_paths = codex_exec_server::ExecServerRuntimePaths::new(
             std::env::current_exe()?,
             codex_linux_sandbox_exe,
         )?;
         let environment_manager = Arc::new(if include_local_environment {
-            codex_exec_server::EnvironmentManager::create_for_tests_with_local(
+// REMOVED-DELETED-CRATE: codex_exec_server::EnvironmentManager::create_for_tests_with_local(
                 exec_server_url,
                 local_runtime_paths,
             )
             .await
         } else {
-            codex_exec_server::EnvironmentManager::create_for_tests(
+// REMOVED-DELETED-CRATE: codex_exec_server::EnvironmentManager::create_for_tests(
                 exec_server_url,
                 Some(local_runtime_paths),
             )
@@ -612,7 +609,7 @@ impl TestCodexBuilder {
         home: Arc<TempDir>,
         resume_from: Option<PathBuf>,
         test_env: TestEnv,
-        environment_manager: Arc<codex_exec_server::EnvironmentManager>,
+// REMOVED-DELETED-CRATE: environment_manager: Arc<codex_exec_server::EnvironmentManager>,
     ) -> anyhow::Result<TestCodex> {
         let auth = self.auth.clone();
         let state_db = codex_core::init_state_db(&config).await;

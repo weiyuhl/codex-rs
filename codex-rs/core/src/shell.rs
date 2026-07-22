@@ -1,4 +1,3 @@
-use codex_exec_server::ShellInfo;
 use codex_shell_command::shell_detect::DetectedShell;
 use serde::Deserialize;
 use serde::Serialize;

@@ -9,7 +9,6 @@ use codex_analytics::AnalyticsEventsClient;
 use codex_analytics::InvocationType;
 use codex_analytics::SkillInvocation;
 use codex_analytics::TrackEventsContext;
-use codex_exec_server::LOCAL_FS;
 use codex_otel::SessionTelemetry;
 use codex_otel::sanitize_metric_tag_value;
 use codex_protocol::user_input::UserInput;

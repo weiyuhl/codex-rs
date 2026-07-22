@@ -992,7 +992,7 @@ fn event_matches_turn(event: &Event, expected_turn_id: &str) -> bool {
 
 pub(crate) fn build_guardian_review_session_config(
     parent_config: &Config,
-    live_network_config: Option<codex_network_proxy::NetworkProxyConfig>,
+// REMOVED-DELETED-CRATE: // REMOVED: live_network_config: Option<codex_network_proxy::NetworkProxyConfig>,
     active_model: &str,
     reasoning_effort: Option<codex_protocol::openai_models::ReasoningEffort>,
     model_messages: Option<&ModelMessages>,

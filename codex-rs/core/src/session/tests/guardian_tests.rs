@@ -13,7 +13,6 @@ use codex_config::ConfigLayerEntry;
 use codex_config::ConfigLayerSource;
 use codex_config::ConfigRequirements;
 use codex_config::ConfigRequirementsToml;
-use codex_exec_server::EnvironmentManager;
 use codex_execpolicy::Decision;
 use codex_execpolicy::Evaluation;
 use codex_execpolicy::RuleMatch;
@@ -156,7 +155,7 @@ async fn request_permissions_routes_to_guardian_when_reviewer_is_enabled() {
     );
     assert_eq!(
         session
-            .granted_turn_permissions(codex_exec_server::LOCAL_ENVIRONMENT_ID)
+// REMOVED-DELETED-CRATE: .granted_turn_permissions(codex_exec_server::LOCAL_ENVIRONMENT_ID)
             .await,
         Some(requested_permissions.into())
     );
@@ -264,7 +263,7 @@ async fn request_permissions_guardian_review_stops_when_cancelled() {
     assert_eq!(response, None);
     assert_eq!(
         session
-            .granted_turn_permissions(codex_exec_server::LOCAL_ENVIRONMENT_ID)
+// REMOVED-DELETED-CRATE: .granted_turn_permissions(codex_exec_server::LOCAL_ENVIRONMENT_ID)
             .await,
         None
     );
@@ -407,7 +406,7 @@ async fn strict_auto_review_turn_grant_forces_guardian_for_shell_command_policy_
                 scope: PermissionGrantScope::Turn,
                 strict_auto_review: true,
             },
-            codex_exec_server::LOCAL_ENVIRONMENT_ID,
+// REMOVED-DELETED-CRATE: codex_exec_server::LOCAL_ENVIRONMENT_ID,
             Some(&originating_turn_state),
         )
         .await;
@@ -609,7 +608,7 @@ async fn shell_command_allows_sticky_turn_permissions_without_inline_request_per
         let active_turn = active_turn.as_mut().expect("active turn");
         let mut turn_state = active_turn.turn_state.lock().await;
         turn_state.record_granted_permissions(
-            codex_exec_server::LOCAL_ENVIRONMENT_ID,
+// REMOVED-DELETED-CRATE: codex_exec_server::LOCAL_ENVIRONMENT_ID,
             PermissionProfile {
                 network: Some(NetworkPermissions {
                     enabled: Some(true),

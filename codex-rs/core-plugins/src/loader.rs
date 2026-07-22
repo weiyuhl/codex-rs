@@ -30,7 +30,6 @@ use codex_core_skills::config_rules::resolve_disabled_skill_paths;
 use codex_core_skills::config_rules::skill_config_rules_from_stack;
 use codex_core_skills::loader::SkillRoot;
 use codex_core_skills::loader::load_skills_from_roots;
-use codex_exec_server::LOCAL_FS;
 use codex_mcp::parse_plugin_mcp_config;
 use codex_plugin::AppDeclaration;
 use codex_plugin::LoadedPlugin;

@@ -58,7 +58,6 @@ impl McpRuntimeSnapshot {
 
     #[cfg(test)]
     pub(crate) fn new_uninitialized_for_test(config: &crate::config::Config) -> Arc<Self> {
-        use codex_exec_server::EnvironmentManager;
         use codex_features::Feature;
         use codex_mcp::ResolvedMcpCatalog;
         use rmcp::model::ElicitationCapability;

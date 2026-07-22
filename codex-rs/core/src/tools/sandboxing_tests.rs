@@ -1,7 +1,6 @@
 use super::*;
 use crate::sandboxing::SandboxPermissions;
 use crate::tools::hook_names::HookToolName;
-use codex_network_proxy::ManagedNetworkSandboxContext;
 use codex_protocol::permissions::FileSystemAccessMode;
 use codex_protocol::permissions::FileSystemPath;
 use codex_protocol::permissions::FileSystemSandboxEntry;
@@ -262,7 +261,7 @@ fn exec_server_env_keeps_command_native_and_carries_sandbox_context() {
     assert_eq!(request.sandbox, SandboxType::None);
     assert_eq!(
         request.exec_server_sandbox,
-        Some(codex_exec_server::FileSystemSandboxContext {
+// REMOVED-DELETED-CRATE: // REMOVED: Some(codex_exec_server::FileSystemSandboxContext {
             permissions: exec_server_permissions.clone().into(),
             cwd: Some(cwd_uri.clone()),
             workspace_roots: vec![cwd_uri.clone()],

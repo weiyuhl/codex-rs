@@ -1,6 +1,5 @@
 use std::fs;
 
-use codex_exec_server::LOCAL_FS;
 use codex_protocol::protocol::Product;
 use codex_utils_path_uri::PathUri;
 use pretty_assertions::assert_eq;

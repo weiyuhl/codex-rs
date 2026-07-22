@@ -1,6 +1,4 @@
 use crate::manifest::parse_plugin_manifest_uri;
-use codex_exec_server::EnvironmentManager;
-use codex_exec_server::ExecutorFileSystem;
 use codex_plugin::PluginProvider;
 use codex_plugin::ResolvedPlugin;
 use codex_plugin::ResolvedPluginError;

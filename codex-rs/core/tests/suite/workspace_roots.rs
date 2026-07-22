@@ -1,6 +1,5 @@
 use anyhow::Context;
 use anyhow::Result;
-use codex_exec_server::RemoveOptions;
 use codex_features::Feature;
 use codex_protocol::models::PermissionProfile;
 use codex_protocol::permissions::NetworkSandboxPolicy;

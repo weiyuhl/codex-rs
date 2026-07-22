@@ -221,7 +221,7 @@ fn network_toml_overlays_unix_socket_permissions_by_path() {
 
     assert_eq!(
         config.unix_sockets,
-        Some(codex_network_proxy::NetworkUnixSocketPermissions {
+// REMOVED-DELETED-CRATE: Some(codex_network_proxy::NetworkUnixSocketPermissions {
             entries: BTreeMap::from([
                 (
                     "/tmp/base.sock".to_string(),
@@ -422,10 +422,10 @@ fn profile_network_proxy_config_keeps_proxy_disabled_for_proxy_policy() {
     assert!(!config.enable_socks5);
     assert_eq!(
         config.domains,
-        Some(codex_network_proxy::NetworkDomainPermissions {
-            entries: vec![codex_network_proxy::NetworkDomainPermissionEntry {
+// REMOVED-DELETED-CRATE: Some(codex_network_proxy::NetworkDomainPermissions {
+// REMOVED-DELETED-CRATE: entries: vec![codex_network_proxy::NetworkDomainPermissionEntry {
                 pattern: "openai.com".to_string(),
-                permission: codex_network_proxy::NetworkDomainPermission::Allow,
+// REMOVED-DELETED-CRATE: permission: codex_network_proxy::NetworkDomainPermission::Allow,
             }],
         })
     );

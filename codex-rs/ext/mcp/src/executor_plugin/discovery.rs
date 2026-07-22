@@ -1,6 +1,5 @@
 use codex_connectors::parse_plugin_app_config;
 use codex_core_plugins::manifest::parse_plugin_manifest_uri;
-use codex_exec_server::CapabilityRootDiscovery;
 use codex_mcp::parse_executor_plugin_mcp_config;
 use codex_plugin::manifest::PluginManifestMcpServers;
 use codex_protocol::capabilities::CapabilityRootLocation;

@@ -1,6 +1,5 @@
 use codex_config::McpServerConfig;
 use codex_core_plugins::ResolvedExecutorPlugin;
-use codex_exec_server::ExecutorFileSystem;
 use codex_mcp::parse_executor_plugin_mcp_config;
 use codex_plugin::PluginResourceLocator;
 use codex_plugin::ResolvedPlugin;

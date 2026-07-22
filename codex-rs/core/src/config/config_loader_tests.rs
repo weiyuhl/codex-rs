@@ -31,7 +31,6 @@ use codex_config::config_toml::ProjectConfig;
 use codex_config::loader::load_config_layers_state;
 use codex_config::loader::load_requirements_toml;
 use codex_config::test_support::CloudConfigBundleFixture;
-use codex_exec_server::LOCAL_FS;
 use codex_protocol::config_types::EnvironmentVariablePattern;
 use codex_protocol::config_types::TrustLevel;
 use codex_protocol::config_types::WebSearchMode;

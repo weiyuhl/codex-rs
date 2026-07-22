@@ -4,7 +4,6 @@ use std::time::Duration;
 
 use crate::async_utils::CancelErr;
 use crate::async_utils::OrCancelExt;
-use codex_network_proxy::PROXY_ACTIVE_ENV_KEY;
 use codex_utils_absolute_path::AbsolutePathBuf;
 use tokio_util::sync::CancellationToken;
 use tracing::error;

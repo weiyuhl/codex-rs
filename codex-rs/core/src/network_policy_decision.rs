@@ -1,7 +1,5 @@
 use codex_execpolicy::Decision as ExecPolicyDecision;
 use codex_execpolicy::NetworkRuleProtocol as ExecPolicyNetworkRuleProtocol;
-use codex_network_proxy::BlockedRequest;
-use codex_network_proxy::NetworkPolicyDecision;
 use codex_protocol::approvals::NetworkApprovalContext;
 use codex_protocol::approvals::NetworkApprovalProtocol;
 use codex_protocol::approvals::NetworkPolicyAmendment;

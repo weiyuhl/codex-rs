@@ -1,9 +1,5 @@
 use super::*;
 use crate::mcp::McpRuntimeProjection;
-use codex_exec_server::ExecutorCapabilityDiscoveryCache;
-use codex_exec_server::ExecutorCapabilityDiscoverySnapshot;
-use codex_exec_server::MAX_SELECTED_CAPABILITY_ROOTS;
-use codex_exec_server::ResolvedSelectedCapabilityRoot;
 use codex_mcp::ElicitationReviewRequest;
 use codex_mcp::ElicitationReviewer;
 use codex_mcp::ElicitationReviewerHandle;

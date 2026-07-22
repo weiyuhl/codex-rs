@@ -6,11 +6,6 @@ use std::sync::OnceLock;
 
 use arc_swap::ArcSwap;
 use async_channel::Sender;
-use codex_exec_server::Environment;
-use codex_exec_server::EnvironmentConnectionState;
-use codex_exec_server::EnvironmentManager;
-use codex_exec_server::ExecServerError;
-use codex_exec_server::ExecutorFileSystem;
 use codex_protocol::protocol::EnvironmentConnectionEvent;
 use codex_protocol::protocol::Event;
 use codex_protocol::protocol::EventMsg;
@@ -436,7 +431,7 @@ impl TurnEnvironmentSnapshot {
     }
 
     #[cfg(test)]
-    pub(crate) fn primary_environment(&self) -> Option<Arc<codex_exec_server::Environment>> {
+// REMOVED-DELETED-CRATE: // REMOVED: pub(crate) fn primary_environment(&self) -> Option<Arc<codex_exec_server::Environment>> {
         self.primary()
             .map(|environment| Arc::clone(&environment.environment))
     }
@@ -476,10 +471,6 @@ impl TurnEnvironmentSnapshot {
 mod tests {
     use std::time::Duration;
 
-    use codex_exec_server::Environment;
-    use codex_exec_server::ExecServerRuntimePaths;
-    use codex_exec_server::LOCAL_ENVIRONMENT_ID;
-    use codex_exec_server::REMOTE_ENVIRONMENT_ID;
     use codex_protocol::protocol::TurnEnvironmentSelection;
     use codex_utils_absolute_path::AbsolutePathBuf;
     use codex_utils_path_uri::PathUri;

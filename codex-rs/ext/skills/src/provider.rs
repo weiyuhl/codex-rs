@@ -7,7 +7,6 @@ mod host;
 mod orchestrator;
 
 use codex_core_skills::HostSkillsSnapshot;
-use codex_exec_server::ExecutorCapabilityDiscoverySnapshot;
 use codex_mcp::McpResourceClient;
 use codex_protocol::capabilities::SelectedCapabilityRoot;
 

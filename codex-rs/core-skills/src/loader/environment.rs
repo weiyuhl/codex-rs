@@ -1,8 +1,6 @@
 use std::collections::HashMap;
 use std::io;
 
-use codex_exec_server::CapabilityRootDiscovery;
-use codex_exec_server::ExecutorFileSystem;
 use codex_protocol::protocol::Product;
 pub use codex_skills::EnvironmentSkillMetadata;
 use codex_utils_path_uri::PathUri;

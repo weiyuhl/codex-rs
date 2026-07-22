@@ -1,6 +1,5 @@
 use super::*;
 use crate::unified_exec::clamp_yield_time;
-use codex_network_proxy::ManagedNetworkSandboxContext;
 use pretty_assertions::assert_eq;
 use tokio::time::Duration;
 use tokio::time::Instant;
@@ -94,7 +93,7 @@ fn exec_env_policy_excludes_runtime_permission_profile() {
 
     assert_eq!(
         exec_env_policy_from_shell_policy(&policy),
-        codex_exec_server::ExecEnvPolicy {
+// REMOVED-DELETED-CRATE: codex_exec_server::ExecEnvPolicy {
             inherit: policy.inherit,
             ignore_default_excludes: policy.ignore_default_excludes,
             exclude: vec![CODEX_PERMISSION_PROFILE_ENV_VAR.to_string()],
@@ -136,7 +135,7 @@ fn exec_server_params_use_path_uri_and_env_policy_overlay_contract() {
             ),
         ]),
         exec_server_env_config: Some(ExecServerEnvConfig {
-            policy: codex_exec_server::ExecEnvPolicy {
+// REMOVED-DELETED-CRATE: policy: codex_exec_server::ExecEnvPolicy {
                 inherit: codex_protocol::config_types::ShellEnvironmentPolicyInherit::Core,
                 ignore_default_excludes: false,
                 exclude: Vec::new(),
@@ -198,7 +197,7 @@ fn exec_server_params_use_path_uri_and_env_policy_overlay_contract() {
         ])
     );
     request.exec_server_sandbox = Some(
-        codex_exec_server::FileSystemSandboxContext::from_permission_profile(permission_profile),
+// REMOVED-DELETED-CRATE: codex_exec_server::FileSystemSandboxContext::from_permission_profile(permission_profile),
     );
     let first =
         exec_server_params_for_request(/*process_id*/ 123, &request, /*tty*/ true);

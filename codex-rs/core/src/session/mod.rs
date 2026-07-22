@@ -58,8 +58,6 @@ use codex_config::types::AuthKeyringBackendKind;
 use codex_config::types::OAuthCredentialsStoreMode;
 use codex_connectors::connector_runtime_context_key;
 use codex_core_skills::injection::HostSkillsCatalogInWorldState;
-use codex_exec_server::Environment;
-use codex_exec_server::EnvironmentManager;
 use codex_execpolicy::prefix_rule_migration;
 use codex_extension_api::ExtensionDataInit;
 use codex_extension_api::LoadedUserInstructions;
@@ -80,9 +78,6 @@ use codex_mcp::McpRuntime;
 use codex_mcp::McpRuntimeContext;
 use codex_models_manager::manager::RefreshStrategy;
 use codex_models_manager::manager::SharedModelsManager;
-use codex_network_proxy::NetworkProxy;
-use codex_network_proxy::NetworkProxyAuditMetadata;
-use codex_network_proxy::normalize_host;
 use codex_otel::current_span_trace_id;
 use codex_otel::current_span_w3c_trace_context;
 use codex_otel::set_parent_from_w3c_trace_context;
@@ -989,8 +984,8 @@ impl Session {
         spec: &crate::config::NetworkProxySpec,
         exec_policy: &codex_execpolicy::Policy,
         permission_profile: &PermissionProfile,
-        network_policy_decider: Option<Arc<dyn codex_network_proxy::NetworkPolicyDecider>>,
-        blocked_request_observer: Option<Arc<dyn codex_network_proxy::BlockedRequestObserver>>,
+// REMOVED-DELETED-CRATE: network_policy_decider: Option<Arc<dyn codex_network_proxy::NetworkPolicyDecider>>,
+// REMOVED-DELETED-CRATE: blocked_request_observer: Option<Arc<dyn codex_network_proxy::BlockedRequestObserver>>,
         managed_network_requirements_enabled: bool,
         audit_metadata: NetworkProxyAuditMetadata,
     ) -> anyhow::Result<(StartedNetworkProxy, SessionNetworkProxyRuntime)> {

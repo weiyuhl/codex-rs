@@ -7,7 +7,6 @@ use codex_connectors::ConnectorRuntimeManager;
 use codex_connectors::ConnectorSnapshot;
 use codex_connectors::PluginConnectorSource;
 use codex_core_plugins::PluginsManager;
-use codex_exec_server::ExecutorCapabilityDiscoverySnapshot;
 use codex_extension_api::ExtensionData;
 use codex_extension_api::ExtensionDataInit;
 use codex_extension_api::ExtensionRegistry;

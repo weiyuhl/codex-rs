@@ -1,4 +1,3 @@
-use codex_network_proxy::NetworkProxy;
 use codex_utils_absolute_path::AbsolutePathBuf;
 use std::collections::HashMap;
 use std::path::PathBuf;

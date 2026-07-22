@@ -4,7 +4,6 @@ use std::sync::Arc;
 
 use anyhow::Result;
 use codex_config::types::Personality;
-use codex_exec_server::LOCAL_ENVIRONMENT_ID;
 use codex_features::Feature;
 use codex_protocol::models::PermissionProfile;
 use codex_protocol::protocol::AskForApproval;

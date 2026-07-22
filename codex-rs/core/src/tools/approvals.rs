@@ -110,7 +110,7 @@ impl ApprovalAction {
 fn guardian_cwd(environment_id: &str, cwd: PathUri) -> std::io::Result<AbsolutePathBuf> {
     match cwd.to_abs_path() {
         Ok(cwd) => Ok(cwd),
-        Err(err) if environment_id != codex_exec_server::LOCAL_ENVIRONMENT_ID => Err(err),
+// REMOVED-DELETED-CRATE: // REMOVED: Err(err) if environment_id != codex_exec_server::LOCAL_ENVIRONMENT_ID => Err(err),
         Err(_) => {
             let cwd_display = cwd.to_string();
             let path = cwd.to_url().to_file_path().map_err(|()| {

@@ -1,6 +1,4 @@
 use super::*;
-use codex_network_proxy::BlockedRequest;
-use codex_network_proxy::NetworkDecisionSource;
 use codex_protocol::approvals::NetworkPolicyAmendment;
 use codex_protocol::approvals::NetworkPolicyRuleAction;
 use pretty_assertions::assert_eq;

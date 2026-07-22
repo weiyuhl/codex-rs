@@ -11,15 +11,6 @@ use crate::session::turn_context::TurnContext;
 use crate::tools::context::ExecCommandToolOutput;
 use crate::unified_exec::WriteStdinRequest;
 use crate::unified_exec::process::OutputHandles;
-use codex_exec_server::ExecProcess;
-use codex_exec_server::ExecProcessEventReceiver;
-use codex_exec_server::ExecProcessFuture;
-use codex_exec_server::ProcessId;
-use codex_exec_server::ProcessSignal;
-use codex_exec_server::ReadResponse;
-use codex_exec_server::StartedExecProcess;
-use codex_exec_server::WriteResponse;
-use codex_exec_server::WriteStatus;
 use codex_sandboxing::SandboxType;
 use codex_utils_absolute_path::AbsolutePathBuf;
 use codex_utils_output_truncation::TruncationPolicy;
@@ -228,7 +219,7 @@ struct BlockingTerminateExecProcess {
 }
 
 impl BlockingTerminateExecProcess {
-    async fn read(&self) -> Result<ReadResponse, codex_exec_server::ExecServerError> {
+// REMOVED-DELETED-CRATE: async fn read(&self) -> Result<ReadResponse, codex_exec_server::ExecServerError> {
         Ok(ReadResponse {
             chunks: Vec::new(),
             next_seq: 1,
@@ -240,13 +231,13 @@ impl BlockingTerminateExecProcess {
         })
     }
 
-    async fn write(&self) -> Result<WriteResponse, codex_exec_server::ExecServerError> {
+// REMOVED-DELETED-CRATE: async fn write(&self) -> Result<WriteResponse, codex_exec_server::ExecServerError> {
         Ok(WriteResponse {
             status: WriteStatus::Accepted,
         })
     }
 
-    async fn terminate(&self) -> Result<(), codex_exec_server::ExecServerError> {
+// REMOVED-DELETED-CRATE: async fn terminate(&self) -> Result<(), codex_exec_server::ExecServerError> {
         let _ = self.terminate_started.send(true);
         self.allow_terminate.notified().await;
         Ok(())
@@ -747,7 +738,7 @@ async fn completed_pipe_commands_preserve_exit_code() -> anyhow::Result<()> {
         shell_env(),
     );
 
-    let environment = codex_exec_server::Environment::default_for_tests();
+// REMOVED-DELETED-CRATE: let environment = codex_exec_server::Environment::default_for_tests();
     let process = UnifiedExecProcessManager::default()
         .open_session_with_prepared_exec_env(
             /*process_id*/ 1234,

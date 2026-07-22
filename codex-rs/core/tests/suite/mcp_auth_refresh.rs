@@ -94,7 +94,7 @@ async fn hosted_plugin_runtime_ps_mcp_tool_calls_use_current_auth_manager_token(
         CancellationToken::new(),
         PermissionProfile::default(),
         McpRuntimeContext::new(
-            Arc::new(codex_exec_server::EnvironmentManager::without_environments()),
+// REMOVED-DELETED-CRATE: // REMOVED: Arc::new(codex_exec_server::EnvironmentManager::without_environments()),
             home.path().to_path_buf(),
         ),
         home.path().to_path_buf(),

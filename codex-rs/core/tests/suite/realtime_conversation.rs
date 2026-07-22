@@ -188,7 +188,7 @@ fn run_realtime_conversation_test_in_subprocess(
         .env(REALTIME_CONVERSATION_TEST_SUBPROCESS_ENV_VAR, "1");
     // The child talks to a loopback websocket server; parent proxy settings can
     // route that connection away from the test server in Bazel environments.
-    for &key in codex_network_proxy::PROXY_ENV_KEYS {
+// REMOVED-DELETED-CRATE: // REMOVED: for &key in codex_network_proxy::PROXY_ENV_KEYS {
         command.env_remove(key);
     }
     match openai_api_key {

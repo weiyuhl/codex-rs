@@ -396,7 +396,7 @@ impl SandboxManager {
     ) -> Result<SandboxExecRequest, SandboxTransformError> {
         #[cfg(target_os = "windows")]
         {
-            let codex_home = codex_utils_home_dir::find_codex_home()
+            let codex_home = codex_home::find_codex_home()
                 .map_err(|err| SandboxTransformError::WindowsSandboxPreparation(err.to_string()))?;
             self.transform_for_direct_spawn_with_codex_home(request, codex_home.as_path())
         }

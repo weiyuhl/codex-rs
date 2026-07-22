@@ -62,7 +62,6 @@ members = [
     "git-utils",
     "utils/cache",
     "utils/image",
-    "utils/home-dir",
     "utils/pty",
     "utils/rustls-provider",
     "utils/string",
@@ -157,7 +156,6 @@ codex-thread-store = { path = "thread-store" }
 codex-tools = { path = "tools" }
 codex-utils-absolute-path = { path = "utils/absolute-path" }
 codex-utils-cache = { path = "utils/cache" }
-codex-utils-home-dir = { path = "utils/home-dir" }
 codex-utils-image = { path = "utils/image" }
 codex-utils-output-truncation = { path = "utils/output-truncation" }
 codex-utils-path = { path = "utils/path-utils" }

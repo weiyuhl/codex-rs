@@ -7,7 +7,7 @@
 use anyhow::Context;
 use anyhow::Result;
 use anyhow::anyhow;
-use codex_utils_home_dir::find_codex_home;
+use codex_home::find_codex_home;
 use sha2::Digest;
 use sha2::Sha256;
 use std::fs;

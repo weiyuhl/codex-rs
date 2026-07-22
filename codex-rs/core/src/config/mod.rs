@@ -4462,7 +4462,7 @@ fn normalize_guardian_policy_config(value: Option<&str>) -> Option<String> {
 /// - If `CODEX_HOME` is not set, this function does not verify that the
 ///   directory exists.
 pub fn find_codex_home() -> std::io::Result<AbsolutePathBuf> {
-    codex_utils_home_dir::find_codex_home()
+    codex_home::find_codex_home()
 }
 
 /// Returns the path to the folder where Codex logs are stored. Does not verify

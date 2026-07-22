@@ -206,7 +206,6 @@ itertools = "0.14.0"
 jsonptr = { version = "0.7.1", default-features = false }
 jsonwebtoken = "9.3.1"
 keyring = { version = "3.6", default-features = false }
-landlock = "0.4.4"
 lazy_static = "1"
 libc = "0.2.182"
 # Keep SQLx's bundled SQLite on a version containing the WAL-reset corruption fix:
@@ -254,7 +253,6 @@ rustls = { version = "0.23", default-features = false, features = [
 rustls-native-certs = "0.8.3"
 rustls-pki-types = "1.14.0"
 schemars = "0.8.22"
-seccompiler = "0.5.0"
 semver = "1.0"
 sentry = "0.46.0"
 serde = { version = "1", features = ["rc"] }

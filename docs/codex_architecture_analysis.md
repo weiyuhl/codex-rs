@@ -1,7 +1,9 @@
 > **文档状态**：已归档  
 > **更新时间**：2026-07-22  
 > **工作区路径**：`d:/codex-main`  
-> **修改记录**：`codex-rs/tui` 模块已于 2026-07-22 成功从中移除，Workspace 依赖项已同步完成清理。  
+> **修改记录**：  
+> 1. `codex-rs/tui` 模块已于 2026-07-22 成功从中移除，Workspace 依赖项已同步完成清理。  
+> 2. `codex-rs/app-server` 及 `codex-rs/app-server-client` 模块已于 2026-07-22 成功从中移除，Workspace 依赖项已同步完成清理。  
 
 ---
 

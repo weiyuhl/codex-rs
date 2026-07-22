@@ -1,5 +1,4 @@
 mod app_mcp_routing;
-mod command_migration;
 mod discoverable;
 mod http_client_selector;
 pub mod installed_marketplaces;
@@ -11,7 +10,6 @@ pub mod marketplace_add;
 mod marketplace_policy;
 pub mod marketplace_remove;
 pub mod marketplace_upgrade;
-mod npm_source;
 mod plugin_bundle_archive;
 mod provider;
 pub mod remote;
@@ -39,12 +37,6 @@ pub type LoadedPlugin = codex_plugin::LoadedPlugin<codex_config::McpServerConfig
 pub type PluginLoadOutcome = codex_plugin::PluginLoadOutcome<codex_config::McpServerConfig>;
 
 pub use app_mcp_routing::apps_route_available;
-pub use command_migration::CommandDescriptionMode;
-pub use command_migration::CommandMigrationProfile;
-pub use command_migration::RewriteProfile as CommandRewriteProfile;
-pub use command_migration::count_missing_commands_with_profile;
-pub use command_migration::import_commands_with_profile;
-pub use command_migration::missing_command_names_with_profile;
 pub use discoverable::ToolSuggestDiscoverablePlugin;
 pub use discoverable::ToolSuggestPluginDiscoveryInput;
 pub use loader::PluginHookLoadOutcome;

@@ -16,7 +16,8 @@
 > 10. 彻底剥离 4 大桌面端冗余模块（删除 `feedback` 桌面反馈、`install-context` 包管理器检测、`stdio-to-uds` 管道重定向、`utils/sleep-inhibitor` 防休眠锁）。  
 > 11. 彻底剥离 V8 引擎 POC 模块（删除 `v8-poc`）。  
 > 12. 彻底剥离桌面 Linux Bubblewrap 隔离包装模块（删除 `bwrap`）。  
-> 13. `codex-rs/` 全量代码统计数据完成归档。  
+> 13. 彻底剥离 app-server 残留守护进程/Socket传输/测试模块（删除 `app-server-daemon`、`app-server-transport`、`app-server-test-client`，保留 `app-server-protocol` Schema 数据定义库）。  
+> 14. `codex-rs/` 全量代码统计数据完成归档。  
 
 ---
 

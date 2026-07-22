@@ -6,7 +6,6 @@ members = [
     "apply-patch",
     "features",
     "codex-home",
-    "connectors",
     "config",
     "shell-command",
     "skills",
@@ -18,7 +17,6 @@ members = [
     "secrets",
     "file-system",
     "ext/extension-api",
-    "ext/goal",
     "ext/image-generation",
     "ext/items",
     "ext/memories",
@@ -55,7 +53,6 @@ members = [
     "codex-api",
     "state",
     "thread-store",
-    "codex-experimental-api-macros",
     "plugin",
     "model-provider",
 ]
@@ -81,16 +78,13 @@ codex-client = { path = "codex-client" }
 codex-home = { path = "codex-home" }
 codex-http-client = { path = "http-client" }
 codex-config = { path = "config" }
-codex-connectors = { path = "connectors" }
 codex-core = { path = "core" }
 codex-core-plugins = { path = "core-plugins" }
 codex-core-skills = { path = "core-skills" }
 codex-file-system = { path = "file-system" }
 codex-extension-api = { path = "ext/extension-api" }
 codex-extension-items = { path = "ext/items" }
-codex-goal-extension = { path = "ext/goal" }
 codex-image-generation-extension = { path = "ext/image-generation" }
-codex-experimental-api-macros = { path = "codex-experimental-api-macros" }
 codex-features = { path = "features" }
 codex-file-search = { path = "file-search" }
 codex-git-utils = { path = "git-utils" }

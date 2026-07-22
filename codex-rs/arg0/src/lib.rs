@@ -30,7 +30,6 @@ pub struct Arg0DispatchPaths {
     /// a test harness, where `current_exe()` can point at the harness binary
     /// instead of the real Codex CLI.
     pub codex_self_exe: Option<PathBuf>,
-    pub codex_linux_sandbox_exe: Option<PathBuf>,
     pub main_execve_wrapper_exe: Option<PathBuf>,
 }
 

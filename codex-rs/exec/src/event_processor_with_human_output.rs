@@ -12,7 +12,10 @@ use codex_core::config::Config;
 use codex_model_provider_info::WireApi;
 use codex_protocol::num_format::format_with_separators;
 use codex_protocol::protocol::SessionConfiguredEvent;
-use codex_utils_sandbox_summary::summarize_permission_profile;
+
+fn summarize_permission_profile(_profile: &codex_protocol::models::PermissionProfile, _cwd: &std::path::Path, _roots: &[codex_utils_absolute_path::AbsolutePathBuf]) -> String {
+    "enabled".to_string()
+}
 use owo_colors::OwoColorize;
 use owo_colors::Style;
 

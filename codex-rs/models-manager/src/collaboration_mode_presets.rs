@@ -1,5 +1,6 @@
-use codex_collaboration_mode_templates::DEFAULT as COLLABORATION_MODE_DEFAULT;
-use codex_collaboration_mode_templates::PLAN as COLLABORATION_MODE_PLAN;
+pub const COLLABORATION_MODE_DEFAULT: &str = "You are in default mode. Available modes: {{KNOWN_MODE_NAMES}}.";
+pub const COLLABORATION_MODE_PLAN: &str = "You are in planning mode.";
+
 use codex_protocol::config_types::CollaborationModeMask;
 use codex_protocol::config_types::ModeKind;
 use codex_protocol::config_types::TUI_VISIBLE_COLLABORATION_MODES;

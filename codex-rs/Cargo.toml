@@ -14,7 +14,6 @@ members = [
     "code-mode-host",
     "code-mode-protocol",
     "codex-home",
-    "collaboration-mode-templates",
     "connectors",
     "config",
     "context-fragments",
@@ -73,11 +72,9 @@ members = [
     "utils/json-to-toml",
     "utils/home-dir",
     "utils/pty",
-    "utils/readiness",
     "utils/rustls-provider",
     "utils/string",
     "utils/elapsed",
-    "utils/sandbox-summary",
     "utils/oss",
     "utils/output-truncation",
     "utils/path-utils",
@@ -117,7 +114,6 @@ codex-async-utils = { path = "async-utils" }
 codex-backend-client = { path = "backend-client" }
 codex-chatgpt = { path = "chatgpt" }
 codex-client = { path = "codex-client" }
-codex-collaboration-mode-templates = { path = "collaboration-mode-templates" }
 codex-code-mode = { path = "code-mode" }
 codex-code-mode-protocol = { path = "code-mode-protocol" }
 codex-home = { path = "codex-home" }
@@ -192,7 +188,6 @@ codex-utils-path-uri = { path = "utils/path-uri" }
 codex-utils-plugins = { path = "utils/plugins" }
 codex-utils-pty = { path = "utils/pty" }
 codex-utils-rustls-provider = { path = "utils/rustls-provider" }
-codex-utils-sandbox-summary = { path = "utils/sandbox-summary" }
 codex-utils-stream-parser = { path = "utils/stream-parser" }
 codex-utils-string = { path = "utils/string" }
 codex-utils-template = { path = "utils/template" }

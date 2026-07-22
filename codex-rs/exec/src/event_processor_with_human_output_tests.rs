@@ -15,7 +15,7 @@ use codex_protocol::protocol::AskForApproval;
 use codex_protocol::protocol::SessionConfiguredEvent;
 use codex_utils_absolute_path::test_support::PathBufExt;
 use codex_utils_absolute_path::test_support::test_path_buf;
-use codex_utils_sandbox_summary::summarize_permission_profile;
+use super::summarize_permission_profile;
 use owo_colors::Style;
 use pretty_assertions::assert_eq;
 

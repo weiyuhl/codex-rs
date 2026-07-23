@@ -21,7 +21,6 @@ pub use responses_metadata::CodexResponsesMetadata;
 pub use session::SteerInputError;
 pub use turn_metadata::detached_memory_responses_metadata;
 mod codex_thread;
-mod compact_model_fallback;
 mod compact_token_budget;
 mod config_lock;
 pub use codex_thread::BackgroundTerminalInfo;

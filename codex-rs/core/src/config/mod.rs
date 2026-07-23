@@ -144,8 +144,6 @@ use toml_edit::DocumentMut;
 
 pub(crate) mod agent_roles;
 pub mod edit;
-mod managed_features;
-mod network_proxy_spec;
 mod permissions;
 mod resolved_permission_profile;
 #[cfg(test)]

@@ -23,7 +23,6 @@ mod skills_config;
 mod state;
 mod strict_config;
 mod thread_config;
-mod tui_keymap;
 pub mod types;
 
 pub const CONFIG_TOML_FILE: &str = "config.toml";

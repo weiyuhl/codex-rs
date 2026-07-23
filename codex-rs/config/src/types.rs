@@ -28,20 +28,6 @@ use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
 
-pub use crate::tui_keymap::KeybindingSpec;
-pub use crate::tui_keymap::KeybindingsSpec;
-pub use crate::tui_keymap::MAX_FUNCTION_KEY;
-pub use crate::tui_keymap::TuiApprovalKeymap;
-pub use crate::tui_keymap::TuiChatKeymap;
-pub use crate::tui_keymap::TuiComposerKeymap;
-pub use crate::tui_keymap::TuiEditorKeymap;
-pub use crate::tui_keymap::TuiGlobalKeymap;
-pub use crate::tui_keymap::TuiKeymap;
-pub use crate::tui_keymap::TuiListKeymap;
-pub use crate::tui_keymap::TuiPagerKeymap;
-pub use crate::tui_keymap::TuiVimNormalKeymap;
-pub use crate::tui_keymap::TuiVimOperatorKeymap;
-
 pub const DEFAULT_OTEL_ENVIRONMENT: &str = "dev";
 pub const DEFAULT_MEMORIES_MAX_ROLLOUTS_PER_STARTUP: usize = 2;
 pub const DEFAULT_MEMORIES_MAX_ROLLOUT_AGE_DAYS: i64 = 10;

@@ -630,7 +630,7 @@ pub enum ModeKind {
     Execute,
 }
 
-pub const TUI_VISIBLE_COLLABORATION_MODES: [ModeKind; 2] = [ModeKind::Default, ModeKind::Plan];
+pub const VISIBLE_COLLABORATION_MODES: [ModeKind; 2] = [ModeKind::Default, ModeKind::Plan];
 
 impl ModeKind {
     pub const fn display_name(self) -> &'static str {
@@ -830,11 +830,11 @@ mod tests {
     }
 
     #[test]
-    fn tui_visible_collaboration_modes_match_mode_kind_visibility() {
+    fn visible_collaboration_modes_match_mode_kind_visibility() {
         let expected = [ModeKind::Default, ModeKind::Plan];
-        assert_eq!(expected, TUI_VISIBLE_COLLABORATION_MODES);
+        assert_eq!(expected, VISIBLE_COLLABORATION_MODES);
 
-        for mode in TUI_VISIBLE_COLLABORATION_MODES {
+        for mode in VISIBLE_COLLABORATION_MODES {
             assert!(mode.is_tui_visible());
         }
 

@@ -76,7 +76,3 @@ where
     let thread_id = thread_id.map(|thread_id| thread_id.to_string());
     shell_environment::populate_env(vars, policy, thread_id.as_deref())
 }
-
-#[cfg(test)]
-#[path = "exec_env_tests.rs"]
-mod tests;

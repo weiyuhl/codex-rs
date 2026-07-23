@@ -143,7 +143,6 @@ use toml::Value as TomlValue;
 use toml_edit::DocumentMut;
 
 pub(crate) mod agent_roles;
-pub mod edit;
 mod permissions;
 mod resolved_permission_profile;
 #[cfg(test)]

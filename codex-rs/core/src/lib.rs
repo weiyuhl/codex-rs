@@ -34,7 +34,6 @@ mod agent;
 mod agent_communication;
 mod attestation;
 mod codex_delegate;
-mod command_canonicalization;
 pub mod config;
 pub mod connectors;
 pub mod context;

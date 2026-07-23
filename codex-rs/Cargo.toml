@@ -1,6 +1,5 @@
 [workspace]
 members = [
-    "analytics",
     "agent-graph-store",
     "app-server-protocol",
     "apply-patch",
@@ -64,7 +63,6 @@ license = "Apache-2.0"
 
 [workspace.dependencies]
 # Internal
-codex-analytics = { path = "analytics" }
 codex-agent-graph-store = { path = "agent-graph-store" }
 codex-api = { path = "codex-api" }
 codex-app-server-protocol = { path = "app-server-protocol" }

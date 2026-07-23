@@ -3,10 +3,6 @@ use dns_lookup::AddrInfoHints;
 #[cfg(unix)]
 use dns_lookup::getaddrinfo;
 use std::sync::LazyLock;
-#[cfg(windows)]
-use winapi_util::sysinfo::ComputerNameKind;
-#[cfg(windows)]
-use winapi_util::sysinfo::get_computer_name;
 
 static HOST_NAME: LazyLock<Option<String>> = LazyLock::new(compute_host_name);
 
@@ -54,15 +50,7 @@ fn local_fqdn_for_hostname(hostname: &str) -> Option<String> {
         .find_map(|hostname| normalize_fqdn_candidate(&hostname))
 }
 
-#[cfg(windows)]
-fn local_fqdn_for_hostname(_hostname: &str) -> Option<String> {
-    get_computer_name(ComputerNameKind::PhysicalDnsFullyQualified)
-        .ok()
-        .and_then(|hostname| hostname.into_string().ok())
-        .and_then(|hostname| normalize_fqdn_candidate(&hostname))
-}
-
-#[cfg(not(any(unix, windows)))]
+#[cfg(not(unix))]
 fn local_fqdn_for_hostname(_hostname: &str) -> Option<String> {
     None
 }

@@ -240,14 +240,6 @@ mod tests {
             detect_shell_type(PathBuf::from("bash")),
             Some(ShellType::Bash)
         );
-        assert_eq!(
-            detect_shell_type(PathBuf::from("pwsh")),
-            Some(ShellType::PowerShell)
-        );
-        assert_eq!(
-            detect_shell_type(PathBuf::from("powershell")),
-            Some(ShellType::PowerShell)
-        );
         assert_eq!(detect_shell_type(PathBuf::from("fish")), None);
         assert_eq!(detect_shell_type(PathBuf::from("other")), None);
         assert_eq!(
@@ -263,37 +255,9 @@ mod tests {
             Some(ShellType::Bash)
         );
         assert_eq!(
-            detect_shell_type(PathBuf::from("powershell.exe")),
-            Some(ShellType::PowerShell)
-        );
-        assert_eq!(
-            detect_shell_type(PathBuf::from(if cfg!(windows) {
-                "C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
-            } else {
-                "/usr/local/bin/pwsh"
-            })),
-            Some(ShellType::PowerShell)
-        );
-        assert_eq!(
-            detect_shell_type(PathBuf::from("pwsh.exe")),
-            Some(ShellType::PowerShell)
-        );
-        assert_eq!(
-            detect_shell_type(PathBuf::from("/usr/local/bin/pwsh")),
-            Some(ShellType::PowerShell)
-        );
-        assert_eq!(
             detect_shell_type(PathBuf::from("/bin/sh")),
             Some(ShellType::Sh)
         );
         assert_eq!(detect_shell_type(PathBuf::from("sh")), Some(ShellType::Sh));
-        assert_eq!(
-            detect_shell_type(PathBuf::from("cmd")),
-            Some(ShellType::Cmd)
-        );
-        assert_eq!(
-            detect_shell_type(PathBuf::from("cmd.exe")),
-            Some(ShellType::Cmd)
-        );
     }
 }

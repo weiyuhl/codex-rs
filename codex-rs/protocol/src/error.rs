@@ -40,16 +40,6 @@ pub enum SandboxErr {
         network_policy_decision: Option<NetworkPolicyDecisionPayload>,
     },
 
-    /// Error from linux seccomp filter setup
-    #[cfg(target_os = "linux")]
-    #[error("seccomp setup error")]
-    SeccompInstall(#[from] seccompiler::Error),
-
-    /// Error from linux seccomp backend
-    #[cfg(target_os = "linux")]
-    #[error("seccomp backend error")]
-    SeccompBackend(#[from] seccompiler::BackendError),
-
     /// Command timed out
     #[error("command timed out")]
     Timeout { output: Box<ExecToolCallOutput> },
@@ -57,10 +47,6 @@ pub enum SandboxErr {
     /// Command was killed by a signal
     #[error("command was killed by a signal")]
     Signal(i32),
-
-    /// Error from linux landlock
-    #[error("Landlock was not able to fully enforce all sandbox rules")]
-    LandlockRestrict,
 }
 
 #[derive(Error, Debug)]
@@ -153,12 +139,6 @@ pub enum CodexErr {
     Io(#[from] io::Error),
     #[error(transparent)]
     Json(#[from] serde_json::Error),
-    #[cfg(target_os = "linux")]
-    #[error(transparent)]
-    LandlockRuleset(#[from] landlock::RulesetError),
-    #[cfg(target_os = "linux")]
-    #[error(transparent)]
-    LandlockPathFd(#[from] landlock::PathFdError),
     #[error(transparent)]
     TokioJoin(#[from] JoinError),
     #[error("{0}")]

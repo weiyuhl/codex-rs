@@ -1,7 +1,6 @@
 use crate::bash::extract_bash_command;
 use crate::bash::try_parse_shell;
 use crate::bash::try_parse_word_only_commands_sequence;
-use crate::powershell::extract_powershell_command;
 use codex_protocol::parse_command::ParsedCommand;
 use shlex::split as shlex_split;
 use shlex::try_join as shlex_try_join;
@@ -14,7 +13,7 @@ pub fn shlex_join(tokens: &[String]) -> String {
 
 /// Extracts the shell and script from a command, regardless of platform
 pub fn extract_shell_command(command: &[String]) -> Option<(&str, &str)> {
-    extract_bash_command(command).or_else(|| extract_powershell_command(command))
+    extract_bash_command(command)
 }
 
 /// DO NOT REVIEW THIS CODE BY HAND
@@ -1261,12 +1260,6 @@ mod tests {
 pub fn parse_command_impl(command: &[String]) -> Vec<ParsedCommand> {
     if let Some(commands) = parse_shell_lc_commands(command) {
         return commands;
-    }
-
-    if let Some((_, script)) = extract_powershell_command(command) {
-        return vec![ParsedCommand::Unknown {
-            cmd: script.to_string(),
-        }];
     }
 
     let normalized = normalize_tokens(command);

@@ -72,54 +72,15 @@ enum AnalyticsEventsDestination {
     Http {
         url: String,
     },
-    #[cfg(debug_assertions)]
-    CaptureFile {
-        path: PathBuf,
-    },
 }
 
 impl AnalyticsEventsDestination {
     fn from_base_url(base_url: String) -> Self {
-        let capture_file = analytics_capture_file_from_env();
-        Self::from_base_url_and_capture_file(base_url, capture_file)
-    }
-
-    fn from_base_url_and_capture_file(base_url: String, capture_file: Option<PathBuf>) -> Self {
-        #[cfg(debug_assertions)]
-        if let Some(path) = capture_file {
-            if let Err(err) = crate::analytics_capture::initialize(&path) {
-                tracing::error!(
-                    path = %path.display(),
-                    "failed to initialize analytics event capture; network delivery remains disabled: {err}"
-                );
-            }
-            tracing::warn!(
-                path = %path.display(),
-                "analytics event capture enabled; network delivery is disabled"
-            );
-            return Self::CaptureFile { path };
-        }
-
-        #[cfg(not(debug_assertions))]
-        let _ = capture_file;
-
         let base_url = base_url.trim_end_matches('/');
         Self::Http {
             url: format!("{base_url}/codex/analytics-events/events"),
         }
     }
-}
-
-fn analytics_capture_file_from_env() -> Option<PathBuf> {
-    #[cfg(debug_assertions)]
-    {
-        std::env::var_os(crate::analytics_capture::ANALYTICS_EVENTS_CAPTURE_FILE_ENV_VAR)
-            .filter(|value| !value.is_empty())
-            .map(PathBuf::from)
-    }
-
-    #[cfg(not(debug_assertions))]
-    None
 }
 
 impl AnalyticsEventsQueue {
@@ -628,38 +589,6 @@ async fn send_track_events_request(
         .headers(codex_model_provider::auth_provider_from_auth(auth).to_auth_headers())
         .header("Content-Type", "application/json")
         .json(&payload)
-        .send()
-        .await;
-
-    match response {
-        Ok(response) if response.status().is_success() => {}
-        Ok(response) => {
-            let status = response.status();
-            let body = response.text().await.unwrap_or_default();
-            tracing::warn!("events failed with status {status}: {body}");
-        }
-        Err(err) => {
-            tracing::warn!("failed to send events request: {err}");
-        }
-    }
-}
-
-#[cfg(debug_assertions)]
-fn capture_track_events_request(
-    destination: &AnalyticsEventsDestination,
-    payload: &TrackEventsRequest,
-) -> bool {
-    let AnalyticsEventsDestination::CaptureFile { path } = destination else {
-        return false;
-    };
-
-    if let Err(err) = crate::analytics_capture::append_payload(path, payload) {
-        tracing::error!(
-            path = %path.display(),
-            "failed to capture analytics events; network delivery remains disabled: {err}"
-        );
-    }
-    true
 }
 
 #[cfg(test)]

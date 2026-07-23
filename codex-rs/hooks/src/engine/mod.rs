@@ -25,7 +25,7 @@ use crate::events::user_prompt_submit::UserPromptSubmitRequest;
 use crate::output_spill::AdditionalContextLimit;
 use crate::output_spill::HookOutputSpiller;
 use codex_config::ConfigLayerStack;
-use codex_plugin::PluginHookSource;
+use crate::declarations::PluginHookSource;
 use codex_protocol::ThreadId;
 use codex_protocol::protocol::HookEventName;
 use codex_protocol::protocol::HookHandlerType;
@@ -100,6 +100,29 @@ pub struct HookListEntry {
     pub is_managed: bool,
     pub current_hash: String,
     pub trust_status: HookTrustStatus,
+}
+
+impl Default for HookListEntry {
+    fn default() -> Self {
+        Self {
+            key: String::new(),
+            event_name: HookEventName::PreToolUse,
+            handler_type: HookHandlerType::Command,
+            matcher: None,
+            command: None,
+            timeout_sec: 0,
+            status_message: None,
+            additional_context_limit: None,
+            source_path: AbsolutePathBuf::current_dir().unwrap(),
+            source: HookSource::Unknown,
+            plugin_id: None,
+            display_order: 0,
+            enabled: false,
+            is_managed: false,
+            current_hash: String::new(),
+            trust_status: HookTrustStatus::Trusted,
+        }
+    }
 }
 
 #[derive(Clone)]

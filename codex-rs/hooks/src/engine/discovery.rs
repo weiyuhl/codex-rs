@@ -17,7 +17,7 @@ use codex_config::MatcherGroup;
 use codex_config::RequirementSource;
 use codex_config::TomlValue;
 use codex_config::version_for_toml;
-use codex_plugin::PluginHookSource;
+use crate::declarations::PluginHookSource;
 use codex_utils_absolute_path::AbsolutePathBuf;
 use serde::Deserialize;
 use serde::Serialize;
@@ -81,8 +81,6 @@ pub(crate) fn discover_handlers(
             config_layer_stack
                 .requirements()
                 .allow_managed_hooks_only
-                .as_ref()
-                .is_some_and(|requirement| requirement.value)
         }),
         bypass_hook_trust,
     };
@@ -178,89 +176,34 @@ pub(crate) fn discover_handlers(
 }
 
 fn append_managed_requirement_handlers(
-    handlers: &mut Vec<ConfiguredHandler>,
-    hook_entries: &mut Vec<HookListEntry>,
-    warnings: &mut Vec<String>,
-    display_order: &mut i64,
-    config_layer_stack: &ConfigLayerStack,
-    hook_states: &HashMap<String, HookStateToml>,
-    policy: HookDiscoveryPolicy,
-) {
-    let Some(managed_hooks) = config_layer_stack.requirements().managed_hooks.as_ref() else {
-        return;
-    };
-    let source_path = managed_hooks_source_path(managed_hooks.get(), managed_hooks.source.as_ref());
-    append_hook_events(
-        handlers,
-        hook_entries,
-        warnings,
-        display_order,
-        HookHandlerSource {
-            path: &source_path,
-            key_source: source_path.display().to_string(),
-            source: hook_source_for_requirement_source(managed_hooks.source.as_ref()),
-            is_managed: true,
-            bypass_hook_trust: false,
-            hook_states,
-            env: HashMap::new(),
-            plugin_id: None,
-        },
-        managed_hooks.get().hooks.clone(),
-        policy,
-    );
-}
+    _handlers: &mut Vec<ConfiguredHandler>,
+    _hook_entries: &mut Vec<HookListEntry>,
+    _warnings: &mut Vec<String>,
+    _display_order: &mut i64,
+    _config_layer_stack: &ConfigLayerStack,
+    _hook_states: &HashMap<String, HookStateToml>,
+    _policy: HookDiscoveryPolicy,
+) {}
+
+fn append_managed_hooks(
+    _handlers: &mut Vec<ConfiguredHandler>,
+    _hook_entries: &mut Vec<HookListEntry>,
+    _warnings: &mut Vec<String>,
+    _display_order: &mut i64,
+    _config_layer_stack: &ConfigLayerStack,
+    _hook_states: &HashMap<String, HookStateToml>,
+    _policy: HookDiscoveryPolicy,
+) {}
 
 fn append_plugin_hook_sources(
-    handlers: &mut Vec<ConfiguredHandler>,
-    hook_entries: &mut Vec<HookListEntry>,
-    warnings: &mut Vec<String>,
-    display_order: &mut i64,
-    plugin_hook_sources: Vec<PluginHookSource>,
-    hook_states: &HashMap<String, HookStateToml>,
-    policy: HookDiscoveryPolicy,
-) {
-    for source in plugin_hook_sources {
-        let PluginHookSource {
-            plugin_root,
-            plugin_id,
-            plugin_data_root,
-            source_path,
-            source_relative_path,
-            hooks,
-        } = source;
-        let mut env = HashMap::new();
-        let plugin_root_value = plugin_root.display().to_string();
-        let plugin_data_root_value = plugin_data_root.display().to_string();
-        env.insert("PLUGIN_ROOT".to_string(), plugin_root_value.clone());
-        // For OOTB compat with existing plugins that use this env var.
-        env.insert("CLAUDE_PLUGIN_ROOT".to_string(), plugin_root_value);
-        env.insert("PLUGIN_DATA".to_string(), plugin_data_root_value.clone());
-        // For OOTB compat with existing plugins that use this env var.
-        env.insert("CLAUDE_PLUGIN_DATA".to_string(), plugin_data_root_value);
-        let plugin_id = plugin_id.as_key();
-        append_hook_events(
-            handlers,
-            hook_entries,
-            warnings,
-            display_order,
-            HookHandlerSource {
-                path: &source_path,
-                key_source: crate::declarations::plugin_hook_key_source(
-                    plugin_id.as_str(),
-                    source_relative_path.as_str(),
-                ),
-                source: HookSource::Plugin,
-                is_managed: false,
-                bypass_hook_trust: policy.bypass_hook_trust,
-                hook_states,
-                env,
-                plugin_id: Some(plugin_id),
-            },
-            hooks,
-            policy,
-        );
-    }
-}
+    _handlers: &mut Vec<ConfiguredHandler>,
+    _hook_entries: &mut Vec<HookListEntry>,
+    _warnings: &mut Vec<String>,
+    _display_order: &mut i64,
+    _plugin_hook_sources: Vec<PluginHookSource>,
+    _hook_states: &HashMap<String, HookStateToml>,
+    _policy: HookDiscoveryPolicy,
+) {}
 
 fn managed_hooks_source_path(
     managed_hooks: &ManagedHooksRequirementsToml,
@@ -282,25 +225,7 @@ fn fallback_managed_hooks_source_path(
     match requirement_source {
         Some(RequirementSource::SystemRequirementsToml { file })
         | Some(RequirementSource::LegacyManagedConfigTomlFromFile { file }) => file.clone(),
-        Some(RequirementSource::MdmManagedPreferences { domain, key }) => {
-            synthetic_layer_path(&format!("<mdm:{domain}:{key}>/requirements.toml"))
-        }
-        Some(RequirementSource::Composite { .. }) => {
-            synthetic_layer_path("<requirements-composition>/requirements.toml")
-        }
-        Some(RequirementSource::EnterpriseManaged { id, name }) => {
-            let name = escape_xml_text(name);
-            let id = escape_xml_text(id);
-            synthetic_layer_path(&format!(
-                "<enterprise-managed:{name}:{id}>/requirements.toml"
-            ))
-        }
-        Some(RequirementSource::LegacyManagedConfigTomlFromMdm) => {
-            synthetic_layer_path("<legacy-managed-config.toml-mdm>/managed_config.toml")
-        }
-        Some(RequirementSource::Unknown) | None => {
-            synthetic_layer_path("<managed-requirements>/requirements.toml")
-        }
+        _ => synthetic_layer_path("<managed-requirements>/requirements.toml"),
     }
 }
 
@@ -697,23 +622,11 @@ fn hook_metadata_for_config_layer_source(source: &ConfigLayerSource) -> (HookSou
 
 fn hook_source_for_requirement_source(source: Option<&RequirementSource>) -> HookSource {
     match source {
-        Some(RequirementSource::MdmManagedPreferences { .. }) => HookSource::Mdm,
         Some(RequirementSource::SystemRequirementsToml { .. }) => HookSource::System,
         Some(RequirementSource::LegacyManagedConfigTomlFromFile { .. }) => {
             HookSource::LegacyManagedConfigFile
         }
-        Some(RequirementSource::LegacyManagedConfigTomlFromMdm) => {
-            HookSource::LegacyManagedConfigMdm
-        }
-        Some(RequirementSource::Composite { sources }) => {
-            // Requirements hook composition preserves contributing sources in
-            // priority order, but discovery only carries one source for the
-            // whole merged hooks field. Use the primary contributor as the best
-            // available coarse attribution.
-            hook_source_for_requirement_source(sources.first())
-        }
-        Some(RequirementSource::EnterpriseManaged { .. }) => HookSource::CloudRequirements,
-        Some(RequirementSource::Unknown) | None => HookSource::Unknown,
+        _ => HookSource::Unknown,
     }
 }
 

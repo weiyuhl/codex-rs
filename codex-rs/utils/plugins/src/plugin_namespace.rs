@@ -1,6 +1,7 @@
 //! Resolve plugin namespace from skill file paths by walking ancestors for `plugin.json`.
 
 use crate::DISCOVERABLE_PLUGIN_MANIFEST_PATHS;
+use codex_file_system::ExecutorFileSystem;
 use codex_utils_absolute_path::AbsolutePathBuf;
 use codex_utils_path_uri::PathUri;
 use std::path::Path;

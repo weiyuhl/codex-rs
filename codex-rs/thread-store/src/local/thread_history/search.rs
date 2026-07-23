@@ -272,7 +272,6 @@ fn searchable_text(item: &ThreadItem) -> Option<Cow<'_, str>> {
         | ThreadItem::WebSearch(_)
         | ThreadItem::ImageView { .. }
         | ThreadItem::Sleep(_)
-        | ThreadItem::ImageGeneration(_)
         | ThreadItem::EnteredReviewMode { .. }
         | ThreadItem::ExitedReviewMode { .. }
         | ThreadItem::ContextCompaction { .. } => None,

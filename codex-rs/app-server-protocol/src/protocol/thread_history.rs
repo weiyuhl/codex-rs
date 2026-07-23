@@ -26,7 +26,6 @@ use crate::protocol::v2::UserInput;
 use crate::protocol::v2::WebSearchAction;
 use crate::protocol::v2::WebSearchItem;
 use crate::protocol::v2::web_search_action_from_core;
-use codex_extension_items::image_generation::ImageGenerationItem;
 use codex_protocol::items::parse_hook_prompt_message;
 use codex_protocol::models::MessagePhase;
 use codex_protocol::protocol::AgentReasoningEvent;
@@ -852,27 +851,9 @@ impl ThreadHistoryBuilder {
         self.upsert_item_in_current_turn(item);
     }
 
-    fn handle_image_generation_begin(&mut self, payload: &ImageGenerationBeginEvent) {
-        let item = ThreadItem::ImageGeneration(ImageGenerationItem {
-            id: payload.call_id.clone(),
-            status: String::new(),
-            revised_prompt: None,
-            result: String::new(),
-            saved_path: None,
-        });
-        self.upsert_item_in_current_turn(item);
-    }
+    fn handle_image_generation_begin(&mut self, _payload: &ImageGenerationBeginEvent) {}
 
-    fn handle_image_generation_end(&mut self, payload: &ImageGenerationEndEvent) {
-        let item = ThreadItem::ImageGeneration(ImageGenerationItem {
-            id: payload.call_id.clone(),
-            status: payload.status.clone(),
-            revised_prompt: payload.revised_prompt.clone(),
-            result: payload.result.clone(),
-            saved_path: payload.saved_path.clone(),
-        });
-        self.upsert_item_in_current_turn(item);
-    }
+    fn handle_image_generation_end(&mut self, _payload: &ImageGenerationEndEvent) {}
 
     fn handle_collab_agent_spawn_begin(
         &mut self,

@@ -21,8 +21,155 @@
 use std::future::Future;
 use std::io;
 use std::sync::Arc;
+use crate::http_client_adapter::HttpRedirectPolicy;
 use std::sync::atomic::AtomicUsize;
 use std::sync::atomic::Ordering;
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ProcessId(pub String);
+impl From<String> for ProcessId {
+    fn from(s: String) -> Self { Self(s) }
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub enum WriteStatus {
+    #[default]
+    Accepted,
+    UnknownProcess,
+    StdinClosed,
+    Starting,
+}
+
+#[derive(Clone, Debug)]
+pub enum ExecOutputStream {
+    Stdout,
+    Stderr,
+    Pty,
+}
+
+#[derive(Clone, Debug)]
+pub enum ExecProcessEvent {
+    Output(ProcessOutputChunk),
+    Exited { seq: u64, exit_code: i32 },
+    Closed { seq: u64 },
+    Failed(String),
+}
+
+pub type ExecProcessEventReceiver = tokio::sync::broadcast::Receiver<ExecProcessEvent>;
+
+#[derive(Clone, Debug)]
+pub struct ProcessOutputChunk {
+    pub seq: u64,
+    pub bytes: Vec<u8>,
+    pub chunk: bytes::Bytes,
+    pub stream: ExecOutputStream,
+}
+
+#[derive(Clone, Debug)]
+pub struct HttpHeader {
+    pub name: String,
+    pub value: String,
+}
+
+#[derive(Clone, Debug)]
+pub struct HttpResponse {
+    pub status: u16,
+    pub headers: Vec<HttpHeader>,
+    pub body: Option<Vec<u8>>,
+}
+
+#[derive(Clone, Debug)]
+pub struct HttpRequestParams {
+    pub method: String,
+    pub url: String,
+    pub headers: Vec<HttpHeader>,
+    pub body: Option<Vec<u8>>,
+    pub timeout_ms: Option<u64>,
+    pub redirect_policy: HttpRedirectPolicy,
+    pub request_id: String,
+    pub stream_response: bool,
+}
+
+pub trait HttpClient: std::fmt::Debug + Send + Sync {
+    fn http_request(&self, _params: HttpRequestParams) -> futures::future::BoxFuture<'static, Result<HttpResponse, std::io::Error>> {
+        Box::pin(async { Err(std::io::Error::other("disabled")) })
+    }
+    fn http_request_stream(&self, _params: HttpRequestParams) -> futures::future::BoxFuture<'static, Result<(HttpResponse, HttpResponseBodyStream), std::io::Error>> {
+        Box::pin(async { Err(std::io::Error::other("disabled")) })
+    }
+}
+
+#[derive(Clone, Debug)]
+pub struct ExecStartedProcess {
+    pub process: Arc<dyn ExecProcess>,
+}
+
+pub trait ExecBackend: Send + Sync {
+    fn start(&self, _params: ExecParams) -> futures::future::BoxFuture<'static, Result<ExecStartedProcess, std::io::Error>> {
+        Box::pin(async { Err(std::io::Error::other("disabled")) })
+    }
+}
+
+#[derive(Clone, Debug)]
+pub struct ExecParams {
+    pub process_id: ProcessId,
+    pub program: String,
+    pub args: Vec<String>,
+    pub argv: Vec<String>,
+    pub arg0: Option<String>,
+    pub cwd: Option<codex_utils_path_uri::PathUri>,
+    pub env: std::collections::HashMap<String, String>,
+    pub env_policy: ExecEnvPolicy,
+    pub sandbox: Option<()>,
+    pub enforce_managed_network: bool,
+    pub managed_network: Option<()>,
+    pub network_proxy: Option<()>,
+    pub tty: bool,
+    pub pipe_stdin: bool,
+}
+
+#[derive(Clone, Debug, Default)]
+pub struct ExecProcessReadResponse {
+    pub chunks: Vec<ProcessOutputChunk>,
+    pub closed: bool,
+    pub next_seq: u64,
+    pub failure: Option<String>,
+}
+
+#[derive(Clone, Debug, Default)]
+pub struct ExecProcessWriteResponse {
+    pub closed: bool,
+    pub status: WriteStatus,
+}
+
+pub trait ExecProcess: std::fmt::Debug + Send + Sync {
+    fn subscribe_events(&self) -> ExecProcessEventReceiver {
+        let (_tx, rx) = tokio::sync::broadcast::channel(1);
+        rx
+    }
+    fn read(&self, _since_seq: Option<u64>, _max_bytes: Option<usize>, _wait_ms: Option<u64>) -> futures::future::BoxFuture<'static, Result<ExecProcessReadResponse, std::io::Error>> {
+        Box::pin(async { Ok(ExecProcessReadResponse::default()) })
+    }
+    fn write(&self, _bytes: Vec<u8>) -> futures::future::BoxFuture<'static, Result<ExecProcessWriteResponse, std::io::Error>> {
+        Box::pin(async { Ok(ExecProcessWriteResponse::default()) })
+    }
+    fn terminate(&self) -> futures::future::BoxFuture<'static, Result<(), std::io::Error>> {
+        Box::pin(async { Ok(()) })
+    }
+}
+
+#[derive(Clone, Debug)]
+pub struct ExecEnvPolicy {
+    pub mode: String,
+    pub retain_keys: Vec<String>,
+    pub inherit: bool,
+    pub ignore_default_excludes: bool,
+    pub exclude: Vec<String>,
+    pub set: std::collections::HashMap<String, String>,
+    pub include_only: Option<Vec<String>>,
+}
+
+pub type HttpResponseBodyStream = tokio::sync::mpsc::Receiver<Result<bytes::Bytes, io::Error>>;
 
 use bytes::BytesMut;
 use memchr::memchr;
@@ -374,7 +521,7 @@ impl ExecutorProcessTransport {
     }
 
     fn push_process_output(&mut self, chunk: ProcessOutputChunk) {
-        let bytes = chunk.chunk.into_inner();
+        let bytes = chunk.chunk.to_vec();
         match chunk.stream {
             // MCP stdio uses stdout as the protocol stream. PTY output is
             // accepted defensively because the executor process API has a

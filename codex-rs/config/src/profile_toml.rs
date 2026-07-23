@@ -7,8 +7,6 @@ use crate::config_toml::ToolsToml;
 use crate::types::AnalyticsConfigToml;
 use crate::types::ApprovalsReviewer;
 use crate::types::Personality;
-use crate::types::SessionPickerViewMode;
-use crate::types::WindowsToml;
 use codex_features::FeaturesToml;
 use codex_protocol::config_types::ReasoningSummary;
 use codex_protocol::config_types::SandboxMode;
@@ -57,11 +55,6 @@ pub struct ConfigProfile {
     pub tools: Option<ToolsToml>,
     pub web_search: Option<WebSearchMode>,
     pub analytics: Option<AnalyticsConfigToml>,
-    /// TUI settings scoped to this profile.
-    #[serde(default)]
-    pub tui: Option<ProfileTui>,
-    #[serde(default)]
-    pub windows: Option<WindowsToml>,
     /// Optional feature toggles scoped to this profile.
     #[serde(default)]
     // Injects known feature keys into the schema and forbids unknown keys.
@@ -70,12 +63,3 @@ pub struct ConfigProfile {
     pub oss_provider: Option<String>,
 }
 
-/// TUI settings supported inside a named profile.
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize, JsonSchema)]
-#[serde(deny_unknown_fields)]
-#[schemars(deny_unknown_fields)]
-pub struct ProfileTui {
-    /// Preferred layout for resume/fork session picker results.
-    #[serde(default)]
-    pub session_picker_view: Option<SessionPickerViewMode>,
-}

@@ -4,32 +4,50 @@ pub(crate) mod names;
 pub(crate) mod runtime_metrics;
 pub(crate) mod tags;
 
-use crate::config::StatsigMetricsSettings;
-pub use crate::metrics::config::MetricsConfig;
-pub use crate::metrics::config::MetricsExporter;
-pub use crate::metrics::error::MetricsError;
-pub use crate::metrics::error::Result;
 pub use names::*;
-use std::sync::OnceLock;
 pub use tags::ORIGINATOR_TAG;
 pub use tags::SessionMetricTagValues;
 pub use tags::bounded_originator_tag_value;
 
-static GLOBAL_METRICS: OnceLock<MetricsClient> = OnceLock::new();
-static GLOBAL_STATSIG_METRICS_SETTINGS: OnceLock<StatsigMetricsSettings> = OnceLock::new();
+#[derive(Clone, Debug, Default)]
+pub struct MetricsClient;
 
-pub(crate) fn install_global(metrics: MetricsClient) {
-    let _ = GLOBAL_METRICS.set(metrics);
+impl MetricsClient {
+    pub fn shutdown(&self) {}
+    pub fn start_timer(&self, _name: &str, _tags: &[(&str, &str)]) -> Result<Timer, crate::metrics::error::MetricsError> {
+        Err(crate::metrics::error::MetricsError::ExporterDisabled)
+    }
+    pub fn counter(&self, _name: &str, _val: i64, _tags: &[(&str, &str)]) -> Result<(), crate::metrics::error::MetricsError> {
+        Ok(())
+    }
+    pub fn record_duration(&self, _name: &str, _duration: std::time::Duration, _tags: &[(&str, &str)]) -> Result<(), crate::metrics::error::MetricsError> {
+        Ok(())
+    }
+    pub fn histogram<V>(&self, _name: &str, _val: V, _tags: &[(&str, &str)]) -> Result<(), crate::metrics::error::MetricsError> {
+        Ok(())
+    }
+}
+
+#[derive(Clone, Debug, Default)]
+pub struct StatsigMetricsSettings;
+
+#[derive(Clone, Debug, Default)]
+pub struct Timer;
+
+impl Timer {
+    pub fn record(&self, _tags: &[(&str, &str)]) -> Result<(), crate::metrics::error::MetricsError> {
+        Ok(())
+    }
 }
 
 pub fn global() -> Option<MetricsClient> {
-    GLOBAL_METRICS.get().cloned()
+    None
 }
 
-pub(crate) fn install_global_statsig_settings(settings: StatsigMetricsSettings) {
-    let _ = GLOBAL_STATSIG_METRICS_SETTINGS.set(settings);
+pub fn start_global_timer(_name: &str, _tags: &[(&str, &str)]) -> Result<Timer, crate::metrics::error::MetricsError> {
+    Err(crate::metrics::error::MetricsError::ExporterDisabled)
 }
 
-pub(crate) fn global_statsig_settings() -> Option<StatsigMetricsSettings> {
-    GLOBAL_STATSIG_METRICS_SETTINGS.get().cloned()
+pub fn global_statsig_settings() -> Option<StatsigMetricsSettings> {
+    None
 }

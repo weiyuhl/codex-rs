@@ -18,7 +18,17 @@ use crate::oauth::OAuthPersistor;
 use super::PendingTransport;
 use super::RmcpClient;
 
-const JSON_RPC_INTERNAL_ERROR_CODE: i64 = -32603;
+#[derive(Debug, thiserror::Error)]
+pub enum ExecServerError {
+    #[error("HTTP error")]
+    HttpRequest(String),
+    #[error("Server error: {code} {message}")]
+    Server { code: i32, message: String },
+    #[error("Protocol error: {0}")]
+    Protocol(String),
+}
+
+const JSON_RPC_INTERNAL_ERROR_CODE: i32 = -32603;
 pub(super) const STREAMABLE_HTTP_RETRY_DELAYS_MS: [u64; 2] = [250, 1_000];
 
 impl RmcpClient {

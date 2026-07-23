@@ -2,7 +2,6 @@ use super::CodexErrorInfo;
 use super::ThreadItem;
 use super::ThreadStatus;
 use super::TurnStatus;
-use codex_experimental_api_macros::ExperimentalApi;
 use codex_protocol::protocol::SessionSource as CoreSessionSource;
 use codex_protocol::protocol::SubAgentSource as CoreSubAgentSource;
 use codex_protocol::protocol::ThreadHistoryMode as CoreThreadHistoryMode;
@@ -164,14 +163,13 @@ pub struct GitInfo {
     pub origin_url: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, JsonSchema, TS, ExperimentalApi)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, JsonSchema, TS)]
 #[serde(rename_all = "camelCase")]
 #[ts(export_to = "v2/")]
 pub struct Thread {
     /// Identifier for this thread. Codex-generated thread IDs are UUIDv7.
     pub id: String,
     /// Optional implementation-specific thread data.
-    #[experimental("thread.extra")]
     pub extra: Option<ThreadExtra>,
     /// Session id shared by threads that belong to the same session tree.
     pub session_id: String,
@@ -184,7 +182,6 @@ pub struct Thread {
     /// Whether the thread is ephemeral and should not be materialized on disk.
     pub ephemeral: bool,
     /// Persisted thread history contract selected when this thread was created.
-    #[experimental("thread.historyMode")]
     #[serde(default)]
     pub history_mode: ThreadHistoryMode,
     /// Model provider used for this thread (for example, 'openai').
@@ -210,7 +207,6 @@ pub struct Thread {
     pub source: SessionSource,
     /// Whether the app server accepts direct turn input for this loaded thread.
     /// `None` means the capability is unavailable, such as for an unloaded stored thread.
-    #[experimental("thread.canAcceptDirectInput")]
     pub can_accept_direct_input: Option<bool>,
     /// Optional analytics source classification for this thread.
     pub thread_source: Option<ThreadSource>,

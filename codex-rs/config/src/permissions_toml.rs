@@ -192,7 +192,7 @@ fn normalize_profile_network_domains(profile: &mut PermissionProfileToml) {
     let entries = std::mem::take(&mut domains.entries);
     domains.entries = entries
         .into_iter()
-        .map(|(pattern, permission)| (normalize_host(&pattern), permission))
+        .map(|(pattern, permission)| (pattern.trim().to_lowercase(), permission))
         .collect();
 }
 
@@ -365,9 +365,12 @@ pub struct NetworkMitmHookToml {
     pub action: Vec<String>,
 }
 
+pub type NetworkMode = NetworkModeSchema;
+pub type MitmHookBodyConfig = serde_json::Value;
+
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq, JsonSchema)]
 #[serde(rename_all = "lowercase")]
-enum NetworkModeSchema {
+pub enum NetworkModeSchema {
     Limited,
     Full,
 }
@@ -434,157 +437,10 @@ impl NetworkMitmToml {
 
         Ok(())
     }
-
-    pub fn to_runtime_hooks(
-        &self,
-        actions_by_name: Option<&IndexMap<String, NetworkMitmActionToml>>,
-    ) -> Vec<MitmHookConfig> {
-        self.hooks
-            .as_ref()
-            .map(|hooks| {
-                hooks
-                    .values()
-                    .map(|hook| hook.to_runtime(actions_by_name))
-                    .collect()
-            })
-            .unwrap_or_default()
-    }
 }
 
 impl NetworkMitmActionToml {
     pub fn is_empty(&self) -> bool {
         self.strip_request_headers.is_empty() && self.inject_request_headers.is_empty()
-    }
-}
-
-impl NetworkToml {
-    pub fn apply_to_network_proxy_config(&self, config: &mut NetworkProxyConfig) {
-        if let Some(enabled) = self.enabled {
-            config.enabled = enabled;
-        }
-        if let Some(proxy_url) = self.proxy_url.as_ref() {
-            config.proxy_url = proxy_url.clone();
-        }
-        if let Some(enable_socks5) = self.enable_socks5 {
-            config.enable_socks5 = enable_socks5;
-        }
-        if let Some(socks_url) = self.socks_url.as_ref() {
-            config.socks_url = socks_url.clone();
-        }
-        if let Some(enable_socks5_udp) = self.enable_socks5_udp {
-            config.enable_socks5_udp = enable_socks5_udp;
-        }
-        if let Some(allow_upstream_proxy) = self.allow_upstream_proxy {
-            config.allow_upstream_proxy = allow_upstream_proxy;
-        }
-        if let Some(dangerously_allow_non_loopback_proxy) =
-            self.dangerously_allow_non_loopback_proxy
-        {
-            config.dangerously_allow_non_loopback_proxy = dangerously_allow_non_loopback_proxy;
-        }
-        if let Some(dangerously_allow_all_unix_sockets) = self.dangerously_allow_all_unix_sockets {
-            config.dangerously_allow_all_unix_sockets = dangerously_allow_all_unix_sockets;
-        }
-        if let Some(mode) = self.mode {
-            config.mode = mode;
-        }
-        if let Some(domains) = self.domains.as_ref() {
-            overlay_network_domain_permissions(config, domains);
-        }
-        if let Some(unix_sockets) = self.unix_sockets.as_ref() {
-            let mut proxy_unix_sockets = config.unix_sockets.take().unwrap_or_default();
-            for (path, permission) in &unix_sockets.entries {
-                let permission = match permission {
-                    NetworkUnixSocketPermissionToml::Allow => {
-                        ProxyNetworkUnixSocketPermission::Allow
-                    }
-                    NetworkUnixSocketPermissionToml::Deny => ProxyNetworkUnixSocketPermission::Deny,
-                };
-                proxy_unix_sockets.entries.insert(path.clone(), permission);
-            }
-            config.unix_sockets =
-                (!proxy_unix_sockets.entries.is_empty()).then_some(proxy_unix_sockets);
-        }
-        if let Some(allow_local_binding) = self.allow_local_binding {
-            config.allow_local_binding = allow_local_binding;
-        }
-        if let Some(mitm) = self.mitm.as_ref() {
-            config.mitm_hooks = mitm.to_runtime_hooks(mitm.actions.as_ref());
-        }
-        config.mitm = config.mode == NetworkMode::Limited || !config.mitm_hooks.is_empty();
-    }
-
-    pub fn to_network_proxy_config(&self) -> NetworkProxyConfig {
-        let mut config = NetworkProxyConfig::default();
-        self.apply_to_network_proxy_config(&mut config);
-        config
-    }
-}
-
-impl NetworkMitmHookToml {
-    fn to_runtime(
-        &self,
-        actions_by_name: Option<&IndexMap<String, NetworkMitmActionToml>>,
-    ) -> MitmHookConfig {
-        MitmHookConfig {
-            host: self.host.clone(),
-            matcher: MitmHookMatchConfig {
-                methods: self.methods.clone(),
-                path_prefixes: self.path_prefixes.clone(),
-                query: self.query.clone(),
-                headers: self.headers.clone(),
-                body: self.body.clone(),
-            },
-            actions: self.selected_actions(actions_by_name),
-        }
-    }
-
-    fn selected_actions(
-        &self,
-        actions_by_name: Option<&IndexMap<String, NetworkMitmActionToml>>,
-    ) -> MitmHookActionsConfig {
-        let Some(actions_by_name) = actions_by_name else {
-            return MitmHookActionsConfig::default();
-        };
-
-        let mut selected = MitmHookActionsConfig::default();
-        for action_name in &self.action {
-            if let Some(action) = actions_by_name.get(action_name) {
-                selected
-                    .strip_request_headers
-                    .extend(action.strip_request_headers.clone());
-                selected.inject_request_headers.extend(
-                    action
-                        .inject_request_headers
-                        .iter()
-                        .map(NetworkMitmInjectedHeaderToml::to_runtime),
-                );
-            }
-        }
-        selected
-    }
-}
-
-impl NetworkMitmInjectedHeaderToml {
-    fn to_runtime(&self) -> InjectedHeaderConfig {
-        InjectedHeaderConfig {
-            name: self.name.clone(),
-            secret_env_var: self.secret_env_var.clone(),
-            secret_file: self.secret_file.clone(),
-            prefix: self.prefix.clone(),
-        }
-    }
-}
-
-pub fn overlay_network_domain_permissions(
-    config: &mut NetworkProxyConfig,
-    domains: &NetworkDomainPermissionsToml,
-) {
-    for (pattern, permission) in &domains.entries {
-        let permission = match permission {
-            NetworkDomainPermissionToml::Allow => ProxyNetworkDomainPermission::Allow,
-            NetworkDomainPermissionToml::Deny => ProxyNetworkDomainPermission::Deny,
-        };
-        config.upsert_domain_permission(pattern.clone(), permission, normalize_host);
     }
 }

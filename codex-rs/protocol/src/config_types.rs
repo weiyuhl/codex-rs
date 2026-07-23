@@ -270,10 +270,6 @@ fn string_enum_schema_with_description(values: &[&str], description: &str) -> Sc
     );
     Schema::Object(schema)
 }
-
-#[derive(
-    
-
 #[derive(
     Debug,
     Serialize,

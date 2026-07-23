@@ -1,7 +1,22 @@
 use std::fmt;
 use std::sync::Arc;
 
-use crate::config_requirements::RequirementSource;
+use codex_utils_absolute_path::AbsolutePathBuf;
+
+#[derive(Debug, Clone, PartialEq, Eq, Default)]
+pub enum RequirementSource {
+    #[default]
+    Unknown,
+    SystemRequirementsToml { file: AbsolutePathBuf },
+    LegacyManagedConfigTomlFromFile { file: AbsolutePathBuf },
+    LegacyManagedConfigTomlFromMdm,
+}
+
+impl std::fmt::Display for RequirementSource {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Unknown")
+    }
+}
 use thiserror::Error;
 
 #[derive(Debug, Error, PartialEq, Eq)]

@@ -1,5 +1,17 @@
 pub mod auth;
 pub mod token_data;
+pub mod server {
+    pub fn ensure_workspace_account_allowed(_: impl std::fmt::Debug, _: impl std::fmt::Debug) -> Result<(), std::io::Error> { Ok(()) }
+}
+
+#[derive(Clone, Debug, Default)]
+pub struct AuthEnvTelemetry {
+    pub provider_env_key_present: bool,
+    pub refresh_token_url_override_present: bool,
+    pub codex_api_key_env_enabled: bool,
+    pub provider_env_key_name: Option<String>,
+}
+pub fn collect_auth_env_telemetry() -> AuthEnvTelemetry { AuthEnvTelemetry::default() }
 
 mod outbound_proxy;
 

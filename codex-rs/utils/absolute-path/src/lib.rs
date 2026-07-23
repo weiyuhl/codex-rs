@@ -470,7 +470,7 @@ mod tests {
                 .canonicalize()
                 .expect("path should canonicalize")
                 .as_path(),
-            dunce::canonicalize(temp_dir.path().join("two").join("file.txt"))
+            std::fs::canonicalize(temp_dir.path().join("two").join("file.txt"))
                 .expect("expected path should canonicalize")
                 .as_path()
         );
@@ -478,11 +478,43 @@ mod tests {
 
     #[test]
     fn canonicalize_returns_error_for_missing_path() {
-        let temp_dir = tempdir().expect("base dir");
-        let abs_path_buf = AbsolutePathBuf::from_absolute_path(temp_dir.path().join("missing.txt"))
-            .expect("absolute path");
+        let temp_dir = tempfile::tempdir().expect("tempdir");
+        let missing_path = temp_dir.path().join("missing.txt");
 
+        let abs_path_buf =
+            AbsolutePathBuf::from_absolute_path(&missing_path).expect("absolute path");
         assert!(abs_path_buf.canonicalize().is_err());
+    }
+
+    #[test]
+    fn as_real_path_converts_symlink_prefix_properly() {
+        let temp_dir = tempfile::tempdir().expect("tempdir");
+        let real_dir = temp_dir.path().join("real");
+        std::fs::create_dir(&real_dir).expect("create_dir");
+        let real_file = real_dir.join("file.txt");
+        std::fs::write(&real_file, "hello").expect("write file");
+
+        let symlink_dir = temp_dir.path().join("symlink");
+        #[cfg(unix)]
+        std::os::unix::fs::symlink(&real_dir, &symlink_dir).expect("symlink");
+        #[cfg(windows)]
+        std::os::windows::fs::symlink_dir(&real_dir, &symlink_dir).expect("symlink");
+
+        let symlink_file = symlink_dir.join("file.txt");
+        let abs_symlink_file =
+            AbsolutePathBuf::from_absolute_path(&symlink_file).expect("absolute path");
+
+        let real_path_buf = abs_symlink_file
+            .as_real_path()
+            .expect("as_real_path should resolve symlinks");
+
+        let expected_real_file =
+            std::fs::canonicalize(temp_dir.path()).expect("canonicalize temp dir");
+
+        assert_eq!(
+            real_path_buf.as_path(),
+            expected_real_file.join("real").join("file.txt")
+        );
     }
 
     #[test]

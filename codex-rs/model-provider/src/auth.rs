@@ -11,7 +11,15 @@ use codex_login::CodexAuth;
 use codex_login::auth::AgentIdentityAuth;
 use codex_login::auth::AgentIdentityAuthError;
 use codex_login::auth::AgentIdentityAuthPolicy;
-use codex_model_provider_info::ModelProviderInfo;
+use crate::codex_model_provider_info::ModelProviderInfo;
+pub const BEDROCK_API_KEY_UNSUPPORTED_MESSAGE: &str = "Bedrock unsupported";
+
+#[derive(Clone, Debug)]
+pub struct AgentIdentityKey;
+
+pub fn authorization_header_for_agent_task(_: impl std::fmt::Debug) -> Result<String, std::io::Error> {
+    Ok(String::new())
+}
 use codex_protocol::error::CodexErr;
 use codex_protocol::protocol::SessionSource;
 use http::HeaderMap;
@@ -284,6 +292,11 @@ pub fn auth_provider_from_auth(auth: &CodexAuth) -> SharedAuthProvider {
         | CodexAuth::Chatgpt(_)
         | CodexAuth::ChatgptAuthTokens(_)
         | CodexAuth::PersonalAccessToken(_) => Arc::new(BearerAuthProvider {
+            token: auth.get_token().ok(),
+            account_id: auth.get_account_id(),
+            is_fedramp_account: auth.is_fedramp_account(),
+        }),
+        _ => Arc::new(BearerAuthProvider {
             token: auth.get_token().ok(),
             account_id: auth.get_account_id(),
             is_fedramp_account: auth.is_fedramp_account(),

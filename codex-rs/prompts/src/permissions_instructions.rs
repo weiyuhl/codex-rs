@@ -1,5 +1,4 @@
-use codex_core::context::ContextualUserFragment;
-use codex_execpolicy::Policy;
+use codex_protocol::context::ContextualUserFragment;
 use codex_protocol::config_types::ApprovalsReviewer;
 use codex_protocol::config_types::SandboxMode;
 use codex_protocol::models::PermissionProfile;
@@ -52,7 +51,6 @@ struct PermissionsPromptConfig<'a> {
     approvals_reviewer: ApprovalsReviewer,
     approval_messages: Option<&'a ApprovalMessages>,
     permission_messages: Option<&'a PermissionMessages>,
-    exec_policy: &'a Policy,
     exec_permission_approvals_enabled: bool,
     request_permissions_tool_enabled: bool,
 }
@@ -90,7 +88,6 @@ impl PermissionsInstructions {
         permission_profile: &PermissionProfile,
         approval_policy: AskForApproval,
         approval_context: ApprovalPromptContext<'_>,
-        exec_policy: &Policy,
         cwd: &Path,
         exec_permission_approvals_enabled: bool,
         request_permissions_tool_enabled: bool,
@@ -107,7 +104,6 @@ impl PermissionsInstructions {
                 approvals_reviewer: approval_context.reviewer,
                 approval_messages: approval_context.messages,
                 permission_messages: approval_context.permission_messages,
-                exec_policy,
                 exec_permission_approvals_enabled,
                 request_permissions_tool_enabled,
             },
@@ -154,7 +150,6 @@ impl PermissionsInstructions {
                 config.approval_policy,
                 config.approvals_reviewer,
                 config.approval_messages,
-                config.exec_policy,
                 config.exec_permission_approvals_enabled,
                 config.request_permissions_tool_enabled,
             ),
@@ -225,7 +220,6 @@ fn approval_text(
     approval_policy: AskForApproval,
     approvals_reviewer: ApprovalsReviewer,
     approval_messages: Option<&ApprovalMessages>,
-    exec_policy: &Policy,
     exec_permission_approvals_enabled: bool,
     request_permissions_tool_enabled: bool,
 ) -> String {
@@ -261,11 +255,6 @@ fn approval_text(
         if request_permissions_tool_enabled {
             sections.push(request_permissions_tool_prompt_section().to_string());
         }
-        if let Some(prefixes) = approved_command_prefixes_text(exec_policy) {
-            sections.push(format!(
-                "## Approved command prefixes\nThe following prefix rules have already been approved: {prefixes}"
-            ));
-        }
         sections.join("\n\n")
     };
     let text = match approval_policy {
@@ -276,7 +265,6 @@ fn approval_text(
         AskForApproval::OnRequest => on_request_instructions(),
         AskForApproval::Granular(granular_config) => granular_instructions(
             granular_config,
-            exec_policy,
             exec_permission_approvals_enabled,
             request_permissions_tool_enabled,
         ),
@@ -360,22 +348,8 @@ fn denied_reads_text(file_system_policy: &FileSystemSandboxPolicy, cwd: &Path) -
     ))
 }
 
-fn approved_command_prefixes_text(exec_policy: &Policy) -> Option<String> {
-    format_allow_prefixes(exec_policy.get_allowed_prefixes())
-        .filter(|prefixes| !prefixes.is_empty())
-}
-
-fn granular_prompt_intro_text() -> &'static str {
-    "# Approval Requests\n\nApproval policy is `granular`. Categories set to `false` are automatically rejected instead of prompting the user."
-}
-
-fn request_permissions_tool_prompt_section() -> &'static str {
-    "# request_permissions Tool\n\nThe built-in `request_permissions` tool is available in this session. Invoke it when you need to request additional `network` or `file_system` permissions before later shell-like commands need them. Request only the specific permissions required for the task."
-}
-
 fn granular_instructions(
     granular_config: GranularApprovalConfig,
-    exec_policy: &Policy,
     exec_permission_approvals_enabled: bool,
     request_permissions_tool_enabled: bool,
 ) -> String {
@@ -436,13 +410,15 @@ fn granular_instructions(
         sections.push(request_permissions_tool_prompt_section().to_string());
     }
 
-    if let Some(prefixes) = approved_command_prefixes_text(exec_policy) {
-        sections.push(format!(
-            "## Approved command prefixes\nThe following prefix rules have already been approved: {prefixes}"
-        ));
-    }
-
     sections.join("\n\n")
+}
+
+fn request_permissions_tool_prompt_section() -> &'static str {
+    "You can use request_permissions to ask for permission escalation."
+}
+
+fn granular_prompt_intro_text() -> &'static str {
+    ""
 }
 
 #[cfg(test)]

@@ -3,6 +3,10 @@
 // Note this file should generally be restricted to simple struct/enum
 // definitions that do not contain business logic.
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+pub enum ResidencyRequirement {
+    Us,
+}
 pub use crate::mcp_types::AppToolApproval;
 pub use crate::mcp_types::McpServerAuth;
 pub use crate::mcp_types::McpServerConfig;
@@ -137,22 +141,6 @@ impl Default for AuthKeyringBackendKind {
             Self::Direct
         }
     }
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, JsonSchema)]
-#[serde(rename_all = "kebab-case")]
-pub enum WindowsSandboxModeToml {
-    Elevated,
-    Unelevated,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq, Eq, JsonSchema)]
-#[schemars(deny_unknown_fields)]
-pub struct WindowsToml {
-    pub sandbox: Option<WindowsSandboxModeToml>,
-    /// Defaults to `true`. Set to `false` to launch the final sandboxed child
-    /// process on `Winsta0\\Default` instead of a private desktop.
-    pub sandbox_private_desktop: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Copy, Clone, PartialEq, JsonSchema)]
@@ -632,153 +620,6 @@ impl fmt::Display for NotificationCondition {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, JsonSchema, Default)]
-#[serde(rename_all = "kebab-case")]
-pub enum TuiPetAnchor {
-    /// Anchor the pet to the bottom of the current TUI composer viewport.
-    #[default]
-    Composer,
-    /// Anchor the pet to the physical bottom of the terminal screen.
-    ScreenBottom,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Default, JsonSchema)]
-#[schemars(deny_unknown_fields)]
-pub struct TuiNotificationSettings {
-    /// Enable desktop notifications from the TUI.
-    /// Defaults to `true`.
-    #[serde(default, rename = "notifications")]
-    pub notifications: Notifications,
-
-    /// Notification method to use for terminal notifications.
-    /// Defaults to `auto`.
-    #[serde(default, rename = "notification_method")]
-    pub method: NotificationMethod,
-
-    /// Controls whether TUI notifications are delivered only when the terminal is unfocused or
-    /// regardless of focus. Defaults to `unfocused`.
-    #[serde(default, rename = "notification_condition")]
-    pub condition: NotificationCondition,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Default, JsonSchema)]
-#[schemars(deny_unknown_fields)]
-pub struct ModelAvailabilityNuxConfig {
-    /// Number of times a startup availability NUX has been shown per model slug.
-    #[serde(default, flatten)]
-    pub shown_count: HashMap<String, u32>,
-}
-
-/// Fallback resize-reflow row cap when Codex cannot identify a terminal-specific scrollback size.
-pub const DEFAULT_TERMINAL_RESIZE_REFLOW_FALLBACK_MAX_ROWS: usize = 1_000;
-
-/// Collection of settings that are specific to the TUI.
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Default, JsonSchema)]
-#[schemars(deny_unknown_fields)]
-pub struct Tui {
-    #[serde(default, flatten)]
-    pub notification_settings: TuiNotificationSettings,
-
-    /// Enable animations (welcome screen, shimmer effects, spinners).
-    /// Defaults to `true`.
-    #[serde(default = "default_true")]
-    pub animations: bool,
-
-    /// Show startup tooltips in the TUI welcome screen.
-    /// Defaults to `true`.
-    #[serde(default = "default_true")]
-    pub show_tooltips: bool,
-
-    /// Start the composer in Vim mode (`Normal`) by default.
-    /// Defaults to `false`.
-    #[serde(default)]
-    pub vim_mode_default: bool,
-
-    /// Start the TUI in raw scrollback mode for copy-friendly transcript output.
-    /// Defaults to `false`.
-    #[serde(default)]
-    pub raw_output_mode: bool,
-
-    /// Controls whether the TUI uses the terminal's alternate screen buffer.
-    ///
-    /// - `auto` (default): Use alternate screen.
-    /// - `always`: Always use alternate screen.
-    /// - `never`: Never use alternate screen (inline mode only, preserves scrollback).
-    #[serde(default)]
-    pub alternate_screen: AltScreenMode,
-
-    /// Ordered list of status line item identifiers.
-    ///
-    /// When set, the TUI renders the selected items as the status line.
-    /// When unset, the TUI defaults to: `model-with-reasoning` and `current-dir`.
-    #[serde(default)]
-    pub status_line: Option<Vec<String>>,
-
-    /// Color status line items with colors derived from the active syntax theme.
-    /// Defaults to `true`.
-    #[serde(default = "default_true")]
-    pub status_line_use_colors: bool,
-
-    /// Ordered list of terminal title item identifiers.
-    ///
-    /// When set, the TUI renders the selected items into the terminal window/tab title.
-    /// When unset, the TUI defaults to: `activity` and `project`.
-    /// The `activity` item spins while working and shows an action-required
-    /// message when blocked on the user.
-    #[serde(default)]
-    pub terminal_title: Option<Vec<String>>,
-
-    /// Syntax highlighting theme name (kebab-case).
-    ///
-    /// When set, overrides automatic light/dark theme detection.
-    /// Use `/theme` in the TUI or see `$CODEX_HOME/themes` for custom themes.
-    #[serde(default)]
-    pub theme: Option<String>,
-
-    /// Pet id to preselect in the terminal pet picker.
-    ///
-    /// Custom pet ids resolve against CODEX_HOME/pets/<pet-id>/pet.json.
-    #[serde(default)]
-    pub pet: Option<String>,
-
-    /// Where the terminal pet should anchor vertically.
-    ///
-    /// Defaults to `composer`, which follows the current TUI composer viewport.
-    #[serde(default)]
-    pub pet_anchor: TuiPetAnchor,
-
-    /// Preferred layout for resume/fork session picker results.
-    #[serde(default)]
-    pub session_picker_view: Option<SessionPickerViewMode>,
-
-    /// Working directory to use when resuming or forking a session.
-    /// When unset, prompt if the current and session directories differ.
-    #[serde(default)]
-    pub resume_cwd: Option<ResumeCwdMode>,
-
-    /// Keybinding overrides for the TUI.
-    ///
-    /// This supports rebinding selected actions globally and by context.
-    /// Context bindings take precedence over `global` bindings.
-    #[serde(default)]
-    pub keymap: TuiKeymap,
-
-    /// Startup tooltip availability NUX state persisted by the TUI.
-    #[serde(default)]
-    pub model_availability_nux: ModelAvailabilityNuxConfig,
-
-    /// Trim terminal resize-reflow replay to the most recent rendered terminal rows when the
-    /// transcript exceeds this cap. Omit to use Codex's terminal-specific default. Set to `0` to
-    /// keep all rendered rows.
-    #[serde(default)]
-    #[schemars(range(min = 0))]
-    pub terminal_resize_reflow_max_rows: Option<usize>,
-}
-
-const fn default_true() -> bool {
-    true
-}
-
 /// Settings for notices we display to users via the tui and app-server clients
 /// (primarily the Codex IDE extension). NOTE: these are different from
 /// notifications - notices are warnings, NUX screens, acknowledgements, etc.
@@ -923,9 +764,8 @@ pub struct SandboxWorkspaceWrite {
 #[path = "types_tests.rs"]
 mod tests;
 
-#[derive(Debug, Clone, Default, clap::Args)]
+#[derive(Debug, Clone, Default)]
 pub struct SharedCliOptions {
-    #[arg(long = "config", global = true)]
     pub config: Vec<String>,
 }
 

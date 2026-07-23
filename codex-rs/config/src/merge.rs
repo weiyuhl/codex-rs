@@ -154,7 +154,7 @@ fn is_permission_network_domains_path(path: &[String]) -> bool {
 fn normalize_network_domain_keys(table: &mut toml::map::Map<String, TomlValue>) {
     let entries = std::mem::take(table);
     for (pattern, value) in entries {
-        table.insert(normalize_host(&pattern), value);
+        table.insert(pattern.trim().to_lowercase(), value);
     }
 }
 

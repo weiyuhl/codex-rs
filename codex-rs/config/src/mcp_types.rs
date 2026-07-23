@@ -11,7 +11,7 @@ use serde::Deserializer;
 use serde::Serialize;
 use serde::de::Error as SerdeError;
 
-use crate::RequirementSource;
+use crate::constraint::RequirementSource;
 
 /// Effective MCP environment id when config omits `environment_id`.
 pub const DEFAULT_MCP_SERVER_ENVIRONMENT_ID: &str = "local";

@@ -49,6 +49,7 @@ members = [
     "state",
     "thread-store",
     "model-provider",
+    "model-provider/info",
 ]
 resolver = "2"
 
@@ -91,6 +92,7 @@ codex-mcp = { path = "codex-mcp" }
 codex-mcp-extension = { path = "ext/mcp" }
 codex-otel = { path = "otel" }
 codex-model-provider = { path = "model-provider" }
+codex-model-provider-info = { path = "model-provider/info" }
 codex-protocol = { path = "protocol" }
 codex-prompts = { path = "prompts" }
 codex-rmcp-client = { path = "rmcp-client" }

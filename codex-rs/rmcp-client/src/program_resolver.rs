@@ -28,6 +28,15 @@ pub fn resolve(
     Ok(program)
 }
 
+#[cfg(not(unix))]
+pub fn resolve(
+    program: OsString,
+    _env: &HashMap<OsString, OsString>,
+    _cwd: &Path,
+) -> std::io::Result<OsString> {
+    Ok(program)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

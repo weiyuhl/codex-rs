@@ -12,6 +12,7 @@ use std::time::Instant;
 use anyhow::Result;
 use anyhow::anyhow;
 use codex_api::SharedAuthProvider;
+use crate::executor_process_transport::*;
 use codex_config::types::AuthKeyringBackendKind;
 use codex_config::types::McpServerEnvVar;
 use codex_secrets::DefaultKeyringStore;
@@ -80,6 +81,7 @@ use codex_config::types::OAuthCredentialsStoreMode;
 
 #[path = "streamable_http_retry.rs"]
 mod streamable_http_retry;
+pub use self::streamable_http_retry::ExecServerError;
 
 use self::streamable_http_retry::HandshakeError;
 use self::streamable_http_retry::STREAMABLE_HTTP_RETRY_DELAYS_MS;
@@ -809,7 +811,7 @@ impl RmcpClient {
                         // Rebuilds reread the source selected during first construction. Only the
                         // initial construction below evaluates configured store policy.
                         store
-                            .load(&DefaultKeyringStore, server_name, url)?
+                            .load(&DefaultKeyringStore, server_name, url).await?
                             .map(|tokens| ResolvedOAuthTokens { tokens, store })
                     } else {
                         match resolve_oauth_tokens_from_store_policy(
@@ -818,7 +820,7 @@ impl RmcpClient {
                             url,
                             *store_mode,
                             *keyring_backend_kind,
-                        ) {
+                        ).await {
                             Ok(tokens) => {
                                 if let Some(resolved) = tokens.as_ref() {
                                     // Retries and session recovery rebuild this transport. Pin the

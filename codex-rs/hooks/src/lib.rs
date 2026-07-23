@@ -110,3 +110,7 @@ pub fn hook_key(
         hook_event_key_label(event_name)
     )
 }
+
+pub(crate) fn notify_hook(_argv: Vec<String>) -> HookListEntry {
+    HookListEntry::default()
+}

@@ -77,6 +77,7 @@ pub(crate) mod mentions {
     pub(crate) use crate::plugins::collect_tool_mentions_from_messages;
 }
 pub mod sandboxing;
+pub mod spawn;
 mod session_prefix;
 mod session_startup_prewarm;
 pub mod skills;

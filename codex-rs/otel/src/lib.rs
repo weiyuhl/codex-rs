@@ -2,7 +2,6 @@ mod events;
 pub(crate) mod metrics;
 pub(crate) mod provider;
 
-use crate::metrics::Result as MetricsResult;
 use codex_protocol::auth::AuthMode;
 use serde::Serialize;
 use strum_macros::Display;
@@ -20,7 +19,6 @@ pub enum ToolDecisionSource {
     User,
 }
 
-/// Coarsens the authentication domain into the dimensions used by telemetry.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Display)]
 pub enum TelemetryAuthMode {
     ApiKey,
@@ -40,16 +38,12 @@ impl From<AuthMode> for TelemetryAuthMode {
     }
 }
 
-/// Start a metrics timer using the globally installed metrics client.
-pub fn start_global_timer(name: &str, tags: &[(&str, &str)]) -> MetricsResult<Timer> {
-    let Some(metrics) = crate::metrics::global() else {
-        return Err(MetricsError::ExporterDisabled);
-    };
-    metrics.start_timer(name, tags)
-}
+pub type OtelSettings = ();
+pub type OtelExporter = ();
+pub type OtelHttpProtocol = ();
+pub type OtelTlsConfig = ();
 
-/// Returns the resolved Statsig metrics settings for the globally installed
-/// OTEL metrics client, if the active metrics exporter is Statsig.
+pub fn record_process_start_once(_metrics: &MetricsClient, _originator: &str) {}
 pub fn global_statsig_metrics_settings() -> Option<StatsigMetricsSettings> {
-    crate::metrics::global_statsig_settings()
+    None
 }

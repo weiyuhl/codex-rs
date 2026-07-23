@@ -24,8 +24,7 @@ impl ExecutorFileSystem for LocalFileSystem {
         Box::pin(async move {
             let native = path.to_abs_path()?;
             let canonical = native.canonicalize()?;
-            PathUri::from_abs_path(&canonical)
-                .map_err(|e| io::Error::new(io::ErrorKind::InvalidInput, e.to_string()))
+            Ok(PathUri::from_abs_path(&canonical))
         })
     }
 

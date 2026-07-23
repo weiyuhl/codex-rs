@@ -18,7 +18,14 @@ use codex_login::AuthManager;
 use codex_login::CodexAuth;
 use codex_login::collect_auth_env_telemetry;
 use codex_login::default_client::build_default_reqwest_client_for_route_async;
-use codex_model_provider_info::ModelProviderInfo;
+use crate::codex_model_provider_info::ModelProviderInfo;
+
+mod codex_models_manager {
+    pub mod manager {
+        pub trait ModelsEndpointClient {}
+        pub type ModelsEndpointFuture<'a, T> = futures::future::BoxFuture<'a, T>;
+    }
+}
 use codex_models_manager::manager::ModelsEndpointClient;
 use codex_models_manager::manager::ModelsEndpointFuture;
 use codex_otel::TelemetryAuthMode;

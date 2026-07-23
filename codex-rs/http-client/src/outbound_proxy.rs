@@ -12,8 +12,7 @@ use std::sync::Mutex;
 use std::sync::OnceLock;
 use std::time::Duration;
 use std::time::Instant;
-#[cfg(any(target_os = "windows", target_os = "macos"))]
-use tokio::sync::Semaphore;
+
 
 use crate::custom_ca::BuildCustomCaTransportError;
 use crate::custom_ca::build_reqwest_client_with_custom_ca;
@@ -179,26 +178,7 @@ impl HttpClientFactory {
         if let Some(route) = self.cached_proxy_route(&request_url) {
             return Ok(route);
         }
-
-        #[cfg(not(any(target_os = "windows", target_os = "macos")))]
-        return Ok(self.resolve_proxy_route(&request_url));
-
-        #[cfg(any(target_os = "windows", target_os = "macos"))]
-        {
-            let permit = ASYNC_SYSTEM_PROXY_RESOLUTION_PERMIT
-                .acquire()
-                .await
-                .map_err(io::Error::other)?;
-            let factory = self.clone();
-            tokio::task::spawn_blocking(move || {
-                // Keep the permit with the blocking task: cancelling the caller must not allow a
-                // second PAC/WinHTTP lookup to start while this one is still running.
-                let _permit = permit;
-                factory.resolve_proxy_route(&request_url)
-            })
-            .await
-            .map_err(io::Error::other)
-        }
+        Ok(self.resolve_proxy_route(&request_url))
     }
 
     fn cached_proxy_route(&self, request_url: &str) -> Option<OutboundProxyRoute> {

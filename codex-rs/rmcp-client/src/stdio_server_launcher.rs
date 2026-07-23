@@ -16,6 +16,7 @@ use std::ffi::OsString;
 use std::future::Future;
 use std::io;
 use std::path::Path;
+use crate::executor_process_transport::*;
 use std::path::PathBuf;
 use std::process::Stdio;
 use std::sync::Arc;
@@ -484,9 +485,11 @@ impl ExecutorStdioServerLauncher {
         let started = exec_backend
             .start(ExecParams {
                 process_id,
+                program: program_name.clone(),
+                args: argv.clone(),
                 argv,
-                cwd,
-                env_policy: Some(Self::remote_env_policy(&remote_env_vars)),
+                cwd: Some(cwd),
+                env_policy: Self::remote_env_policy(&remote_env_vars),
                 env,
                 tty: false,
                 pipe_stdin: true,
@@ -557,15 +560,13 @@ impl ExecutorStdioServerLauncher {
                 .collect()
         };
         ExecEnvPolicy {
-            inherit: if remote_env_vars.is_empty() {
-                ShellEnvironmentPolicyInherit::Core
-            } else {
-                ShellEnvironmentPolicyInherit::All
-            },
+            mode: "default".to_string(),
+            retain_keys: Vec::new(),
+            inherit: true,
             ignore_default_excludes: true,
             exclude: Vec::new(),
             r#set: HashMap::new(),
-            include_only,
+            include_only: Some(include_only),
         }
     }
 }

@@ -1,11 +1,6 @@
-use crate::config::edit::ConfigEdit;
-use crate::config::edit::ConfigEditsBuilder;
 use crate::path_utils::normalize_for_native_workdir;
 use crate::unified_exec::DEFAULT_MAX_BACKGROUND_TERMINAL_TIMEOUT_MS;
 use crate::unified_exec::MIN_EMPTY_YIELD_TIME_MS;
-use crate::windows_sandbox::WindowsSandboxLevelExt;
-use crate::windows_sandbox::resolve_windows_sandbox_mode;
-use crate::windows_sandbox::resolve_windows_sandbox_private_desktop;
 use codex_config::CloudConfigBundleLoader;
 use codex_config::ConfigLayerSource;
 use codex_config::ConfigLayerStack;
@@ -40,7 +35,6 @@ use codex_config::types::History;
 use codex_config::types::McpServerConfig;
 use codex_config::types::McpServerDisabledReason;
 use codex_config::types::MemoriesConfig;
-use codex_config::types::ModelAvailabilityNuxConfig;
 use codex_config::types::Notice;
 use codex_config::types::OAuthCredentialsStoreMode;
 use codex_config::types::ResumeCwdMode;
@@ -48,11 +42,7 @@ use codex_config::types::SessionPickerViewMode;
 use codex_config::types::ToolSuggestConfig;
 use codex_config::types::ToolSuggestDisabledTool;
 use codex_config::types::ToolSuggestDiscoverable;
-use codex_config::types::TuiKeymap;
-use codex_config::types::TuiNotificationSettings;
-use codex_config::types::TuiPetAnchor;
 use codex_config::types::UriBasedFileOpener;
-use codex_config::types::WindowsSandboxModeToml;
 use codex_core_plugins::PluginLoadOutcome;
 use codex_core_plugins::PluginsConfigInput;
 use codex_features::CodeModeConfigToml;
@@ -85,7 +75,6 @@ use codex_model_provider_info::OLLAMA_CHAT_PROVIDER_REMOVED_ERROR;
 use codex_model_provider_info::built_in_model_providers;
 use codex_model_provider_info::merge_configured_model_providers;
 use codex_models_manager::ModelsManagerConfig;
-use codex_protocol::config_types::AltScreenMode;
 use codex_protocol::config_types::AutoCompactTokenLimitScope;
 use codex_protocol::config_types::ForcedLoginMethod;
 use codex_protocol::config_types::Personality;
@@ -152,8 +141,6 @@ pub use codex_config::Constrained;
 pub use codex_config::ConstraintError;
 pub use codex_config::ConstraintResult;
 pub use codex_config::LoaderOverrides;
-use codex_sandboxing::compatibility_sandbox_policy_for_permission_profile;
-pub use codex_sandboxing::system_bwrap_warning;
 pub use managed_features::ManagedFeatures;
 pub use network_proxy_spec::NetworkProxySpec;
 pub use network_proxy_spec::StartedNetworkProxy;
@@ -334,11 +321,6 @@ pub struct Permissions {
     pub allow_login_shell: bool,
     /// Policy used to build process environments for shell/unified exec.
     pub shell_environment_policy: ShellEnvironmentPolicy,
-    /// Effective Windows sandbox mode derived from `[windows].sandbox` or
-    /// legacy feature keys.
-    pub windows_sandbox_mode: Option<WindowsSandboxModeToml>,
-    /// Whether the final Windows sandboxed child should run on a private desktop.
-    pub windows_sandbox_private_desktop: bool,
 }
 
 impl Permissions {
@@ -356,9 +338,6 @@ impl Permissions {
             workspace_roots: Vec::new(),
             network: None,
             allow_login_shell: true,
-            shell_environment_policy: ShellEnvironmentPolicy::default(),
-            windows_sandbox_mode: None,
-            windows_sandbox_private_desktop: true,
         })
     }
 
@@ -715,79 +694,6 @@ pub struct Config {
     /// ```shell
     /// notify-send Codex '{"type":"agent-turn-complete","turn-id":"12345"}'
     /// ```
-    ///
-    /// If unset the feature is disabled.
-    pub notify: Option<Vec<String>>,
-
-    /// TUI notification settings, including enabled events, delivery method, and focus condition.
-    pub tui_notifications: TuiNotificationSettings,
-
-    /// Enable ASCII animations and shimmer effects in the TUI.
-    pub animations: bool,
-
-    /// Show startup tooltips in the TUI welcome screen.
-    pub show_tooltips: bool,
-
-    /// Persisted startup availability NUX state for model tooltips.
-    pub model_availability_nux: ModelAvailabilityNuxConfig,
-
-    /// Start the composer in Vim mode (`Normal`) by default.
-    pub tui_vim_mode_default: bool,
-
-    /// Start the TUI in raw scrollback mode for copy-friendly transcript output.
-    pub tui_raw_output_mode: bool,
-
-    /// Start the TUI in the specified collaboration mode (plan/default).
-
-    /// Controls whether the TUI uses the terminal's alternate screen buffer.
-    ///
-    /// This is the same `tui.alternate_screen` value from `config.toml`.
-    /// - `auto` (default): Use alternate screen.
-    /// - `always`: Always use alternate screen.
-    /// - `never`: Never use alternate screen (inline mode, preserves scrollback).
-    pub tui_alternate_screen: AltScreenMode,
-    /// Ordered list of status line item identifiers for the TUI.
-    ///
-    /// When unset, the TUI defaults to: `model-with-reasoning` and `current-dir`.
-    pub tui_status_line: Option<Vec<String>>,
-
-    /// Whether to color status line items with colors from the active syntax theme.
-    pub tui_status_line_use_colors: bool,
-
-    /// Ordered list of terminal title item identifiers for the TUI.
-    ///
-    /// When unset, the TUI defaults to: `activity` and `project`.
-    /// The `activity` item spins while working and shows an action-required
-    /// message when blocked on the user.
-    pub tui_terminal_title: Option<Vec<String>>,
-
-    /// Syntax highlighting theme override (kebab-case name).
-    pub tui_theme: Option<String>,
-
-    /// Pet id preselected by the terminal pet picker.
-    pub tui_pet: Option<String>,
-
-    /// Vertical anchor used by terminal pet rendering.
-    pub tui_pet_anchor: TuiPetAnchor,
-
-    /// Preferred layout for resume/fork session picker results.
-    pub tui_session_picker_view: SessionPickerViewMode,
-
-    /// Working directory to use when resuming or forking a session.
-    /// When unset, prompt if the current and session directories differ.
-    pub tui_resume_cwd: Option<ResumeCwdMode>,
-
-    /// Terminal resize-reflow tuning knobs.
-    pub terminal_resize_reflow: TerminalResizeReflowConfig,
-
-    /// Keybinding overrides for the TUI.
-    ///
-    /// Precedence is:
-    ///
-    /// 1. context table (`tui.keymap.chat`, `tui.keymap.composer`, etc.)
-    /// 2. `tui.keymap.global`
-    /// 3. built-in defaults
-    pub tui_keymap: TuiKeymap,
 
     /// The absolute directory that should be treated as the current working
     /// directory for the session. All relative paths inside the business-logic
@@ -3066,9 +2972,7 @@ impl Config {
             feedback: _,
             approval_policy: mut constrained_approval_policy,
             approvals_reviewer: mut constrained_approvals_reviewer,
-            permission_profile: mut constrained_permission_profile,
-            windows_sandbox_mode: mut constrained_windows_sandbox_mode,
-            windows_sandbox_private_desktop: _,
+
             web_search_mode: mut constrained_web_search_mode,
             allow_managed_hooks_only: _,
             allow_appshots: _,
@@ -3170,30 +3074,7 @@ impl Config {
             &mut startup_warnings,
         )?;
         let respect_system_proxy = features.enabled(Feature::RespectSystemProxy);
-        let enable_network_proxy = features.enabled(Feature::NetworkProxy);
-        let configured_windows_sandbox_mode = resolve_windows_sandbox_mode(&cfg);
-        // Keep the configured mode separate so a requirement-constrained mode
-        // does not look like it was explicitly selected in config.
-        let selected_windows_sandbox_mode = configured_windows_sandbox_mode.or_else(|| {
-            match WindowsSandboxLevel::from_features(&features) {
-                WindowsSandboxLevel::Elevated => Some(WindowsSandboxModeToml::Elevated),
-                WindowsSandboxLevel::RestrictedToken => Some(WindowsSandboxModeToml::Unelevated),
-                WindowsSandboxLevel::Disabled => None,
-            }
-        });
-        apply_requirement_constrained_value(
-            "windows.sandbox",
-            selected_windows_sandbox_mode,
-            &mut constrained_windows_sandbox_mode,
-            &mut startup_warnings,
-        )?;
-        let effective_windows_sandbox_mode = *constrained_windows_sandbox_mode.get();
-        let windows_sandbox_mode = if constrained_windows_sandbox_mode.source.is_some() {
-            effective_windows_sandbox_mode
-        } else {
-            configured_windows_sandbox_mode
-        };
-        let windows_sandbox_private_desktop = resolve_windows_sandbox_private_desktop(&cfg);
+
         let resolved_cwd = AbsolutePathBuf::try_from(normalize_for_native_workdir({
             use std::env;
 
@@ -3250,11 +3131,7 @@ impl Config {
             ));
         }
 
-        let windows_sandbox_level = match effective_windows_sandbox_mode {
-            Some(WindowsSandboxModeToml::Elevated) => WindowsSandboxLevel::Elevated,
-            Some(WindowsSandboxModeToml::Unelevated) => WindowsSandboxLevel::RestrictedToken,
-            None => WindowsSandboxLevel::Disabled,
-        };
+        let windows_sandbox_level = WindowsSandboxLevel::Disabled;
         let memories_config: MemoriesConfig = cfg.memories.clone().unwrap_or_default().into();
         let memories_root = memory_root(&codex_home);
 
@@ -3900,14 +3777,13 @@ impl Config {
                 network,
                 allow_login_shell,
                 shell_environment_policy,
-                windows_sandbox_mode,
-                windows_sandbox_private_desktop,
+
             },
             explicit_permission_profile_mode,
             custom_permission_profiles,
             approvals_reviewer: constrained_approvals_reviewer.value(),
             enforce_residency: enforce_residency.value,
-            notify: cfg.notify,
+
             base_instructions,
             personality,
             developer_instructions,
@@ -4059,60 +3935,7 @@ impl Config {
                 .as_ref()
                 .and_then(|feedback| feedback.enabled)
                 .unwrap_or(true),
-            tool_suggest,
-            tui_notifications: cfg
-                .tui
-                .as_ref()
-                .map(|t| t.notification_settings.clone())
-                .unwrap_or_default(),
-            animations: cfg.tui.as_ref().map(|t| t.animations).unwrap_or(true),
-            show_tooltips: cfg.tui.as_ref().map(|t| t.show_tooltips).unwrap_or(true),
-            model_availability_nux: cfg
-                .tui
-                .as_ref()
-                .map(|t| t.model_availability_nux.clone())
-                .unwrap_or_default(),
-            tui_vim_mode_default: cfg
-                .tui
-                .as_ref()
-                .map(|t| t.vim_mode_default)
-                .unwrap_or(false),
-            tui_raw_output_mode: cfg
-                .tui
-                .as_ref()
-                .map(|t| t.raw_output_mode)
-                .unwrap_or(false),
-            tui_alternate_screen: cfg
-                .tui
-                .as_ref()
-                .map(|t| t.alternate_screen)
-                .unwrap_or_default(),
-            tui_status_line: cfg.tui.as_ref().and_then(|t| t.status_line.clone()),
-            tui_status_line_use_colors: cfg
-                .tui
-                .as_ref()
-                .map(|t| t.status_line_use_colors)
-                .unwrap_or(true),
-            tui_terminal_title: cfg.tui.as_ref().and_then(|t| t.terminal_title.clone()),
-            tui_theme: cfg.tui.as_ref().and_then(|t| t.theme.clone()),
-            tui_pet: cfg.tui.as_ref().and_then(|t| t.pet.clone()),
-            tui_pet_anchor: cfg
-                .tui
-                .as_ref()
-                .map(|t| t.pet_anchor)
-                .unwrap_or_default(),
-            tui_session_picker_view: cfg
-                .tui
-                .as_ref()
-                .and_then(|t| t.session_picker_view)
-                .unwrap_or_default(),
-            tui_resume_cwd: cfg.tui.as_ref().and_then(|t| t.resume_cwd),
-            terminal_resize_reflow,
-            tui_keymap: cfg
-                .tui
-                .as_ref()
-                .map(|t| t.keymap.clone())
-                .unwrap_or_default(),
+
             otel,
         };
         Ok(config)
@@ -4154,31 +3977,7 @@ impl Config {
         }
     }
 
-    pub fn set_windows_sandbox_enabled(&mut self, value: bool) {
-        self.permissions.windows_sandbox_mode = if value {
-            Some(WindowsSandboxModeToml::Unelevated)
-        } else if matches!(
-            self.permissions.windows_sandbox_mode,
-            Some(WindowsSandboxModeToml::Unelevated)
-        ) {
-            None
-        } else {
-            self.permissions.windows_sandbox_mode
-        };
-    }
 
-    pub fn set_windows_elevated_sandbox_enabled(&mut self, value: bool) {
-        self.permissions.windows_sandbox_mode = if value {
-            Some(WindowsSandboxModeToml::Elevated)
-        } else if matches!(
-            self.permissions.windows_sandbox_mode,
-            Some(WindowsSandboxModeToml::Elevated)
-        ) {
-            None
-        } else {
-            self.permissions.windows_sandbox_mode
-        };
-    }
 
     pub fn managed_network_requirements_enabled(&self) -> bool {
         !matches!(

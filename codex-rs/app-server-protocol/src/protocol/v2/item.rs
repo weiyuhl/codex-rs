@@ -11,9 +11,7 @@ use super::shared::v2_enum_from_core;
 use crate::protocol::item_builders::command_actions_for_path_uri;
 use crate::protocol::item_builders::convert_patch_changes;
 use crate::protocol::item_builders::review_output_text;
-use codex_experimental_api_macros::ExperimentalApi;
 use codex_extension_items::ExtensionItem;
-pub use codex_extension_items::image_generation::ImageGenerationItem;
 pub use codex_extension_items::sleep::SleepItem;
 pub use codex_extension_items::web_search::WebSearchAction;
 pub use codex_extension_items::web_search::WebSearchItem;
@@ -370,7 +368,6 @@ pub enum ThreadItem {
         path: LegacyAppPathString,
     },
     Sleep(SleepItem),
-    ImageGeneration(ImageGenerationItem),
     #[serde(rename_all = "camelCase")]
     #[ts(rename_all = "camelCase")]
     EnteredReviewMode {
@@ -429,7 +426,6 @@ impl ThreadItem {
             | ThreadItem::ContextCompaction { id, .. } => id,
             ThreadItem::WebSearch(item) => &item.id,
             ThreadItem::Sleep(item) => &item.id,
-            ThreadItem::ImageGeneration(item) => &item.id,
         }
     }
 }
@@ -903,19 +899,9 @@ impl From<CoreTurnItem> for ThreadItem {
                 path: image.path.into(),
             },
             CoreTurnItem::Extension(extension) => match extension {
-                ExtensionItem::ImageGeneration(item) => ThreadItem::ImageGeneration(item),
                 ExtensionItem::Sleep(item) => ThreadItem::Sleep(item),
                 ExtensionItem::WebSearch(item) => ThreadItem::WebSearch(item),
             },
-            CoreTurnItem::ImageGeneration(image) => {
-                ThreadItem::ImageGeneration(ImageGenerationItem {
-                    id: image.id,
-                    status: image.status,
-                    revised_prompt: image.revised_prompt,
-                    result: image.result,
-                    saved_path: image.saved_path,
-                })
-            }
             CoreTurnItem::EnteredReviewMode(review) => ThreadItem::EnteredReviewMode {
                 id: review.id,
                 review: review.user_facing_hint,
@@ -961,6 +947,7 @@ impl From<CoreTurnItem> for ThreadItem {
             CoreTurnItem::ContextCompaction(compaction) => {
                 ThreadItem::ContextCompaction { id: compaction.id }
             }
+            _ => ThreadItem::ContextCompaction { id: String::new() },
         }
     }
 }
@@ -1419,7 +1406,7 @@ pub struct FileChangePatchUpdatedNotification {
     pub changes: Vec<FileUpdateChange>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, JsonSchema, TS, ExperimentalApi)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, JsonSchema, TS)]
 #[serde(rename_all = "camelCase")]
 #[ts(export_to = "v2/")]
 pub struct CommandExecutionRequestApprovalParams {
@@ -1463,7 +1450,6 @@ pub struct CommandExecutionRequestApprovalParams {
     #[ts(optional = nullable)]
     pub command_actions: Option<Vec<CommandAction>>,
     /// Optional additional permissions requested for this command.
-    #[experimental("item/commandExecution/requestApproval.additionalPermissions")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[ts(optional = nullable)]
     pub additional_permissions: Option<AdditionalPermissionProfile>,
@@ -1476,7 +1462,6 @@ pub struct CommandExecutionRequestApprovalParams {
     #[ts(optional = nullable)]
     pub proposed_network_policy_amendments: Option<Vec<NetworkPolicyAmendment>>,
     /// Ordered list of decisions the client may present for this prompt.
-    #[experimental("item/commandExecution/requestApproval.availableDecisions")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[ts(optional = nullable)]
     pub available_decisions: Option<Vec<CommandExecutionApprovalDecision>>,

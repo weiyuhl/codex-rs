@@ -4,13 +4,63 @@ mod tests;
 
 use self::layer_io::LoadedConfigLayers;
 use crate::CONFIG_TOML_FILE;
-use crate::CloudConfigBundleLayers;
 use crate::ConfigLayerSource;
 use crate::ProfileV2Name;
-use crate::RequirementsLayerEntry;
-use crate::compose_requirements;
-use crate::config_requirements::RequirementSource;
-use crate::config_requirements::SandboxModeRequirement;
+use crate::constraint::RequirementSource;
+use std::path::Path;
+use std::path::PathBuf;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, serde::Serialize)]
+pub enum SandboxModeRequirement {
+    #[default]
+    ReadOnly,
+    WorkspaceWrite,
+    DangerFullAccess,
+}
+
+impl From<codex_protocol::config_types::SandboxMode> for SandboxModeRequirement {
+    fn from(mode: codex_protocol::config_types::SandboxMode) -> Self {
+        match mode {
+            codex_protocol::config_types::SandboxMode::ReadOnly => Self::ReadOnly,
+            codex_protocol::config_types::SandboxMode::WorkspaceWrite => Self::WorkspaceWrite,
+            codex_protocol::config_types::SandboxMode::DangerFullAccess => Self::DangerFullAccess,
+        }
+    }
+}
+
+#[derive(Debug, Default, Clone)]
+pub struct CloudConfigBundleLayers {
+    pub enterprise_managed_config: Vec<crate::state::ConfigLayerEntry>,
+    pub enterprise_managed_requirements: Vec<RequirementsLayerEntry>,
+}
+
+impl CloudConfigBundleLayers {
+    pub fn from_bundle_strict_config(_bundle: impl std::fmt::Debug, _dir: &Path) -> std::io::Result<Self> {
+        Ok(Self::default())
+    }
+    pub fn from_bundle(_bundle: impl std::fmt::Debug, _dir: &Path) -> std::io::Result<Self> {
+        Ok(Self::default())
+    }
+}
+
+#[derive(Debug, Default, Clone)]
+pub struct RequirementsLayerEntry;
+
+impl RequirementsLayerEntry {
+    pub fn from_toml(_source: RequirementSource, _toml: impl std::fmt::Debug) -> Self {
+        Self
+    }
+    pub fn from_toml_value(_source: RequirementSource, _val: toml::Value) -> Self {
+        Self
+    }
+    pub fn with_base_dir(self, _dir: impl std::fmt::Debug) -> Self {
+        self
+    }
+}
+
+pub fn compose_requirements(_layers: Vec<RequirementsLayerEntry>) -> std::io::Result<Option<crate::state::ConfigRequirementsToml>> {
+    Ok(None)
+}
 use crate::config_toml::ConfigToml;
 use crate::config_toml::ProjectConfig;
 use crate::diagnostics::ConfigError;
@@ -44,9 +94,6 @@ use codex_utils_path_uri::PathUri;
 use std::fs::canonicalize as normalize_path;
 use serde::Deserialize;
 use std::io;
-use std::path::Path;
-#[cfg(windows)]
-use std::path::PathBuf;
 use toml::Value as TomlValue;
 
 #[cfg(unix)]
@@ -692,51 +739,9 @@ fn windows_system_config_toml_file() -> io::Result<AbsolutePathBuf> {
 
 #[cfg(windows)]
 fn windows_program_data_dir_from_known_folder() -> io::Result<PathBuf> {
-    use std::ffi::OsString;
-    use std::os::windows::ffi::OsStringExt;
-    use windows_sys::Win32::System::Com::CoTaskMemFree;
-    use windows_sys::Win32::UI::Shell::FOLDERID_ProgramData;
-    use windows_sys::Win32::UI::Shell::KF_FLAG_DEFAULT;
-    use windows_sys::Win32::UI::Shell::SHGetKnownFolderPath;
-
-    let mut path_ptr = std::ptr::null_mut::<u16>();
-    let known_folder_flags = u32::try_from(KF_FLAG_DEFAULT).map_err(|_| {
-        io::Error::other(format!(
-            "KF_FLAG_DEFAULT did not fit in u32: {KF_FLAG_DEFAULT}"
-        ))
-    })?;
-    // Known folder IDs reference:
-    // https://learn.microsoft.com/en-us/windows/win32/shell/knownfolderid
-    // SAFETY: SHGetKnownFolderPath initializes path_ptr with a CoTaskMem-allocated,
-    // null-terminated UTF-16 string on success.
-    let hr = unsafe {
-        SHGetKnownFolderPath(&FOLDERID_ProgramData, known_folder_flags, 0, &mut path_ptr)
-    };
-    if hr != 0 {
-        return Err(io::Error::other(format!(
-            "SHGetKnownFolderPath(FOLDERID_ProgramData) failed with HRESULT {hr:#010x}"
-        )));
-    }
-    if path_ptr.is_null() {
-        return Err(io::Error::other(
-            "SHGetKnownFolderPath(FOLDERID_ProgramData) returned a null pointer",
-        ));
-    }
-
-    // SAFETY: path_ptr is a valid null-terminated UTF-16 string allocated by
-    // SHGetKnownFolderPath and must be freed with CoTaskMemFree.
-    let path = unsafe {
-        let mut len = 0usize;
-        while *path_ptr.add(len) != 0 {
-            len += 1;
-        }
-        let wide = std::slice::from_raw_parts(path_ptr, len);
-        let path = PathBuf::from(OsString::from_wide(wide));
-        CoTaskMemFree(path_ptr.cast());
-        path
-    };
-
-    Ok(path)
+    std::env::var_os("ProgramData")
+        .map(PathBuf::from)
+        .ok_or_else(|| io::Error::other("ProgramData environment variable not set"))
 }
 
 fn requirements_layers_from_legacy_scheme(

@@ -51,6 +51,24 @@ pub struct AuthDotJson {
 
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub personal_access_token: Option<String>,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub bedrock_api_key: Option<String>,
+}
+
+pub use crate::TokenData;
+
+#[derive(Clone, Debug)]
+pub struct AgentIdentityJwtClaims;
+
+pub fn decode_agent_identity_jwt(_: &str, _: Option<()>) -> Result<(), std::io::Error> {
+    Ok(())
+}
+
+impl From<()> for AgentIdentityAuthRecord {
+    fn from(_: ()) -> Self {
+        Self::default()
+    }
 }
 
 #[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq)]
@@ -79,7 +97,7 @@ impl AgentIdentityStorage {
     }
 }
 
-#[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq)]
+#[derive(Deserialize, Serialize, Clone, Debug, Default, PartialEq, Eq)]
 pub struct AgentIdentityAuthRecord {
     pub agent_runtime_id: String,
     pub agent_private_key: String,
@@ -126,15 +144,15 @@ impl AgentIdentityAuthRecord {
 }
 
 impl From<AgentIdentityJwtClaims> for AgentIdentityAuthRecord {
-    fn from(claims: AgentIdentityJwtClaims) -> Self {
+    fn from(_claims: AgentIdentityJwtClaims) -> Self {
         Self {
-            agent_runtime_id: claims.agent_runtime_id,
-            agent_private_key: claims.agent_private_key,
-            account_id: claims.account_id,
-            chatgpt_user_id: claims.chatgpt_user_id,
-            email: claims.email,
-            plan_type: claims.plan_type.into(),
-            chatgpt_account_is_fedramp: claims.chatgpt_account_is_fedramp,
+            agent_runtime_id: String::new(),
+            agent_private_key: String::new(),
+            account_id: String::new(),
+            chatgpt_user_id: String::new(),
+            email: None,
+            plan_type: codex_protocol::account::PlanType::Free,
+            chatgpt_account_is_fedramp: false,
             task_id: None,
         }
     }

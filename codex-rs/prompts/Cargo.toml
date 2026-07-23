@@ -14,9 +14,7 @@ workspace = true
 
 [dependencies]
 anyhow = { workspace = true }
-codex-core = { workspace = true }
 codex-git-utils = { workspace = true }
-codex-execpolicy = { workspace = true }
 codex-protocol = { workspace = true }
 codex-utils-absolute-path = { workspace = true }
 codex-utils-template = { workspace = true }

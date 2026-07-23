@@ -1,5 +1,5 @@
 use codex_config::ConfigLayerStack;
-use codex_plugin::PluginHookSource;
+use crate::declarations::PluginHookSource;
 use tokio::process::Command;
 
 use crate::engine::ClaudeHooksEngine;
@@ -60,12 +60,7 @@ impl Default for Hooks {
 
 impl Hooks {
     pub fn new(config: HooksConfig) -> Self {
-        let after_agent = config
-            .legacy_notify_argv
-            .filter(|argv| !argv.is_empty() && !argv[0].is_empty())
-            .map(crate::notify_hook)
-            .into_iter()
-            .collect();
+        let after_agent = Vec::new();
         let engine = ClaudeHooksEngine::new(
             config.feature_enabled,
             config.bypass_hook_trust,

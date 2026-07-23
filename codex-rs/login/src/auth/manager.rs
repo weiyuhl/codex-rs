@@ -35,12 +35,57 @@ use super::agent_identity::record_needs_task_registration;
 use super::agent_identity::register_managed_chatgpt_agent_identity;
 use super::agent_identity::require_agent_identity_authapi_base_url;
 use super::agent_identity::verified_record_from_jwt;
-use super::external_bearer::BearerTokenRefresher;
-use super::revoke::revoke_auth_tokens;
+use external_bearer::BearerTokenRefresher;
+use revoke::revoke_auth_tokens;
 use crate::auth::AuthHeaders;
 pub use crate::auth::agent_identity::AgentIdentityAuth;
 pub use crate::auth::agent_identity::AgentIdentityAuthError;
-pub use crate::auth::personal_access_token::PersonalAccessTokenAuth;
+pub use personal_access_token::PersonalAccessTokenAuth;
+
+mod server {
+    pub fn ensure_workspace_account_allowed(_: impl std::fmt::Debug, _: impl std::fmt::Debug) -> Result<(), std::io::Error> {
+        Ok(())
+    }
+}
+mod external_bearer {
+    use super::ExternalAuthFuture;
+    use super::ExternalAuthRefreshContext;
+    use super::CodexAuth;
+
+    #[derive(Debug, Clone)]
+    pub struct BearerTokenRefresher;
+    impl BearerTokenRefresher {
+        pub fn new(_: impl std::fmt::Debug) -> Self { Self }
+    }
+    impl super::ExternalAuth for BearerTokenRefresher {
+        fn resolve(&self) -> ExternalAuthFuture<'_, CodexAuth> {
+            Box::pin(async { Err(std::io::Error::other("disabled")) })
+        }
+        fn refresh(&self, _context: ExternalAuthRefreshContext) -> ExternalAuthFuture<'_, CodexAuth> {
+            Box::pin(async { Err(std::io::Error::other("disabled")) })
+        }
+    }
+}
+mod revoke {
+    pub async fn revoke_auth_tokens(_: impl std::fmt::Debug, _: impl std::fmt::Debug) -> Result<(), std::io::Error> {
+        Ok(())
+    }
+}
+mod personal_access_token {
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub struct PersonalAccessTokenAuth;
+    impl PersonalAccessTokenAuth {
+        pub async fn load(_: impl std::fmt::Debug, _: impl std::fmt::Debug) -> Result<Self, std::io::Error> {
+            Ok(Self)
+        }
+        pub fn access_token(&self) -> &str { "" }
+        pub fn account_id(&self) -> &str { "" }
+        pub fn is_fedramp_account(&self) -> bool { false }
+        pub fn email(&self) -> Option<&str> { None }
+        pub fn chatgpt_user_id(&self) -> &str { "" }
+        pub fn plan_type(&self) -> codex_protocol::account::PlanType { codex_protocol::account::PlanType::Free }
+    }
+}
 pub use crate::auth::storage::AgentIdentityAuthRecord;
 pub use crate::auth::storage::AgentIdentityStorage;
 pub use crate::auth::storage::AuthDotJson;
@@ -64,6 +109,15 @@ use codex_protocol::protocol::SessionSource;
 use serde_json::Value;
 use thiserror::Error;
 
+#[derive(Debug, Clone, Default)]
+pub struct ChatGptEnvironment;
+
+impl ChatGptEnvironment {
+    pub fn chatgpt_base_url(&self) -> &'static str {
+        "https://chatgpt.com"
+    }
+}
+
 /// Authentication mechanism used by the current user.
 #[derive(Debug, Clone)]
 pub enum CodexAuth {
@@ -73,6 +127,7 @@ pub enum CodexAuth {
     Headers(AuthHeaders),
     AgentIdentity(AgentIdentityAuth),
     PersonalAccessToken(PersonalAccessTokenAuth),
+    BedrockApiKey(String),
 }
 
 /// Policy for resolving Agent Identity auth from a broader Codex auth snapshot.
@@ -632,7 +687,7 @@ impl CodexAuth {
                     return Ok(None);
                 }
                 self.ensure_managed_chatgpt_agent_identity(
-                    require_agent_identity_authapi_base_url(agent_identity_authapi_base_url)?,
+                    &require_agent_identity_authapi_base_url(agent_identity_authapi_base_url)?,
                     forced_chatgpt_workspace_id,
                     auth_route_config,
                     session_source,
@@ -1246,15 +1301,16 @@ async fn load_auth(
                 Ok(Some(CodexAuth::PersonalAccessToken(auth)))
             }
             CodexAccessToken::AgentIdentityJwt(jwt) => {
+                let base_url = require_agent_identity_authapi_base_url(agent_identity_authapi_base_url)?;
                 CodexAuth::from_agent_identity_jwt_with_authapi_base_url(
                     jwt,
                     chatgpt_base_url,
-                    require_agent_identity_authapi_base_url(agent_identity_authapi_base_url)?,
+                    &base_url,
                     auth_route_config,
                 )
+                .await
+                .map(Some)
             }
-            .await
-            .map(Some),
         };
     }
 
@@ -1814,7 +1870,7 @@ impl Debug for AuthManager {
 }
 
 fn default_agent_identity_authapi_base_url() -> Option<String> {
-    agent_identity_authapi_base_url(/*chatgpt_base_url*/ None).ok()
+    agent_identity_authapi_base_url(/*chatgpt_base_url*/ None::<&str>).ok()
 }
 
 impl AuthManager {

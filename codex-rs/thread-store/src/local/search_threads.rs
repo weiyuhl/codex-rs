@@ -65,7 +65,7 @@ pub(super) async fn search_threads(
         model_provider_id: store.config.default_model_provider_id.clone(),
         generate_memories: false,
     };
-    let rg_command = InstallContext::current().rg_command();
+    let rg_command = std::path::PathBuf::from("rg");
     let matching_rollouts = search_rollout_matches(
         rg_command.as_path(),
         store.config.codex_home.as_path(),

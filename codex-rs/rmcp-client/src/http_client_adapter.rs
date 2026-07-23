@@ -13,6 +13,15 @@ use std::sync::Arc;
 
 use bytes::Bytes;
 use codex_api::SharedAuthProvider;
+use crate::executor_process_transport::*;
+use crate::ExecServerError;
+
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub enum HttpRedirectPolicy {
+    #[default]
+    Follow,
+    None,
+}
 use futures::StreamExt;
 use futures::stream;
 use futures::stream::BoxStream;
@@ -57,6 +66,8 @@ pub(crate) enum StreamableHttpClientAdapterError {
     SessionExpired404,
     #[error(transparent)]
     HttpRequest(#[from] ExecServerError),
+    #[error("IO error: {0}")]
+    Io(#[from] std::io::Error),
     #[error("invalid HTTP header: {0}")]
     Header(String),
 }
@@ -535,12 +546,10 @@ async fn collect_body(
     body_stream: &mut HttpResponseBodyStream,
 ) -> std::result::Result<Vec<u8>, StreamableHttpError<StreamableHttpClientAdapterError>> {
     let mut body = Vec::new();
-    while let Some(chunk) = body_stream
-        .recv()
-        .await
-        .map_err(StreamableHttpClientAdapterError::from)
-        .map_err(StreamableHttpError::Client)?
-    {
+    while let Some(res) = body_stream.recv().await {
+        let chunk = res
+            .map_err(StreamableHttpClientAdapterError::from)
+            .map_err(StreamableHttpError::Client)?;
         body.extend_from_slice(&chunk);
     }
     Ok(body)
@@ -551,9 +560,9 @@ fn sse_stream_from_body(
 ) -> BoxStream<'static, std::result::Result<Sse, sse_stream::Error>> {
     SseStream::from_byte_stream(stream::unfold(body_stream, |mut body_stream| async move {
         match body_stream.recv().await {
-            Ok(Some(bytes)) => Some((Ok(Bytes::from(bytes)), body_stream)),
-            Ok(None) => None,
-            Err(error) => Some((Err(io::Error::other(error)), body_stream)),
+            Some(Ok(bytes)) => Some((Ok(Bytes::from(bytes)), body_stream)),
+            Some(Err(error)) => Some((Err(io::Error::other(error)), body_stream)),
+            None => None,
         }
     }))
     .boxed()

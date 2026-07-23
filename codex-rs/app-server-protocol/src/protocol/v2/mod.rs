@@ -53,5 +53,54 @@ pub use thread::*;
 pub use thread_data::*;
 pub use turn::*;
 
+pub type WindowsSandboxSetupMode = String;
+
+#[derive(serde::Serialize, serde::Deserialize, Debug, Clone, PartialEq, schemars::JsonSchema, ts_rs::TS)]
+pub struct InitializeParams;
+
+#[derive(serde::Serialize, serde::Deserialize, Debug, Clone, PartialEq, schemars::JsonSchema, ts_rs::TS)]
+pub struct InitializeResponse;
+
+#[derive(serde::Serialize, serde::Deserialize, Debug, Clone, PartialEq, schemars::JsonSchema, ts_rs::TS)]
+pub struct GetConversationSummaryParams;
+
+#[derive(serde::Serialize, serde::Deserialize, Debug, Clone, PartialEq, schemars::JsonSchema, ts_rs::TS)]
+pub struct GetConversationSummaryResponse;
+
+#[derive(serde::Serialize, serde::Deserialize, Debug, Clone, PartialEq, schemars::JsonSchema, ts_rs::TS)]
+pub struct GitDiffToRemoteParams;
+
+#[derive(serde::Serialize, serde::Deserialize, Debug, Clone, PartialEq, schemars::JsonSchema, ts_rs::TS)]
+pub struct GitDiffToRemoteResponse;
+
+#[derive(serde::Serialize, serde::Deserialize, Debug, Clone, PartialEq, schemars::JsonSchema, ts_rs::TS)]
+pub struct GetAuthStatusParams;
+
+#[derive(serde::Serialize, serde::Deserialize, Debug, Clone, PartialEq, schemars::JsonSchema, ts_rs::TS)]
+pub struct GetAuthStatusResponse;
+
+#[derive(serde::Serialize, serde::Deserialize, Debug, Clone, PartialEq, schemars::JsonSchema, ts_rs::TS)]
+pub struct InterruptConversationResponse;
+
+#[derive(serde::Serialize, serde::Deserialize, Debug, Clone, PartialEq, schemars::JsonSchema, ts_rs::TS)]
+pub struct ApplyPatchApprovalParams;
+
+#[derive(serde::Serialize, serde::Deserialize, Debug, Clone, PartialEq, schemars::JsonSchema, ts_rs::TS)]
+pub struct ApplyPatchApprovalResponse;
+
+#[derive(serde::Serialize, serde::Deserialize, Debug, Clone, PartialEq, schemars::JsonSchema, ts_rs::TS)]
+pub struct ExecCommandApprovalParams;
+
+#[derive(serde::Serialize, serde::Deserialize, Debug, Clone, PartialEq, schemars::JsonSchema, ts_rs::TS)]
+pub struct ExecCommandApprovalResponse;
+
+#[derive(serde::Serialize, serde::Deserialize, Debug, Clone, PartialEq, schemars::JsonSchema, ts_rs::TS)]
+pub struct ExecOneOffCommandParams {
+    pub command: Vec<String>,
+    pub timeout_ms: Option<u64>,
+    pub cwd: Option<std::path::PathBuf>,
+    pub sandbox_policy: Option<permissions::SandboxPolicy>,
+}
+
 #[cfg(test)]
 mod tests;

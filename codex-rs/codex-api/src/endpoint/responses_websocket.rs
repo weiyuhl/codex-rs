@@ -9,9 +9,9 @@ pub async fn responses_websocket(
     _provider: &Provider,
     _auth_provider: &SharedAuthProvider,
     _http_client_factory: &HttpClientFactory,
-    _request: ResponsesWsRequest,
+    _request: ResponsesWsRequest<'_>,
 ) -> Result<ResponseStream, ApiError> {
-    Err(ApiError::Transport(codex_client::TransportError::Tonic(
+    Err(ApiError::Transport(codex_http_client::TransportError::Network(
         "websocket stream is disabled in embedded agent".to_string(),
     )))
 }

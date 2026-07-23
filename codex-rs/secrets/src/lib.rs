@@ -9,6 +9,12 @@ use codex_git_utils::get_git_repo_root;
 #[derive(Debug, Clone, Default)]
 pub struct CredentialStoreError(pub String);
 
+impl CredentialStoreError {
+    pub fn message(&self) -> String {
+        self.0.clone()
+    }
+}
+
 impl fmt::Display for CredentialStoreError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", self.0)

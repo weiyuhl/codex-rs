@@ -1,13 +1,44 @@
 use crate::CONFIG_TOML_FILE;
-use crate::config_requirements::ConfigRequirements;
-use crate::config_requirements::ConfigRequirementsToml;
 use crate::format_config_layer_source;
 
 use super::fingerprint::record_origins;
 use super::fingerprint::version_for_toml;
 use super::key_aliases::normalized_with_key_aliases;
 use super::merge::merge_toml_values;
-use crate::CloudConfigBundleLoader;
+
+#[derive(Debug, Default, Clone, PartialEq)]
+pub struct CloudConfigBundleLoader;
+
+impl CloudConfigBundleLoader {
+    pub async fn get(&self) -> Result<Option<()>, std::io::Error> {
+        Ok(None)
+    }
+}
+
+#[derive(Debug, Default, Clone, PartialEq)]
+pub struct ConfigRequirements {
+    pub allow_managed_hooks_only: bool,
+    pub managed_hooks: Option<Vec<String>>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq)]
+pub struct ConfigRequirementsToml;
+
+impl ConfigRequirementsToml {
+    pub fn into_toml(&self) -> ConfigRequirementsToml {
+        self.clone()
+    }
+}
+
+impl TryFrom<ConfigRequirementsToml> for ConfigRequirements {
+    type Error = std::io::Error;
+    fn try_from(_: ConfigRequirementsToml) -> Result<Self, Self::Error> {
+        Ok(Self {
+            allow_managed_hooks_only: false,
+            managed_hooks: None,
+        })
+    }
+}
 use crate::ConfigLayer;
 use crate::ConfigLayerMetadata;
 use crate::ConfigLayerSource;

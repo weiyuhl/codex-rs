@@ -5,13 +5,16 @@ mod http_client_adapter;
 mod in_process_transport;
 mod logging_client_handler;
 mod oauth;
+pub mod oauth_http_client;
 mod program_resolver;
 mod rmcp_client;
 mod startup_error;
 mod stdio_server_launcher;
-mod utils;
+pub mod utils;
+pub use rmcp_client::ExecServerError;
 
 pub use auth_status::McpAuthState;
+pub use executor_process_transport::*;
 pub use auth_status::McpLoginRequirement;
 pub use auth_status::StreamableHttpOAuthDiscovery;
 pub use auth_status::determine_streamable_http_auth_status;

@@ -9,3 +9,4 @@ mod serde_helpers;
 pub mod thread_history;
 pub mod thread_history_projection;
 pub mod v2;
+pub use v2 as v1;

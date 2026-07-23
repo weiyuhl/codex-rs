@@ -24,7 +24,6 @@ codex-model-provider = { workspace = true }
 codex-otel = { workspace = true }
 codex-protocol = { workspace = true }
 codex-rollout = { workspace = true }
-codex-rollout-trace = { workspace = true }
 codex-secrets = { workspace = true }
 codex-state = { workspace = true }
 codex-utils-absolute-path = { workspace = true }
@@ -38,8 +37,6 @@ tracing = { workspace = true, features = ["log"] }
 uuid = { workspace = true, features = ["v4", "v5"] }
 
 [dev-dependencies]
-codex-model-provider-info = { workspace = true }
-codex-models-manager = { workspace = true }
 core_test_support = { workspace = true }
 pretty_assertions = { workspace = true }
 tempfile = { workspace = true }

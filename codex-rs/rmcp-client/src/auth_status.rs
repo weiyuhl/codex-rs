@@ -15,6 +15,7 @@ use tracing::debug;
 use crate::oauth::StoredOAuthTokenStatus;
 use crate::oauth::oauth_token_status;
 use crate::oauth_http_client::OAuthHttpClientAdapter;
+use crate::executor_process_transport::*;
 use crate::utils::apply_default_headers;
 use crate::utils::build_default_headers;
 use codex_config::types::AuthKeyringBackendKind;
@@ -169,10 +170,10 @@ fn auth_status_before_discovery(
     }
 
     match oauth_token_status(server_name, url, store_mode, keyring_backend_kind)? {
-        StoredOAuthTokenStatus::Usable => {
+        StoredOAuthTokenStatus::Usable | StoredOAuthTokenStatus::Valid => {
             return Ok(AuthStatusCheck::Complete(McpAuthState::OAuth));
         }
-        StoredOAuthTokenStatus::AuthorizationRequired => {
+        StoredOAuthTokenStatus::AuthorizationRequired | StoredOAuthTokenStatus::Expired => {
             return Ok(AuthStatusCheck::Complete(McpAuthState::LoggedOut(
                 McpLoginRequirement::Reauthentication,
             )));

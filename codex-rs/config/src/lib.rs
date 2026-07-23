@@ -24,9 +24,11 @@ mod state;
 mod strict_config;
 mod thread_config;
 pub mod types;
+pub use types::ResidencyRequirement;
 
 pub const CONFIG_TOML_FILE: &str = "config.toml";
 
+pub use constraint::RequirementSource;
 pub use codex_protocol::config_types::ProfileV2Name;
 pub use codex_protocol::config_types::ProfileV2NameParseError;
 pub use codex_utils_absolute_path::AbsolutePathBuf;
@@ -99,7 +101,6 @@ pub use state::ConfigLoadOptions;
 pub use state::LoaderOverrides;
 pub use strict_config::config_error_from_ignored_toml_fields;
 pub use thread_config::NoopThreadConfigLoader;
-pub use thread_config::RemoteThreadConfigLoader;
 pub use thread_config::SessionThreadConfig;
 pub use thread_config::StaticThreadConfigLoader;
 pub use thread_config::ThreadConfigContext;

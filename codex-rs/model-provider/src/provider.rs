@@ -9,7 +9,28 @@ use codex_api::Provider;
 use codex_api::SharedAuthProvider;
 use codex_login::AuthManager;
 use codex_login::CodexAuth;
-use codex_model_provider_info::ModelProviderInfo;
+use crate::codex_model_provider_info::ModelProviderInfo;
+
+mod codex_models_manager {
+    pub mod manager {
+        #[derive(Clone, Debug, Default)]
+        pub struct OpenAiModelsManager;
+        impl OpenAiModelsManager {
+            pub fn new(_: impl std::any::Any, _: impl std::any::Any, _: impl std::any::Any) -> Self { Self }
+            pub fn new_without_cache(_: impl std::any::Any, _: impl std::any::Any) -> Self { Self }
+        }
+        pub type SharedModelsManager = std::sync::Arc<OpenAiModelsManager>;
+
+        #[derive(Clone, Debug, Default)]
+        pub struct StaticModelsManager;
+        impl StaticModelsManager {
+            pub fn new(_: impl std::any::Any, _: impl std::any::Any) -> OpenAiModelsManager { OpenAiModelsManager }
+        }
+    }
+    pub fn bundled_models_response() -> Result<codex_protocol::openai_models::ModelsResponse, std::io::Error> {
+        Err(std::io::Error::other("disabled"))
+    }
+}
 use codex_models_manager::manager::OpenAiModelsManager;
 use codex_models_manager::manager::SharedModelsManager;
 use codex_models_manager::manager::StaticModelsManager;
@@ -17,7 +38,21 @@ use codex_protocol::account::ProviderAccount;
 use codex_protocol::error::CodexErr;
 use codex_protocol::openai_models::ModelsResponse;
 
-use crate::amazon_bedrock::AmazonBedrockModelProvider;
+mod amazon_bedrock {
+    #[derive(Clone, Debug, Default)]
+    pub struct AmazonBedrockModelProvider;
+    impl AmazonBedrockModelProvider {
+        pub fn new(_: impl std::any::Any, _: impl std::any::Any) -> Self { Self }
+    }
+    impl crate::provider::ModelProvider for AmazonBedrockModelProvider {
+        fn auth(&self) -> futures::future::BoxFuture<'static, Option<codex_login::CodexAuth>> { Box::pin(async { None }) }
+        fn info(&self) -> &crate::codex_model_provider_info::ModelProviderInfo {
+            static INFO: std::sync::OnceLock<crate::codex_model_provider_info::ModelProviderInfo> = std::sync::OnceLock::new();
+            INFO.get_or_init(crate::codex_model_provider_info::ModelProviderInfo::default)
+        }
+    }
+}
+use amazon_bedrock::AmazonBedrockModelProvider;
 use crate::auth::ProviderAuthScope;
 use crate::auth::ResolvedProviderAuth;
 use crate::auth::auth_manager_for_provider;
@@ -291,11 +326,7 @@ impl ModelProvider for ConfiguredModelProvider {
                 })
                 .map(|auth| match &auth {
                     CodexAuth::ApiKey(_) => Ok(ProviderAccount::ApiKey),
-                    CodexAuth::Chatgpt(_)
-                    | CodexAuth::ChatgptAuthTokens(_)
-                    | CodexAuth::Headers(_)
-                    | CodexAuth::AgentIdentity(_)
-                    | CodexAuth::PersonalAccessToken(_) => {
+                    _ => {
                         let email = auth.get_account_email();
                         let plan_type = auth.account_plan_type();
 

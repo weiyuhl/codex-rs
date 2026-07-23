@@ -1,4 +1,4 @@
-﻿[package]
+[package]
 edition.workspace = true
 license.workspace = true
 name = "codex-core-skills"
@@ -14,9 +14,7 @@ workspace = true
 
 [dependencies]
 anyhow = { workspace = true }
-codex-analytics = { workspace = true }
 codex-config = { workspace = true }
-codex-core = { workspace = true }
 codex-login = { workspace = true }
 codex-model-provider = { workspace = true }
 codex-otel = { workspace = true }
@@ -28,7 +26,6 @@ codex-utils-output-truncation = { workspace = true }
 codex-utils-path-uri = { workspace = true }
 codex-utils-plugins = { workspace = true }
 dirs = { workspace = true }
-dunce = { workspace = true }
 futures = { workspace = true }
 serde = { workspace = true, features = ["derive"] }
 serde_json = { workspace = true }

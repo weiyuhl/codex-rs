@@ -15,7 +15,6 @@ workspace = true
 [dependencies]
 chardetng = { workspace = true }
 chrono = { workspace = true, features = ["serde"] }
-codex-execpolicy = { workspace = true }
 codex-extension-items = { workspace = true }
 codex-utils-absolute-path = { workspace = true }
 codex-utils-image = { workspace = true }

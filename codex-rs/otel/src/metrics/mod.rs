@@ -4,8 +4,6 @@ mod error;
 pub(crate) mod names;
 pub(crate) mod runtime_metrics;
 pub(crate) mod tags;
-pub(crate) mod timer;
-pub(crate) mod validation;
 
 use crate::config::StatsigMetricsSettings;
 pub use crate::metrics::client::MetricsClient;

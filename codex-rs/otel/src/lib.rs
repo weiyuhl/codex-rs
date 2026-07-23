@@ -5,7 +5,6 @@ pub(crate) mod provider;
 pub(crate) mod trace_context;
 
 mod otlp;
-mod targets;
 
 use crate::metrics::Result as MetricsResult;
 use codex_protocol::auth::AuthMode;
@@ -23,7 +22,6 @@ pub use crate::events::session_telemetry::SessionTelemetry;
 pub use crate::events::session_telemetry::SessionTelemetryMetadata;
 pub use crate::metrics::runtime_metrics::RuntimeMetricTotals;
 pub use crate::metrics::runtime_metrics::RuntimeMetricsSummary;
-pub use crate::metrics::timer::Timer;
 pub use crate::metrics::*;
 pub use crate::provider::OtelProvider;
 pub use crate::trace_context::context_from_w3c_trace_context;

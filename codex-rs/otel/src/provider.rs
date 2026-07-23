@@ -4,8 +4,6 @@ use crate::config::OtelSettings;
 use crate::config::StatsigMetricsSettings;
 use crate::metrics::MetricsClient;
 use crate::metrics::MetricsConfig;
-use crate::targets::is_log_export_target;
-use crate::targets::is_trace_safe_target;
 use gethostname::gethostname;
 use opentelemetry::Context;
 use opentelemetry::KeyValue;
@@ -181,12 +179,12 @@ impl OtelProvider {
         Self::log_export_filter(meta)
     }
 
-    pub fn log_export_filter(meta: &tracing::Metadata<'_>) -> bool {
-        is_log_export_target(meta.target())
+    pub fn log_export_filter(_meta: &tracing::Metadata<'_>) -> bool {
+        true
     }
 
     pub fn trace_export_filter(meta: &tracing::Metadata<'_>) -> bool {
-        meta.is_span() || is_trace_safe_target(meta.target())
+        meta.is_span()
     }
 
     pub fn metrics(&self) -> Option<&MetricsClient> {

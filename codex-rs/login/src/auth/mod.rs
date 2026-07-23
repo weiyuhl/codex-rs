@@ -3,11 +3,9 @@ mod agent_identity;
 mod auth_headers;
 pub mod default_client;
 pub mod error;
-mod personal_access_token;
 mod storage;
 mod util;
 
-mod external_bearer;
 mod manager;
 
 pub use auth_headers::AuthHeaders;

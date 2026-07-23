@@ -1,4 +1,3 @@
-mod client;
 mod config;
 mod error;
 pub(crate) mod names;
@@ -6,7 +5,6 @@ pub(crate) mod runtime_metrics;
 pub(crate) mod tags;
 
 use crate::config::StatsigMetricsSettings;
-pub use crate::metrics::client::MetricsClient;
 pub use crate::metrics::config::MetricsConfig;
 pub use crate::metrics::config::MetricsExporter;
 pub use crate::metrics::error::MetricsError;

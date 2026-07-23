@@ -4,8 +4,6 @@ pub(crate) mod metrics;
 pub(crate) mod provider;
 pub(crate) mod trace_context;
 
-mod otlp;
-
 use crate::metrics::Result as MetricsResult;
 use codex_protocol::auth::AuthMode;
 use serde::Serialize;

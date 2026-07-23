@@ -1,4 +1,3 @@
-pub(crate) mod config;
 mod events;
 pub(crate) mod metrics;
 pub(crate) mod provider;
@@ -7,13 +6,6 @@ use crate::metrics::Result as MetricsResult;
 use codex_protocol::auth::AuthMode;
 use serde::Serialize;
 use strum_macros::Display;
-
-pub use crate::config::OtelExporter;
-pub use crate::config::OtelHttpProtocol;
-pub use crate::config::OtelSettings;
-pub use crate::config::OtelTlsConfig;
-pub use crate::config::StatsigMetricsSettings;
-pub use crate::config::validate_span_attributes;
 pub use crate::metrics::runtime_metrics::RuntimeMetricTotals;
 pub use crate::metrics::runtime_metrics::RuntimeMetricsSummary;
 pub use crate::metrics::*;

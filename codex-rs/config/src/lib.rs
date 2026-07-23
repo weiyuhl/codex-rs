@@ -22,7 +22,6 @@ mod shell_environment_policy;
 mod skills_config;
 mod state;
 mod strict_config;
-pub mod test_support;
 mod thread_config;
 mod tui_keymap;
 pub mod types;

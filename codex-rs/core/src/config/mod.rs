@@ -146,7 +146,6 @@ pub(crate) mod agent_roles;
 pub mod edit;
 mod managed_features;
 mod network_proxy_spec;
-mod otel;
 mod permission_profile_catalog;
 mod permissions;
 mod requirements;

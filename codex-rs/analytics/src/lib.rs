@@ -1,4 +1,3 @@
-mod accepted_lines;
 #[cfg(debug_assertions)]
 mod analytics_capture;
 mod client;
@@ -9,8 +8,6 @@ mod reducer;
 use std::time::SystemTime;
 use std::time::UNIX_EPOCH;
 
-pub use accepted_lines::accepted_line_fingerprints_from_unified_diff;
-pub use accepted_lines::fingerprint_hash;
 pub use client::AnalyticsEventsClient;
 pub use events::AppServerRpcTransport;
 pub use events::GuardianApprovalRequestSource;

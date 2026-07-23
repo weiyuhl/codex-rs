@@ -96,8 +96,3 @@ pub fn default_user_shell() -> Shell {
 fn default_user_shell_from_path(user_shell_path: Option<PathBuf>) -> Shell {
     codex_shell_command::shell_detect::default_user_shell_from_path(user_shell_path).into()
 }
-
-#[cfg(test)]
-#[cfg(unix)]
-#[path = "shell_tests.rs"]
-mod tests;

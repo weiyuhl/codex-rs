@@ -92,7 +92,6 @@ mod safety_buffering;
 mod safety_check_downgrade;
 mod search_tool;
 mod shell_command;
-mod shell_serialization;
 mod skill_approval;
 mod skills;
 mod skills_extension;

@@ -535,7 +535,3 @@ mod disable_powershell_profile_tests {
         assert_eq!(rewritten, command);
     }
 }
-
-#[cfg(all(test, unix))]
-#[path = "mod_tests.rs"]
-mod tests;

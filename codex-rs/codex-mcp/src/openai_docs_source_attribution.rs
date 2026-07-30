@@ -1,5 +1,9 @@
 use std::sync::Arc;
-
+use codex_rmcp_client::ExecServerError;
+use codex_rmcp_client::HttpClient;
+use codex_rmcp_client::HttpRequestParams;
+use codex_rmcp_client::HttpResponse as HttpRequestResponse;
+use codex_rmcp_client::HttpResponseBodyStream;
 use futures::future::BoxFuture;
 
 const OPENAI_DEVELOPER_DOCS_MCP_URL: &str = "https://developers.openai.com/mcp";
@@ -16,6 +20,7 @@ pub(crate) fn maybe_with_openai_docs_source_attribution(
     }
 }
 
+#[derive(Debug)]
 struct OpenAiDocsHttpClient {
     http_client: Arc<dyn HttpClient>,
 }
@@ -32,7 +37,7 @@ impl HttpClient for OpenAiDocsHttpClient {
     fn http_request(
         &self,
         mut params: HttpRequestParams,
-    ) -> BoxFuture<'_, Result<HttpRequestResponse, ExecServerError>> {
+    ) -> BoxFuture<'static, Result<HttpRequestResponse, std::io::Error>> {
         self.attribute_mcp_request(&mut params);
         self.http_client.http_request(params)
     }
@@ -40,7 +45,7 @@ impl HttpClient for OpenAiDocsHttpClient {
     fn http_request_stream(
         &self,
         mut params: HttpRequestParams,
-    ) -> BoxFuture<'_, Result<(HttpRequestResponse, HttpResponseBodyStream), ExecServerError>> {
+    ) -> BoxFuture<'static, Result<(HttpRequestResponse, HttpResponseBodyStream), std::io::Error>> {
         self.attribute_mcp_request(&mut params);
         self.http_client.http_request_stream(params)
     }

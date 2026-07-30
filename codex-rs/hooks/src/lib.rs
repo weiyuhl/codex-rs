@@ -1,5 +1,5 @@
 mod config_rules;
-mod declarations;
+pub mod declarations;
 mod engine;
 pub(crate) mod events;
 mod output_spill;

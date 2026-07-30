@@ -19,6 +19,19 @@ impl CloudConfigBundleLoader {
 pub struct ConfigRequirements {
     pub allow_managed_hooks_only: bool,
     pub managed_hooks: Option<Vec<String>>,
+    pub marketplaces: Option<MarketplacesRequirement>,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct MarketplacesRequirement {
+    pub value: MarketplaceRequirementsToml,
+    pub source: crate::RequirementSource,
+}
+
+#[derive(Debug, Default, Clone, PartialEq)]
+pub struct MarketplaceRequirementsToml {
+    pub restrict_to_allowed_sources: Option<bool>,
+    pub allowed_sources: std::collections::HashMap<String, crate::MarketplaceAllowedSourceToml>,
 }
 
 #[derive(Debug, Default, Clone, PartialEq)]
@@ -36,6 +49,7 @@ impl TryFrom<ConfigRequirementsToml> for ConfigRequirements {
         Ok(Self {
             allow_managed_hooks_only: false,
             managed_hooks: None,
+            marketplaces: None,
         })
     }
 }

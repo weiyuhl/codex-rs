@@ -1,3 +1,4 @@
+use codex_file_system::ExecutorFileSystem;
 use codex_utils_path_uri::PathUri;
 use codex_utils_plugins::plugin_namespace_for_root_uri;
 use futures::StreamExt;

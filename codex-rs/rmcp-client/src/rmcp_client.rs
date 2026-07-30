@@ -811,13 +811,13 @@ impl RmcpClient {
                         // Rebuilds reread the source selected during first construction. Only the
                         // initial construction below evaluates configured store policy.
                         store
-                            .load(&DefaultKeyringStore, server_name, url).await?
+                            .load(&DefaultKeyringStore, server_name.to_string(), url.to_string()).await?
                             .map(|tokens| ResolvedOAuthTokens { tokens, store })
                     } else {
                         match resolve_oauth_tokens_from_store_policy(
                             &DefaultKeyringStore,
-                            server_name,
-                            url,
+                            server_name.to_string(),
+                            url.to_string(),
                             *store_mode,
                             *keyring_backend_kind,
                         ).await {

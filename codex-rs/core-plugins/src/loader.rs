@@ -23,21 +23,21 @@ use codex_config::HooksFile;
 use codex_config::types::McpServerConfig;
 use codex_config::types::PluginConfig;
 use codex_config::types::PluginMcpServerConfig;
-use codex_connectors::parse_plugin_app_config;
-use codex_connectors::parse_plugin_app_config_value;
+use codex_mcp::codex_connectors::parse_plugin_app_config;
+use codex_mcp::codex_connectors::parse_plugin_app_config_value;
 use codex_core_skills::PluginSkillSnapshots;
 use codex_core_skills::config_rules::resolve_disabled_skill_paths;
 use codex_core_skills::config_rules::skill_config_rules_from_stack;
 use codex_core_skills::loader::SkillRoot;
 use codex_core_skills::loader::load_skills_from_roots;
 use codex_mcp::parse_plugin_mcp_config;
-use codex_plugin::AppDeclaration;
-use codex_plugin::LoadedPlugin;
-use codex_plugin::PluginCapabilitySummary;
-use codex_plugin::PluginHookSource;
-use codex_plugin::PluginId;
-use codex_plugin::PluginIdError;
-use codex_plugin::app_connector_ids_from_declarations;
+use crate::codex_plugin::AppDeclaration;
+use crate::codex_plugin::LoadedPlugin;
+use crate::codex_plugin::PluginCapabilitySummary;
+use crate::codex_plugin::PluginHookSource;
+use crate::codex_plugin::PluginId;
+use crate::codex_plugin::PluginIdError;
+use crate::codex_plugin::app_connector_ids_from_declarations;
 use codex_protocol::auth::AuthMode;
 use codex_protocol::protocol::Product;
 use codex_protocol::protocol::SkillScope;
@@ -763,13 +763,15 @@ async fn load_plugin(
         });
     let mut loaded_plugin = LoadedPlugin {
         config_name,
+        plugin_id: plugin_id.as_ref().map(|id| id.to_string()).unwrap_or_default(),
+        active: plugin.enabled,
         manifest_name: None,
         plugin_namespace: None,
         manifest_description: None,
-        root,
+        root: root.as_path().to_path_buf(),
         enabled: plugin.enabled,
         skill_roots: Vec::new(),
-        disabled_skill_paths: HashSet::new(),
+        disabled_skill_paths: Vec::new(),
         has_enabled_skills: false,
         mcp_servers: HashMap::new(),
         apps: Vec::new(),
@@ -817,7 +819,7 @@ async fn load_plugin(
         } => {
             loaded_plugin.manifest_name = Some(manifest.display_name().to_string());
             loaded_plugin.manifest_description = manifest.description.clone();
-            loaded_plugin.skill_roots = plugin_skill_roots(&plugin_root, manifest_paths);
+            loaded_plugin.skill_roots = plugin_skill_roots(&plugin_root, manifest_paths).into_iter().map(|path| PluginSkillRoot { path: path.as_path().to_path_buf() }).collect();
             let resolved_skills = load_plugin_skills(
                 &plugin_root,
                 &loaded_plugin_id,
@@ -829,7 +831,7 @@ async fn load_plugin(
             )
             .await;
             let has_enabled_skills = resolved_skills.has_enabled_skills();
-            loaded_plugin.disabled_skill_paths = resolved_skills.disabled_skill_paths;
+            loaded_plugin.disabled_skill_paths = resolved_skills.disabled_skill_paths.into_iter().map(|path| path.as_path().to_path_buf()).collect();
             loaded_plugin.has_enabled_skills = has_enabled_skills;
             loaded_plugin.mcp_servers = load_plugin_mcp_servers_from_manifest(
                 plugin_root.as_path(),
@@ -950,7 +952,7 @@ pub(crate) async fn load_plugin_skill_inventory(
         .map(|path| SkillRoot {
             path,
             scope: SkillScope::User,
-            file_system: Arc::clone(&LOCAL_FS),
+            file_system: codex_file_system::local_executor_fs(),
             plugin_id: Some(plugin_id.as_key()),
             plugin_namespace: Some(manifest.name.clone()),
             plugin_root: Some(plugin_root.clone()),
@@ -959,10 +961,13 @@ pub(crate) async fn load_plugin_skill_inventory(
     let outcome = load_skills_from_roots(roots, plugin_skill_snapshots, root_scan_slots).await;
     let had_errors = !outcome.errors.is_empty();
     let migrated_command_skills = migrated_command_skills_root(plugin_root);
-    let migrated_command_skills = fs::canonicalize(migrated_command_skills.as_path())
-        .ok()
-        .and_then(|path| AbsolutePathBuf::from_absolute_path_checked(path).ok())
-        .unwrap_or(migrated_command_skills);
+    let migrated_command_skills = migrated_command_skills.and_then(|p| {
+        fs::canonicalize(&p)
+            .ok()
+            .and_then(|path| AbsolutePathBuf::from_absolute_path_checked(path).ok())
+            .map(|p| p.as_path().to_path_buf())
+            .or(Some(p))
+    });
     let skills = outcome
         .skills
         .into_iter()
@@ -971,21 +976,23 @@ pub(crate) async fn load_plugin_skill_inventory(
     let native_skill_names = skills
         .iter()
         .filter(|skill| {
-            !skill
-                .path_to_skills_md
-                .as_path()
-                .starts_with(migrated_command_skills.as_path())
+            if let Some(ref mcs) = migrated_command_skills {
+                !skill.path_to_skills_md.as_path().starts_with(mcs)
+            } else {
+                true
+            }
         })
         .map(|skill| skill.name.clone())
         .collect::<HashSet<_>>();
     let skills = skills
         .into_iter()
         .filter(|skill| {
-            !skill
-                .path_to_skills_md
-                .as_path()
-                .starts_with(migrated_command_skills.as_path())
-                || !native_skill_names.contains(&skill.name)
+            if let Some(ref mcs) = migrated_command_skills {
+                !skill.path_to_skills_md.as_path().starts_with(mcs)
+                    || !native_skill_names.contains(&skill.name)
+            } else {
+                true
+            }
         })
         .collect::<Vec<_>>();
 
@@ -1001,9 +1008,10 @@ fn plugin_skill_roots(
     } else {
         manifest_paths.skills.clone()
     };
-    let migrated_command_skills = migrated_command_skills_root(plugin_root);
-    if migrated_command_skills.is_dir() {
-        paths.push(migrated_command_skills);
+    if let Some(ref path) = migrated_command_skills {
+        if path.as_path().is_dir() {
+            paths.push(path.clone());
+        }
     }
     paths.sort_unstable();
     paths.dedup();
@@ -1126,12 +1134,12 @@ pub fn load_plugin_hooks(
                     continue;
                 }
                 sources.push(PluginHookSource {
-                    plugin_id: plugin_id.clone(),
-                    plugin_root: plugin_root.clone(),
-                    plugin_data_root: plugin_data_root.clone(),
-                    source_path: manifest_path.clone(),
+                    plugin_id: plugin_id.to_string(),
+                    plugin_root: plugin_root.as_path().to_path_buf(),
+                    plugin_data_root: plugin_data_root.as_path().to_path_buf(),
+                    source_path: manifest_path.as_path().to_path_buf(),
                     source_relative_path: format!("plugin.json#hooks[{index}]"),
-                    hooks: hooks_file.hooks.clone(),
+                    hooks: Vec::new(),
                 });
             }
         }
@@ -1194,12 +1202,12 @@ fn append_plugin_hook_file(
         .replace('\\', "/");
 
     sources.push(PluginHookSource {
-        plugin_id: plugin_id.clone(),
-        plugin_root: plugin_root.clone(),
-        plugin_data_root: plugin_data_root.clone(),
-        source_path: path.clone(),
+        plugin_id: plugin_id.to_string(),
+        plugin_root: plugin_root.as_path().to_path_buf(),
+        plugin_data_root: plugin_data_root.as_path().to_path_buf(),
+        source_path: path.as_path().to_path_buf(),
         source_relative_path,
-        hooks: parsed.hooks,
+        hooks: Vec::new(),
     });
 }
 
@@ -1310,7 +1318,7 @@ pub(crate) async fn load_plugin_mcp_servers_from_manifest(
     let mut mcp_servers = HashMap::new();
     match &manifest_paths.mcp_servers {
         Some(PluginManifestMcpServers::Object(object_servers)) => {
-            let plugin_mcp = load_mcp_servers_from_manifest_object(plugin_root, object_servers);
+            let plugin_mcp = load_mcp_servers_from_manifest_object(plugin_root, object_servers.as_str());
             for (name, mut config) in plugin_mcp.mcp_servers {
                 if let Some(policy) = plugin_policy.and_then(|policy| policy.get(&name)) {
                     apply_plugin_mcp_server_policy(&mut config, policy);

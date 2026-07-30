@@ -19,11 +19,24 @@ use codex_login::CodexAuth;
 use codex_login::collect_auth_env_telemetry;
 use codex_login::default_client::build_default_reqwest_client_for_route_async;
 use crate::codex_model_provider_info::ModelProviderInfo;
+use futures::future::BoxFuture;
 
 mod codex_models_manager {
     pub mod manager {
-        pub trait ModelsEndpointClient {}
-        pub type ModelsEndpointFuture<'a, T> = futures::future::BoxFuture<'a, T>;
+        use futures::future::BoxFuture;
+
+        pub trait ModelsEndpointClient {
+            fn has_command_auth(&self) -> bool { false }
+            fn uses_codex_backend(&self) -> BoxFuture<'_, bool> { Box::pin(async { false }) }
+            fn list_models<'a>(
+                &'a self,
+                _client_version: &'a str,
+                _http_client_factory: codex_http_client::HttpClientFactory,
+            ) -> BoxFuture<'a, codex_protocol::error::Result<(Vec<codex_protocol::openai_models::ModelInfo>, Option<String>)>> {
+                Box::pin(async { Err(codex_protocol::error::CodexErr::Fatal("disabled".to_string())) })
+            }
+        }
+        pub type ModelsEndpointFuture<'a, T> = BoxFuture<'a, T>;
     }
 }
 use codex_models_manager::manager::ModelsEndpointClient;

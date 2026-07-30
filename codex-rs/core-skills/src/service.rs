@@ -6,6 +6,7 @@ use std::sync::RwLock;
 use codex_config::ConfigLayerStack;
 use codex_protocol::protocol::Product;
 use codex_protocol::protocol::SkillScope;
+use codex_file_system::ExecutorFileSystem;
 use codex_utils_absolute_path::AbsolutePathBuf;
 use codex_utils_plugins::PluginSkillRoot;
 use tokio::sync::Semaphore;

@@ -1,4 +1,4 @@
-use codex_plugin::AppDeclaration;
+use crate::codex_plugin::AppDeclaration;
 use codex_protocol::auth::AuthMode;
 use std::collections::HashMap;
 use std::collections::HashSet;

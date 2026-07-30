@@ -15,7 +15,11 @@ use codex_utils_path_uri::PathUri;
 use serde::Deserialize;
 use serde::Serialize;
 
+use crate::Environment;
+use crate::EnvironmentManager;
+use crate::HttpClient;
 use crate::McpConnectionManager;
+use crate::ReqwestHttpClient;
 
 /// Owns the currently published MCP connection set for one Codex thread.
 ///

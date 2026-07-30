@@ -15,7 +15,7 @@ use crate::store::PLUGINS_CACHE_DIR;
 use crate::store::PluginStore;
 use crate::store::PluginStoreError;
 use codex_login::CodexAuth;
-use codex_plugin::PluginId;
+use crate::codex_plugin::PluginId;
 use std::collections::BTreeMap;
 use std::collections::BTreeSet;
 use std::collections::HashMap;

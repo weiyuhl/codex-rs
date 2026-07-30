@@ -4,7 +4,7 @@ use std::time::Instant;
 use anyhow::Context;
 use anyhow::Result;
 use anyhow::anyhow;
-use codex_connectors::ConnectorRuntimeFetchSource;
+use crate::codex_connectors::ConnectorRuntimeFetchSource;
 use tracing::Instrument;
 use tracing::instrument;
 use tracing::trace;

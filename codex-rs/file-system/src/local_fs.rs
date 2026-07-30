@@ -14,6 +14,9 @@ use std::io;
 pub struct LocalFileSystem;
 
 pub static LOCAL_FS: LocalFileSystem = LocalFileSystem;
+pub fn local_executor_fs() -> std::sync::Arc<dyn ExecutorFileSystem> {
+    std::sync::Arc::new(LocalFileSystem)
+}
 
 impl ExecutorFileSystem for LocalFileSystem {
     fn canonicalize<'a>(

@@ -1,7 +1,9 @@
 use crate::manifest::parse_plugin_manifest_uri;
-use codex_plugin::PluginProvider;
-use codex_plugin::ResolvedPlugin;
-use codex_plugin::ResolvedPluginError;
+use codex_file_system::ExecutorFileSystem;
+use codex_mcp::EnvironmentManager;
+use crate::codex_plugin::PluginProvider;
+use crate::codex_plugin::ResolvedPlugin;
+use crate::codex_plugin::ResolvedPluginError;
 use codex_protocol::capabilities::CapabilityRootLocation;
 use codex_protocol::capabilities::SelectedCapabilityRoot;
 use codex_utils_path_uri::PathUri;
@@ -134,7 +136,7 @@ impl PluginProvider for ExecutorPluginProvider {
     async fn resolve(
         &self,
         selected_root: &SelectedCapabilityRoot,
-    ) -> Result<Option<ResolvedPlugin>, Self::Error> {
+    ) -> Result<Option<ResolvedPlugin>, ExecutorPluginProviderError> {
         self.resolve_bound(selected_root)
             .await
             .map(|plugin| plugin.map(|plugin| plugin.plugin))

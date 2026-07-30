@@ -8,8 +8,11 @@ use codex_config::McpServerTransportConfig;
 use codex_config::types::AuthKeyringBackendKind;
 use codex_config::types::OAuthCredentialsStoreMode;
 use codex_login::CodexAuth;
+use crate::HttpClient;
+#[derive(Clone, Debug, Default, thiserror::Error)]
+#[error("OAuth provider error")]
+pub struct OAuthProviderError;
 use codex_rmcp_client::McpAuthState;
-use codex_rmcp_client::OAuthProviderError;
 use codex_rmcp_client::determine_streamable_http_auth_status;
 use codex_rmcp_client::determine_streamable_http_auth_status_with_http_client;
 use codex_rmcp_client::discover_streamable_http_oauth;

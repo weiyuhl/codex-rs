@@ -99,6 +99,7 @@ fn curated_plugins_sha_path(codex_home: &Path) -> PathBuf {
 pub fn sync_openai_plugins_repo(
     codex_home: &Path,
     http_client_factory: HttpClientFactory,
+) -> Result<String, String> {
     // Under embedded PRoot Linux container, `which::which` resolves binary paths inside the container's RootFS $PATH.
     let git_binary = Some(PathBuf::from("git"));
 

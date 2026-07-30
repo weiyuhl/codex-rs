@@ -12,6 +12,7 @@ use std::sync::atomic::AtomicU64;
 use std::sync::atomic::Ordering;
 use std::time::Duration;
 
+use crate::Environment;
 use codex_config::McpServerConfig;
 use codex_config::McpServerTransportConfig;
 use lru::LruCache;

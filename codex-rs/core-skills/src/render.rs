@@ -292,25 +292,26 @@ fn record_skill_render_side_effects(
     match side_effects {
         SkillRenderSideEffects::None => {}
         SkillRenderSideEffects::ThreadStart { session_telemetry } => {
+            let empty_tags: &[(&str, &str)] = &[];
             session_telemetry.histogram(
                 THREAD_SKILLS_ENABLED_TOTAL_METRIC,
                 i64::try_from(total_count).unwrap_or(i64::MAX),
-                &[],
+                empty_tags,
             );
             session_telemetry.histogram(
                 THREAD_SKILLS_KEPT_TOTAL_METRIC,
                 i64::try_from(included_count).unwrap_or(i64::MAX),
-                &[],
+                empty_tags,
             );
             session_telemetry.histogram(
                 THREAD_SKILLS_TRUNCATED_METRIC,
                 if omitted_count > 0 { 1 } else { 0 },
-                &[],
+                empty_tags,
             );
             session_telemetry.histogram(
                 THREAD_SKILLS_DESCRIPTION_TRUNCATED_CHARS_METRIC,
                 i64::try_from(truncated_description_chars).unwrap_or(i64::MAX),
-                &[],
+                empty_tags,
             );
         }
     }

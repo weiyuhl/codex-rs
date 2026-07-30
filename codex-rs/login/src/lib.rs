@@ -10,8 +10,10 @@ pub struct AuthEnvTelemetry {
     pub refresh_token_url_override_present: bool,
     pub codex_api_key_env_enabled: bool,
     pub provider_env_key_name: Option<String>,
+    pub openai_api_key_env_present: bool,
+    pub codex_api_key_env_present: bool,
 }
-pub fn collect_auth_env_telemetry() -> AuthEnvTelemetry { AuthEnvTelemetry::default() }
+pub fn collect_auth_env_telemetry(_: impl std::fmt::Debug, _: impl std::fmt::Debug) -> AuthEnvTelemetry { AuthEnvTelemetry::default() }
 
 mod outbound_proxy;
 

@@ -58,8 +58,15 @@ use crate::store::PluginInstallResult as StorePluginInstallResult;
 use crate::store::PluginStore;
 use crate::store::PluginStoreError;
 use crate::tool_suggest_metadata::ToolSuggestMetadataCache;
-use codex_analytics::AnalyticsEventsClient;
-use codex_analytics::PluginInstallSource;
+#[derive(Debug, Clone, Default)]
+pub struct AnalyticsEventsClient;
+impl AnalyticsEventsClient {
+    pub fn track_plugin_installed(&self, _: impl std::fmt::Debug, _2: impl std::fmt::Debug, _3: impl std::fmt::Debug) {}
+    pub fn track_plugin_uninstalled(&self, _: impl std::fmt::Debug) {}
+    pub fn track_plugin_install_failed(&self, _: impl std::fmt::Debug, _2: impl std::fmt::Debug, _3: impl std::fmt::Debug, _4: impl std::fmt::Debug) {}
+}
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum PluginInstallSource { Direct, Remote, Manual }
 use codex_config::ConfigLayerStack;
 use codex_config::clear_user_plugin;
 use codex_config::set_user_plugin_enabled;
@@ -73,13 +80,13 @@ use codex_hooks::plugin_hook_declarations;
 use codex_http_client::HttpClientFactory;
 use codex_login::AuthManager;
 use codex_login::CodexAuth;
-use codex_plugin::AppConnectorId;
-use codex_plugin::PluginCapabilitySummary;
-use codex_plugin::PluginId;
-use codex_plugin::PluginIdError;
-use codex_plugin::PluginTelemetryMetadata;
-use codex_plugin::app_connector_ids_from_declarations;
-use codex_plugin::prompt_safe_plugin_description;
+use crate::codex_plugin::AppConnectorId;
+use crate::codex_plugin::PluginCapabilitySummary;
+use crate::codex_plugin::PluginId;
+use crate::codex_plugin::PluginIdError;
+use crate::codex_plugin::PluginTelemetryMetadata;
+use crate::codex_plugin::app_connector_ids_from_declarations;
+use crate::codex_plugin::prompt_safe_plugin_description;
 use codex_protocol::auth::AuthMode;
 use codex_protocol::protocol::HookEventName;
 use codex_protocol::protocol::Product;

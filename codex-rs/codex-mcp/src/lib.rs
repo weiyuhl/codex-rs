@@ -15,6 +15,100 @@ pub use rmcp_client::MCP_SANDBOX_STATE_META_CAPABILITY;
 pub use runtime::McpRuntime;
 pub use runtime::McpRuntimeContext;
 pub use runtime::SandboxState;
+pub mod environment {
+    use std::sync::Arc;
+    use codex_rmcp_client::HttpClient;
+    use super::{ReqwestHttpClient, LocalExecBackend};
+    #[derive(Debug, Clone, Default)]
+    pub struct Environment;
+    impl Environment {
+        pub fn get_http_client(&self) -> Arc<dyn HttpClient> {
+            Arc::new(ReqwestHttpClient)
+        }
+        pub fn get_exec_backend(&self) -> Arc<dyn codex_rmcp_client::ExecBackend> {
+            Arc::new(LocalExecBackend)
+        }
+        pub fn get_filesystem(&self) -> Arc<dyn codex_file_system::ExecutorFileSystem> {
+            codex_file_system::local_executor_fs()
+        }
+    }
+    #[derive(Debug, Clone, Default)]
+    pub struct EnvironmentManager;
+    impl EnvironmentManager {
+        pub fn get_environment(&self, _: &str) -> Option<Arc<Environment>> {
+            None
+        }
+    }
+}
+pub use environment::{Environment, EnvironmentManager};
+
+pub use codex_rmcp_client::HttpClient;
+#[derive(Debug, Clone, Default)]
+pub struct ReqwestHttpClient;
+impl HttpClient for ReqwestHttpClient {}
+pub use codex_rmcp_client::HttpResponse as HttpRequestResponse;
+pub use codex_rmcp_client::HttpResponseBodyStream;
+pub use codex_rmcp_client::HttpRequestParams;
+#[derive(Debug, Clone, Default)]
+pub struct LocalExecBackend;
+impl codex_rmcp_client::ExecBackend for LocalExecBackend {}
+pub use codex_rmcp_client::ExecServerError;
+
+pub mod codex_connectors {
+    #[derive(Clone, Debug, Default)]
+    pub struct ConnectorRuntimeManager<T>(std::marker::PhantomData<T>);
+    impl<T> ConnectorRuntimeManager<T> {
+        pub fn context(&self, _: impl std::fmt::Debug, _: impl std::fmt::Debug) -> ConnectorRuntimeContext<T> { ConnectorRuntimeContext(std::marker::PhantomData) }
+    }
+    #[derive(Clone, Debug, Default)]
+    pub struct ConnectorRuntimeContextKey;
+    pub fn connector_runtime_context_key(_: Option<&codex_login::CodexAuth>) -> ConnectorRuntimeContextKey {
+        ConnectorRuntimeContextKey
+    }
+    #[derive(Clone, Debug, Default)]
+    pub struct ConnectorSnapshot;
+    impl ConnectorSnapshot {
+        pub fn connector_ids(&self) -> Vec<String> { Vec::new() }
+        pub fn plugin_display_names_for_connector_id(&self, _: &str) -> Vec<String> { Vec::new() }
+    }
+    #[derive(Clone, Debug, Default)]
+    pub struct ConnectorRuntimeContext<T = ()>(std::marker::PhantomData<T>);
+    impl<T> ConnectorRuntimeContext<T> {
+        pub fn current_tools(_: &Self) -> Option<Vec<crate::tools::ToolInfo>> { None }
+        pub fn cached_server_info(_: &Self) -> Option<codex_protocol::mcp::McpServerInfo> { None }
+        pub fn has_current_tools(&self) -> bool { false }
+        pub fn begin_fetch(&self, _: ConnectorRuntimeFetchSource) -> Option<()> { None }
+        pub fn publish_if_newest_accepted(&self, _: impl std::fmt::Debug, _: impl std::fmt::Debug, tools: Vec<crate::tools::ToolInfo>) -> Vec<crate::tools::ToolInfo> { tools }
+    }
+    #[derive(Clone, Debug, Default)]
+    pub enum ConnectorRuntimeFetchSource {
+        #[default]
+        Startup,
+        HardRefresh,
+    }
+    pub fn parse_plugin_app_config(_: &std::path::Path) -> Result<serde_json::Value, String> { Ok(serde_json::Value::Null) }
+    pub fn parse_plugin_app_config_value(_: &serde_json::Value) -> Result<serde_json::Value, String> { Ok(serde_json::Value::Null) }
+}
+
+pub mod async_utils {
+    #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+    pub enum CancelErr {
+        Cancelled,
+    }
+    pub trait OrCancelExt<T> {
+        fn or_cancel(self, token: &tokio_util::sync::CancellationToken) -> impl std::future::Future<Output = Result<T, CancelErr>> + Send;
+    }
+    impl<T: Send, F: std::future::Future<Output = T> + Send> OrCancelExt<T> for F {
+        async fn or_cancel(self, token: &tokio_util::sync::CancellationToken) -> Result<T, CancelErr> {
+            tokio::select! {
+                res = self => Ok(res),
+                _ = token.cancelled() => Err(CancelErr::Cancelled),
+            }
+        }
+    }
+}
+pub use async_utils::{CancelErr, OrCancelExt};
+
 pub use tool_catalog_cache::McpToolCatalogCache;
 pub use tools::ToolInfo;
 

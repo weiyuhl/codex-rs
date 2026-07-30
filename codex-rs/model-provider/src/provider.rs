@@ -50,6 +50,11 @@ mod amazon_bedrock {
             static INFO: std::sync::OnceLock<crate::codex_model_provider_info::ModelProviderInfo> = std::sync::OnceLock::new();
             INFO.get_or_init(crate::codex_model_provider_info::ModelProviderInfo::default)
         }
+        fn auth_manager(&self) -> Option<std::sync::Arc<codex_login::AuthManager>> { None }
+        fn account_state(&self) -> crate::provider::ProviderAccountResult { Ok(crate::provider::ProviderAccountState { account: None, requires_openai_auth: false }) }
+        fn models_manager(&self, _: std::path::PathBuf, _: Option<codex_protocol::openai_models::ModelsResponse>) -> crate::provider::SharedModelsManager {
+            std::sync::Arc::new(crate::provider::OpenAiModelsManager)
+        }
     }
 }
 use amazon_bedrock::AmazonBedrockModelProvider;
@@ -193,7 +198,7 @@ pub trait ModelProvider: fmt::Debug + Send + Sync {
     fn runtime_base_url(
         &self,
     ) -> ModelProviderFuture<'_, codex_protocol::error::Result<Option<String>>> {
-        Box::pin(async { Ok(self.info().base_url.clone()) })
+        Box::pin(async { Ok(Some(self.info().base_url.clone())) })
     }
 
     /// Returns the auth provider used to attach request credentials.

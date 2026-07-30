@@ -6,6 +6,12 @@ use thiserror::Error;
 pub enum AgentIdentityAuthError {
     #[error("Agent identity is disabled on Android target")]
     Disabled,
+    #[error("Bootstrap unavailable")]
+    BootstrapUnavailable {
+        operation: String,
+        attempts: u32,
+        message: String,
+    },
 }
 
 impl AgentIdentityAuthError {
@@ -28,6 +34,7 @@ impl AgentIdentityAuth {
     pub fn email(&self) -> Option<&str> { None }
     pub fn chatgpt_user_id(&self) -> &str { "" }
     pub fn plan_type(&self) -> codex_protocol::account::PlanType { codex_protocol::account::PlanType::Free }
+    pub fn run_task_id(&self) -> &str { "" }
     pub fn record(&self) -> &'static AgentIdentityAuthRecord {
         static RECORD: LazyLock<AgentIdentityAuthRecord> = LazyLock::new(AgentIdentityAuthRecord::default);
         &RECORD

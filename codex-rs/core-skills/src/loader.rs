@@ -25,6 +25,8 @@ use codex_config::merge_toml_values;
 use codex_config::project_root_markers_from_config;
 use codex_protocol::protocol::Product;
 use codex_protocol::protocol::SkillScope;
+use codex_file_system::ExecutorFileSystem;
+use codex_file_system::local_executor_fs;
 use codex_utils_absolute_path::AbsolutePathBuf;
 use codex_utils_absolute_path::AbsolutePathBufGuard;
 use codex_utils_path_uri::PathUri;
@@ -278,7 +280,7 @@ async fn skill_roots_with_home_dir(
     roots.extend(plugin_skill_roots.into_iter().map(|root| SkillRoot {
         path: root.path,
         scope: SkillScope::User,
-        file_system: Arc::clone(&LOCAL_FS),
+        file_system: local_executor_fs(),
         plugin_id: Some(root.plugin_id),
         plugin_namespace: Some(root.plugin_namespace),
         plugin_root: Some(root.plugin_root),
@@ -286,7 +288,7 @@ async fn skill_roots_with_home_dir(
     roots.extend(extra_skill_roots.into_iter().map(|path| SkillRoot {
         path,
         scope: SkillScope::User,
-        file_system: Arc::clone(&LOCAL_FS),
+        file_system: local_executor_fs(),
         plugin_id: None,
         plugin_namespace: None,
         plugin_root: None,
@@ -330,7 +332,7 @@ fn skill_roots_from_layer_stack_inner(
                 roots.push(SkillRoot {
                     path: config_folder.join(SKILLS_DIR_NAME),
                     scope: SkillScope::User,
-                    file_system: Arc::clone(&LOCAL_FS),
+                    file_system: local_executor_fs(),
                     plugin_id: None,
                     plugin_namespace: None,
                     plugin_root: None,
@@ -341,7 +343,7 @@ fn skill_roots_from_layer_stack_inner(
                     roots.push(SkillRoot {
                         path: home_dir.join(AGENTS_DIR_NAME).join(SKILLS_DIR_NAME),
                         scope: SkillScope::User,
-                        file_system: Arc::clone(&LOCAL_FS),
+                        file_system: local_executor_fs(),
                         plugin_id: None,
                         plugin_namespace: None,
                         plugin_root: None,
@@ -353,7 +355,7 @@ fn skill_roots_from_layer_stack_inner(
                 roots.push(SkillRoot {
                     path: system_cache_root_dir(&config_folder),
                     scope: SkillScope::System,
-                    file_system: Arc::clone(&LOCAL_FS),
+                    file_system: local_executor_fs(),
                     plugin_id: None,
                     plugin_namespace: None,
                     plugin_root: None,
@@ -365,7 +367,7 @@ fn skill_roots_from_layer_stack_inner(
                 roots.push(SkillRoot {
                     path: config_folder.join(SKILLS_DIR_NAME),
                     scope: SkillScope::Admin,
-                    file_system: Arc::clone(&LOCAL_FS),
+                    file_system: local_executor_fs(),
                     plugin_id: None,
                     plugin_namespace: None,
                     plugin_root: None,

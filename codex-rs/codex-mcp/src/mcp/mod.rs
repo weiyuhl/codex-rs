@@ -26,9 +26,10 @@ use codex_config::McpServerTransportConfig;
 use codex_config::types::AppToolApproval;
 use codex_config::types::AuthKeyringBackendKind;
 use codex_config::types::OAuthCredentialsStoreMode;
-use codex_connectors::ConnectorRuntimeManager;
-use codex_connectors::ConnectorSnapshot;
-use codex_connectors::connector_runtime_context_key;
+use crate::McpToolCatalogCache;
+use crate::codex_connectors::ConnectorRuntimeManager;
+use crate::codex_connectors::ConnectorSnapshot;
+use crate::codex_connectors::connector_runtime_context_key;
 use codex_login::CodexAuth;
 use codex_model_provider::CHATGPT_CODEX_BASE_URL;
 use codex_protocol::mcp::McpServerInfo;
@@ -192,10 +193,10 @@ impl ToolPluginProvenance {
             tool_plugin_provenance
                 .plugin_display_names_by_connector_id
                 .insert(
-                    connector_id.0.clone(),
+                    connector_id.clone(),
                     config
                         .connector_snapshot
-                        .plugin_display_names_for_connector_id(&connector_id.0)
+                        .plugin_display_names_for_connector_id(&connector_id)
                         .to_vec(),
                 );
         }

@@ -37,7 +37,12 @@ impl From<AuthMode> for TelemetryAuthMode {
         }
     }
 }
-
+#[derive(Debug, Clone, Default)]
+pub struct SessionTelemetry;
+impl SessionTelemetry {
+    pub fn counter(&self, _: impl std::fmt::Debug, _: impl std::fmt::Debug, _: impl std::fmt::Debug) {}
+    pub fn histogram(&self, _: impl std::fmt::Debug, _: impl std::fmt::Debug, _: impl std::fmt::Debug) {}
+}
 pub type OtelSettings = ();
 pub type OtelExporter = ();
 pub type OtelHttpProtocol = ();

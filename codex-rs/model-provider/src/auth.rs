@@ -14,10 +14,13 @@ use codex_login::auth::AgentIdentityAuthPolicy;
 use crate::codex_model_provider_info::ModelProviderInfo;
 pub const BEDROCK_API_KEY_UNSUPPORTED_MESSAGE: &str = "Bedrock unsupported";
 
-#[derive(Clone, Debug)]
-pub struct AgentIdentityKey;
+#[derive(Clone, Debug, Default)]
+pub struct AgentIdentityKey<'a> {
+    pub agent_runtime_id: &'a str,
+    pub private_key_pkcs8_base64: &'a str,
+}
 
-pub fn authorization_header_for_agent_task(_: impl std::fmt::Debug) -> Result<String, std::io::Error> {
+pub fn authorization_header_for_agent_task(_: impl std::fmt::Debug, _: impl std::fmt::Debug) -> Result<String, std::io::Error> {
     Ok(String::new())
 }
 use codex_protocol::error::CodexErr;

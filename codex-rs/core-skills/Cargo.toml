@@ -15,6 +15,8 @@ workspace = true
 [dependencies]
 anyhow = { workspace = true }
 codex-config = { workspace = true }
+codex-file-system = { workspace = true }
+codex-home = { workspace = true }
 codex-login = { workspace = true }
 codex-model-provider = { workspace = true }
 codex-otel = { workspace = true }

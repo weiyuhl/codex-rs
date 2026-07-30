@@ -10,6 +10,8 @@ pub use codex_skills::SkillInterface;
 pub use codex_skills::SkillMetadata;
 pub use codex_skills::SkillPolicy;
 pub use codex_skills::SkillToolDependency;
+use codex_file_system::ExecutorFileSystem;
+use codex_file_system::local_executor_fs;
 use codex_utils_absolute_path::AbsolutePathBuf;
 use codex_utils_path_uri::PathUri;
 
@@ -83,7 +85,7 @@ impl HostSkillsSnapshot {
         let fs = self
             .outcome
             .file_system_for_skill(skill)
-            .unwrap_or_else(|| Arc::clone(&LOCAL_FS));
+            .unwrap_or_else(local_executor_fs);
         let path = PathUri::from_abs_path(&skill.path_to_skills_md);
         fs.read_file_text(&path, /*sandbox*/ None).await
     }

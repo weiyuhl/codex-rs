@@ -5,10 +5,38 @@ use std::sync::Arc;
 use crate::SkillLoadOutcome;
 use crate::SkillMetadata;
 use crate::build_skill_name_counts;
-use codex_analytics::AnalyticsEventsClient;
-use codex_analytics::InvocationType;
-use codex_analytics::SkillInvocation;
-use codex_analytics::TrackEventsContext;
+pub mod codex_analytics {
+    #[derive(Clone, Debug, Default)]
+    pub struct AnalyticsEventsClient;
+    impl AnalyticsEventsClient {
+        pub fn track_skill_invocations(&self, _: impl std::fmt::Debug, _: impl std::fmt::Debug) {}
+    }
+    #[derive(Clone, Debug, Default)]
+    pub enum InvocationType { #[default] Explicit, Implicit }
+    #[derive(Clone, Debug)]
+    pub struct SkillInvocation {
+        pub skill_name: String,
+        pub skill_scope: codex_protocol::protocol::SkillScope,
+        pub skill_path: std::path::PathBuf,
+        pub plugin_id: Option<String>,
+        pub invocation_type: InvocationType,
+    }
+    impl Default for SkillInvocation {
+        fn default() -> Self {
+            Self {
+                skill_name: String::new(),
+                skill_scope: codex_protocol::protocol::SkillScope::User,
+                skill_path: std::path::PathBuf::new(),
+                plugin_id: None,
+                invocation_type: InvocationType::Explicit,
+            }
+        }
+    }
+    #[derive(Clone, Debug, Default)]
+    pub struct TrackEventsContext;
+}
+use codex_analytics::{AnalyticsEventsClient, InvocationType, SkillInvocation, TrackEventsContext};
+use codex_file_system::local_executor_fs;
 use codex_otel::SessionTelemetry;
 use codex_otel::sanitize_metric_tag_value;
 use codex_protocol::user_input::UserInput;
@@ -88,7 +116,7 @@ pub async fn build_skill_injections(
     for skill in mentioned_skills {
         let fs = loaded_skills
             .and_then(|outcome| outcome.file_system_for_skill(skill))
-            .unwrap_or_else(|| Arc::clone(&LOCAL_FS));
+            .unwrap_or_else(local_executor_fs);
         let path = PathUri::from_abs_path(&skill.path_to_skills_md);
         match fs.read_file_text(&path, /*sandbox*/ None).await {
             Ok(contents) => {

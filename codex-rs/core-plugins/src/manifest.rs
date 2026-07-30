@@ -1,3 +1,4 @@
+use crate::codex_plugin;
 use codex_config::HooksFile;
 use codex_utils_absolute_path::AbsolutePathBuf;
 use codex_utils_path_uri::PathConvention;
@@ -223,6 +224,7 @@ pub fn parse_plugin_manifest_uri(
         } = interface;
 
         let interface = codex_plugin::manifest::PluginManifestInterface {
+            icon: None,
             display_name,
             short_description,
             long_description,

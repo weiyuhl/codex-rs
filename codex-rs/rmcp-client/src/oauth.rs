@@ -1,13 +1,25 @@
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Default)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct StoredOAuthTokens {
     pub access_token: String,
     pub refresh_token: Option<String>,
     pub expires_at: Option<i64>,
     pub client_id: String,
     pub token_response: (rmcp::transport::auth::OAuthTokenResponse,),
+}
+
+impl Default for StoredOAuthTokens {
+    fn default() -> Self {
+        Self {
+            access_token: String::new(),
+            refresh_token: None,
+            expires_at: None,
+            client_id: String::new(),
+            token_response: (serde_json::from_str("{}").unwrap(),),
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Default)]

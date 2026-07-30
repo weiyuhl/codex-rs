@@ -2,6 +2,20 @@ use std::collections::HashMap;
 use std::io;
 
 use codex_protocol::protocol::Product;
+#[derive(Clone, Debug)]
+pub struct DiscoveredManifest {
+    pub path: PathUri,
+    pub contents: String,
+}
+
+#[derive(Clone, Debug)]
+pub struct CapabilityRootDiscovery {
+    pub warnings: Vec<String>,
+    pub error: Option<String>,
+    pub namespace_manifests: Vec<DiscoveredManifest>,
+    pub skills: Vec<DiscoveredSkill>,
+}
+use codex_file_system::ExecutorFileSystem;
 pub use codex_skills::EnvironmentSkillMetadata;
 use codex_utils_path_uri::PathUri;
 use futures::StreamExt;
@@ -259,26 +273,10 @@ pub fn load_environment_skills_from_discovery(
             ));
             continue;
         }
-        let (dependencies, policy) = skill
-            .metadata
-            .as_ref()
-            .and_then(|metadata| {
-                serde_yaml::from_str::<SkillMetadataFile>(&metadata.contents)
-                    .map_err(|error| {
-                        tracing::warn!(
-                            path = %metadata.path,
-                            "ignoring invalid discovered skill metadata: {error}"
-                        );
-                    })
-                    .ok()
-            })
-            .map(|metadata| {
-                (
-                    resolve_dependencies(metadata.dependencies),
-                    resolve_policy(metadata.policy),
-                )
-            })
-            .unwrap_or((None, None));
+        let (dependencies, policy) = match &skill.metadata {
+            SkillMetadataDiscovery::Present(_path) | SkillMetadataDiscovery::Probe(_path) => (None, None),
+            SkillMetadataDiscovery::Absent => (None, None),
+        };
         let metadata = EnvironmentSkillMetadata {
             path_to_skills_md: skill.instructions.path.clone(),
             name,

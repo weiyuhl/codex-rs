@@ -111,3 +111,19 @@ pub use thread_config::ThreadConfigLoaderFuture;
 pub use thread_config::ThreadConfigSource;
 pub use thread_config::UserThreadConfig;
 pub use toml::Value as TomlValue;
+
+pub use state::ConfigRequirements;
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum MarketplaceAllowedSourceKind { Direct, Remote, Git, HostPattern, Local }
+
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct MarketplaceAllowedSourceToml {
+    pub source: Option<MarketplaceAllowedSourceKind>,
+    pub source_type: Option<String>,
+    pub url: Option<String>,
+    pub ref_name: Option<String>,
+    pub host_pattern: Option<String>,
+    pub path: Option<std::path::PathBuf>,
+}
+

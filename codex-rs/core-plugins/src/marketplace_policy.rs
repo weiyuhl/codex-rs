@@ -19,7 +19,7 @@ use codex_config::RequirementSource;
 use codex_config::types::MarketplaceConfig;
 use codex_config::types::MarketplaceSourceType;
 use codex_config::types::PluginConfig;
-use codex_plugin::PluginId;
+use crate::codex_plugin::PluginId;
 use codex_utils_absolute_path::AbsolutePathBuf;
 use codex_utils_path::paths_match_after_normalization;
 use regex::Regex;

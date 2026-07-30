@@ -25,9 +25,24 @@ pub mod codex_model_provider_info {
     }
     impl ModelProviderInfo {
         pub fn to_api_provider(&self, _: impl std::fmt::Debug) -> Result<codex_api::Provider, codex_protocol::error::CodexErr> {
-            Ok(codex_api::Provider::OpenAi)
+            Ok(codex_api::Provider {
+                name: "openai".to_string(),
+                base_url: self.base_url.clone(),
+                query_params: None,
+                headers: http::HeaderMap::new(),
+                retry: codex_api::RetryConfig {
+                    max_attempts: 3,
+                    base_delay: std::time::Duration::from_millis(250),
+                    retry_429: true,
+                    retry_5xx: true,
+                    retry_transport: true,
+                },
+                stream_idle_timeout: std::time::Duration::from_secs(30),
+            })
         }
         pub fn is_amazon_bedrock(&self) -> bool { false }
+        pub fn api_key(&self) -> Result<Option<String>, std::io::Error> { Ok(None) }
+        pub fn has_command_auth(&self) -> bool { false }
     }
 }
 pub use codex_protocol::account::ProviderAccount;

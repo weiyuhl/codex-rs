@@ -18,12 +18,12 @@ use codex_http_client::RouteAwareRequestBuilder;
 use codex_http_client::RouteAwareRequestError;
 use codex_login::CodexAuth;
 use codex_login::default_client::default_headers;
-use codex_plugin::AppConnectorId;
-use codex_plugin::AppDeclaration;
-use codex_plugin::PluginCapabilitySummary;
-use codex_plugin::PluginId;
-use codex_plugin::app_connector_ids_from_declarations;
-use codex_plugin::prompt_safe_plugin_description;
+use crate::codex_plugin::AppConnectorId;
+use crate::codex_plugin::AppDeclaration;
+use crate::codex_plugin::PluginCapabilitySummary;
+use crate::codex_plugin::PluginId;
+use crate::codex_plugin::app_connector_ids_from_declarations;
+use crate::codex_plugin::prompt_safe_plugin_description;
 use codex_utils_absolute_path::AbsolutePathBuf;
 use http::Method;
 use http::StatusCode;
@@ -1349,6 +1349,7 @@ fn app_declarations_from_remote_app_ids(app_ids: &[String]) -> Vec<AppDeclaratio
     app_ids
         .iter()
         .map(|app_id| AppDeclaration {
+            app_id: app_id.clone(),
             name: app_id.clone(),
             connector_id: AppConnectorId(app_id.clone()),
             category: None,

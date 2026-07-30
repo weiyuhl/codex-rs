@@ -1,4 +1,4 @@
-﻿[package]
+[package]
 edition.workspace = true
 license.workspace = true
 name = "codex-core-plugins"
@@ -17,7 +17,9 @@ anyhow = { workspace = true }
 codex-app-server-protocol = { workspace = true }
 codex-config = { workspace = true }
 codex-core-skills = { workspace = true }
+codex-file-system = { workspace = true }
 codex-git-utils = { workspace = true }
+codex-home = { workspace = true }
 codex-hooks = { workspace = true }
 codex-http-client = { workspace = true }
 codex-login = { workspace = true }

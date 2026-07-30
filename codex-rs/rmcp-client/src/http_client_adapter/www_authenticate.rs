@@ -1,4 +1,5 @@
 use reqwest::header::WWW_AUTHENTICATE;
+use crate::executor_process_transport::HttpHeader;
 
 #[derive(Debug, PartialEq, Eq)]
 pub(super) struct InsufficientScopeChallenge {

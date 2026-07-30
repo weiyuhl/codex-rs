@@ -1,6 +1,9 @@
 use std::collections::HashSet;
 use std::io;
 
+use codex_file_system::ExecutorFileSystem;
+use codex_file_system::WalkEntryKind;
+use codex_file_system::WalkOptions;
 use codex_utils_path_uri::PathUri;
 use codex_utils_plugins::DISCOVERABLE_PLUGIN_MANIFEST_PATHS;
 
@@ -35,11 +38,20 @@ pub(super) struct SkillDiscovery {
     pub warnings: Vec<String>,
 }
 
+#[derive(Clone, Debug)]
+pub(super) struct DiscoveredInstructions {
+    pub path: PathUri,
+    pub contents: String,
+}
+
+#[derive(Clone, Debug)]
 pub(super) struct DiscoveredSkill {
     pub path: PathUri,
+    pub instructions: DiscoveredInstructions,
     pub metadata: SkillMetadataDiscovery,
 }
 
+#[derive(Clone, Debug)]
 pub(super) enum SkillMetadataDiscovery {
     Present(PathUri),
     Absent,
@@ -143,6 +155,10 @@ pub(super) async fn discover_skills(
     let skills = skill_files
         .into_iter()
         .map(|path| DiscoveredSkill {
+            instructions: DiscoveredInstructions {
+                path: path.clone(),
+                contents: String::new(),
+            },
             metadata: discover_skill_metadata(
                 &path,
                 &file_paths,

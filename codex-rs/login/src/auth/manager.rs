@@ -2008,7 +2008,7 @@ impl AuthManager {
         })
     }
 
-    pub fn external_bearer_only(config: ModelProviderAuthInfo) -> Arc<Self> {
+    pub fn external_bearer_only(config: impl std::fmt::Debug) -> Arc<Self> {
         let (auth_change_tx, _auth_change_rx) = watch::channel(0);
         Arc::new(Self {
             codex_home: PathBuf::from("non-existent"),
